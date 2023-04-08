@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Schema\Templates\ChildDaoCollectionAdd.tmpl" />
+    <None Remove="Schema\Templates\ChildXrefCollectionAdd.tmpl" />
+    <None Remove="Schema\Templates\Class.tmpl" />
+    <None Remove="Schema\Templates\Collection.tmpl" />
+    <None Remove="Schema\Templates\ColumnsClass.tmpl" />
+    <None Remove="Schema\Templates\ColumnsProperty.tmpl" />
+    <None Remove="Schema\Templates\Context.tmpl" />
+    <None Remove="Schema\Templates\ContextMethods.tmpl" />
+    <None Remove="Schema\Templates\DaoCollectionProperty.tmpl" />
+    <None Remove="Schema\Templates\ForeignKeyProperty.tmpl" />
+    <None Remove="Schema\Templates\KeyProperty.tmpl" />
+    <None Remove="Schema\Templates\PagedQueryClass.tmpl" />
+    <None Remove="Schema\Templates\Partial.tmpl" />
+    <None Remove="Schema\Templates\Property.tmpl" />
+    <None Remove="Schema\Templates\QiClass.tmpl" />
+    <None Remove="Schema\Templates\QueryClass.tmpl" />
+    <None Remove="Schema\Templates\README.md" />
+    <None Remove="Schema\Templates\XrefProperty.tmpl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Schema\Templates\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Schema\Templates\ChildDaoCollectionAdd.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\ChildXrefCollectionAdd.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\Class.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\Collection.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\ColumnsClass.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\ColumnsProperty.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\Context.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\ContextMethods.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\DaoCollectionProperty.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\ForeignKeyProperty.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\KeyProperty.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\PagedQueryClass.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\Partial.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\Property.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\QiClass.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\QueryClass.tmpl" />
+    <EmbeddedResource Include="Schema\Templates\XrefProperty.tmpl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\bam.base\bam.base\bam.base.csproj" />
+    <ProjectReference Include="..\..\bam.data\bam.data\bam.data\bam.data.csproj" />
+  </ItemGroup>
+
+</Project>
