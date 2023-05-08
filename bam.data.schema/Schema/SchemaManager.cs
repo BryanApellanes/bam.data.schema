@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 //using Bam.Net.Javascript;
 using System.Threading;
 using Bam.Net.Configuration;
+using Bam.Net.Javascript;
 
 namespace Bam.Net.Data.Schema
 {

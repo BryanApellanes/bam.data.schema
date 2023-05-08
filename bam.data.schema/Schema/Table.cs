@@ -45,8 +45,8 @@ namespace Bam.Net.Data.Schema
 
         public void SetPropertyName(string columnName, string propertyName)
         {
-            List<Column> columns = new List<Column>(Columns);
-            Column toSet = columns.FirstOrDefault(c => c.Name.Equals(columnName));
+            List<IColumn> columns = new List<IColumn>(Columns);
+            IColumn toSet = columns.FirstOrDefault(c => c.Name.Equals(columnName));
             if (toSet != null)
             {
                 toSet.PropertyName = propertyName;
@@ -54,8 +54,8 @@ namespace Bam.Net.Data.Schema
             }
             else
             {
-                List<ForeignKeyColumn> fks = new List<ForeignKeyColumn>(ForeignKeys);
-                ForeignKeyColumn toSetFk = fks.FirstOrDefault(c => c.Name.Equals(columnName));
+                List<IForeignKeyColumn> fks = new List<IForeignKeyColumn>(ForeignKeys);
+                IForeignKeyColumn toSetFk = fks.FirstOrDefault(c => c.Name.Equals(columnName));
                 if (toSetFk != null)
                 {
                     toSetFk.PropertyName = propertyName;
@@ -143,7 +143,7 @@ namespace Bam.Net.Data.Schema
             {
                 lock (_columnLock)
                 {
-                    _referencingForeignKeys = new List<ForeignKeyColumn>(value);
+                    _referencingForeignKeys = new List<IForeignKeyColumn>(value);
                 }
             }
         }
@@ -153,13 +153,13 @@ namespace Bam.Net.Data.Schema
         {
             get
             {
-                Column key = (from col in Columns
-                        where (col is KeyColumnModel || col.Key)
+                IColumn key = (from col in Columns
+                        where (col is KeyColumn || col.Key)
                         select col).FirstOrDefault();
                 
                 if (key == null)
                 {
-                    key = KeyColumnModel.Default;
+                    key = KeyColumn.Default;
                 }
 
                 return key;
@@ -168,7 +168,7 @@ namespace Bam.Net.Data.Schema
 
         public void SetKeyColumn(string columnName)
         {
-            Column c = (from cl in Columns
+            IColumn c = (from cl in Columns
                         where cl.Key
                         select cl).FirstOrDefault();
             if (c != null)
@@ -176,14 +176,14 @@ namespace Bam.Net.Data.Schema
                 UnsetKeyColumn(c.Name);
             }
 
-            Column col = this[columnName];
+            IColumn col = this[columnName];
             this._columns.Remove(col.Name);
-            this.AddColumn(new KeyColumnModel(col));
+            this.AddColumn(new KeyColumn(col));
         }
 
         public void SetForeignKeyColumn(string columnName, string referencedColumn, string referencedTable)
         {
-            Column c = (from cl in Columns
+            IColumn c = (from cl in Columns
                         where cl.Name.Equals(columnName)
                         select cl).FirstOrDefault();
             if (c != null)
@@ -195,7 +195,7 @@ namespace Bam.Net.Data.Schema
         
         private void UnsetKeyColumn(string columnName)
         {
-            Column col = this[columnName];            
+            IColumn col = this[columnName];            
             RemoveColumn(col.Name);
             this.AddColumn(new Column { 
                 AllowNull = col.AllowNull, 
@@ -278,7 +278,7 @@ namespace Bam.Net.Data.Schema
 
         public bool HasColumn(string columnName)
         {
-            return HasColumn(columnName, out Column ignore);
+            return HasColumn(columnName, out IColumn ignore);
         }
         
         public bool HasColumn(string columnName, out IColumn column)

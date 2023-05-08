@@ -19,12 +19,12 @@ namespace Bam.Net.Data.Repositories
     public class TypeSchemaGenerator : Loggable, IHasTypeSchemaTempPathProvider
     {
         ITypeTableNameProvider _tableNameProvider;
-        public TypeSchemaGenerator(ITypeTableNameProvider tableNameProvider = null, Func<SchemaDefinition, ITypeSchema, string> schemaTempPathProvider = null)
+        public TypeSchemaGenerator(ITypeTableNameProvider tableNameProvider = null, Func<ISchemaDefinition, ITypeSchema, string> schemaTempPathProvider = null)
         {
             DefaultDataTypeBehavior = DefaultDataTypeBehaviors.Exclude;
             TypeSchemaTempPathProvider = schemaTempPathProvider ?? ((sd, ts) => RuntimeSettings.ProcessDataFolder);
             SchemaManager = new CuidSchemaManager(false);            
-            TypeSchemaWarnings = new HashSet<TypeSchemaWarning>();
+            TypeSchemaWarnings = new HashSet<ITypeSchemaWarning>();
             _tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
         }
 
@@ -142,12 +142,12 @@ namespace Bam.Net.Data.Repositories
             return CreateTypeSchema(Types);
         }
 
-        public SchemaDefinition CreateSchema(string schemaName)
+        public ISchemaDefinition CreateSchema(string schemaName)
         {
             return CreateSchemaDefinition(Types, schemaName).SchemaDefinition;
         }
         
-        public HashSet<TypeSchemaWarning> TypeSchemaWarnings { get; set; }
+        public HashSet<ITypeSchemaWarning> TypeSchemaWarnings { get; set; }
         
         /// <summary>
         /// Create a TypeSchema from the specified types
@@ -160,8 +160,8 @@ namespace Bam.Net.Data.Repositories
             SubscribeToTypeSchemaWarnings();
             
             HashSet<Type> tableTypes = new HashSet<Type>();
-            HashSet<TypeFk> foreignKeyTypes = new HashSet<TypeFk>();
-            HashSet<TypeXref> xrefTypes = new HashSet<TypeXref>();
+            HashSet<ITypeFk> foreignKeyTypes = new HashSet<ITypeFk>();
+            HashSet<ITypeXref> xrefTypes = new HashSet<ITypeXref>();
 
             foreach (Type type in types)
             {
@@ -171,12 +171,12 @@ namespace Bam.Net.Data.Repositories
                 }
             }
 
-            foreach (TypeFk typeFk in GetForeignKeyTypes(tableTypes))
+            foreach (ITypeFk typeFk in GetForeignKeyTypes(tableTypes))
             {
                 foreignKeyTypes.Add(typeFk);
             }
 
-            foreach (TypeXref xref in GetXrefTypes(tableTypes))
+            foreach (ITypeXref xref in GetXrefTypes(tableTypes))
             {
                 xrefTypes.Add(xref);
             }
@@ -188,8 +188,8 @@ namespace Bam.Net.Data.Repositories
         {
             AddSchemaTables(typeSchema, schemaManager, tableNameProvider);
 
-            HashSet<TypeFk> foreignKeyTypes = typeSchema.ForeignKeys;
-            HashSet<TypeXref> xrefTypes = typeSchema.Xrefs;
+            HashSet<ITypeFk> foreignKeyTypes = typeSchema.ForeignKeys;
+            HashSet<ITypeXref> xrefTypes = typeSchema.Xrefs;
             // accounting for missing columns
             // loop primary keys and fks separately to ensure 
             // missing keys get recorded prior to trying to add the
@@ -560,7 +560,7 @@ namespace Bam.Net.Data.Repositories
 
                 void Handler(object o, EventArgs a)
                 {
-                    TypeSchemaWarning warning = TypeSchemaWarning.FromEventArgs((TypeSchemaWarningEventArgs) a);
+                    ITypeSchemaWarning warning = TypeSchemaWarning.FromEventArgs((TypeSchemaWarningEventArgs) a);
                     TypeSchemaWarnings.Add(warning);
                 }
 

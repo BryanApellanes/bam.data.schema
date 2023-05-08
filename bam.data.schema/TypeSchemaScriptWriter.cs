@@ -19,7 +19,7 @@ namespace Bam.Net.Data.Repositories
             database.ExecuteSql(WriteSchemaScript(database, types));
         }
 
-        public SqlStringBuilder WriteSchemaScript(Database database, IEnumerable<Type> types)
+        public ISqlStringBuilder WriteSchemaScript(Database database, IEnumerable<Type> types)
         {
             return WriteSchemaScript(database, types.ToArray());
         }
@@ -30,7 +30,7 @@ namespace Bam.Net.Data.Repositories
         /// <param name="database"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public SqlStringBuilder WriteSchemaScript(Database database, params Type[] types)
+        public ISqlStringBuilder WriteSchemaScript(Database database, params Type[] types)
         {
             TypeInheritanceSchemaGenerator schemaGenerator = new TypeInheritanceSchemaGenerator {Types = types};
             return WriteSchemaScript(database, schemaGenerator);
@@ -46,7 +46,7 @@ namespace Bam.Net.Data.Repositories
 
         public SqlStringBuilder WriteSchemaScript(Database database, SchemaDefinitionCreateResult schemaDefinitionCreateResult)
         {
-            SchemaDefinition schemaDefinition = schemaDefinitionCreateResult.SchemaDefinition;
+            ISchemaDefinition schemaDefinition = schemaDefinitionCreateResult.SchemaDefinition;
             SchemaWriter writer = database.GetService<SchemaWriter>();
             IEnumerable<ForeignKeyAttribute> fks = GetForeignKeyAttributes(schemaDefinition);
             
@@ -66,7 +66,7 @@ namespace Bam.Net.Data.Repositories
             return writer;
         }
 
-        private static string GetColumnDefinitions(Table table, SchemaWriter writer)
+        private static string GetColumnDefinitions(ITable table, SchemaWriter writer)
         {
             List<string> columnSegments = new List<string>();
             table.Columns.Each(column =>
@@ -85,12 +85,12 @@ namespace Bam.Net.Data.Repositories
             return string.Join(", ", columnSegments.ToArray());
         }
 
-        private static T GetColumnAttribute<T>(Column column) where T : ColumnAttribute, new()
+        private static T GetColumnAttribute<T>(IColumn column) where T : ColumnAttribute, new()
         {
             return new T { Name = column.Name, AllowNull = column.AllowNull, DbDataType = column.DbDataType, MaxLength = column.MaxLength, Table = column.TableName };
         }
         
-        private static IEnumerable<ForeignKeyAttribute> GetForeignKeyAttributes(SchemaDefinition schema)
+        private static IEnumerable<ForeignKeyAttribute> GetForeignKeyAttributes(ISchemaDefinition schema)
         {
             foreach(ForeignKeyColumn fk in schema.ForeignKeys)
             {

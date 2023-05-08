@@ -15,7 +15,7 @@ namespace Bam.Net.Data.Schema
     {
 		public KeyColumn() { }
 
-        public KeyColumn(Column c)
+        public KeyColumn(IColumn c)
             : base(c.TableName)
         {
             this.Name = c.Name;

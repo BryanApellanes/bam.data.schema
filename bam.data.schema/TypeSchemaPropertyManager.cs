@@ -31,7 +31,7 @@ namespace Bam.Net.Data.Repositories
         public void ForEachChildCollection(object parent, Action<Type, IEnumerable> forEachCollection)
         {
             Type parentType = parent.GetType();
-            List<TypeFk> fkDescriptors = TypeSchema.ForeignKeys.Where(tfk => tfk.PrimaryKeyType == parentType).ToList();
+            List<ITypeFk> fkDescriptors = TypeSchema.ForeignKeys.Where(tfk => tfk.PrimaryKeyType == parentType).ToList();
             foreach (TypeFk fk in fkDescriptors)
             {
                 IEnumerable collection = (IEnumerable)fk.CollectionProperty.GetValue(parent);

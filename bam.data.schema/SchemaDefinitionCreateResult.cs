@@ -21,7 +21,7 @@ namespace Bam.Net.Data.Repositories
 		}
 
 		public TypeSchema TypeSchema { get; private set; }
-		public HashSet<TypeSchemaWarning> TypeSchemaWarnings { get; set; }
+		public HashSet<ITypeSchemaWarning> TypeSchemaWarnings { get; set; }
 		public ISchemaDefinition SchemaDefinition { get; private set; }
 		public SchemaWarnings Warnings { get; private set; }
 

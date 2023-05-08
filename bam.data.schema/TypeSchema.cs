@@ -28,9 +28,9 @@ namespace Bam.Net.Data.Repositories
         {
             List<Type> sortedTables = Tables.ToList();
             sortedTables.Sort((t1, t2) => t1.FullName.CompareTo(t2.FullName));
-            List<TypeFk> sortedForeignKeys = ForeignKeys.ToList();
+            List<ITypeFk> sortedForeignKeys = ForeignKeys.ToList();
             sortedForeignKeys.Sort((f1, f2) => f1.Hash.CompareTo(f2.Hash));
-            List<TypeXref> sortedXrefs = Xrefs.ToList();
+            List<ITypeXref> sortedXrefs = Xrefs.ToList();
             sortedXrefs.Sort((x1, x2) => x1.Hash.CompareTo(x2.Hash));
             string tables = sortedTables.ToInfoString();
             string tablesInfo = Tables.ToInfoHash();

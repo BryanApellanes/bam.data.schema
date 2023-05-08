@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -54,6 +54,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\bam.base\bam.base\bam.base.csproj" />
     <ProjectReference Include="..\..\bam.data\bam.data\bam.data\bam.data.csproj" />
+    <ProjectReference Include="..\..\bam.javascript\bam.javascript\bam.javascript.csproj" />
   </ItemGroup>
 
 </Project>

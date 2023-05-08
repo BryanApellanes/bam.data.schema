@@ -3,7 +3,7 @@ using Bam.Net.Data.Schema;
 
 namespace Bam.Net.Data.Repositories
 {
-    public class TypeSchemaWarning
+    public class TypeSchemaWarning : ITypeSchemaWarning
     {
         public TypeSchemaWarnings Warning { get; set; }
         public Type ParentType { get; set; }
@@ -31,7 +31,7 @@ namespace Bam.Net.Data.Repositories
             return false;
         }
 
-        public static TypeSchemaWarning FromEventArgs(TypeSchemaWarningEventArgs args)
+        public static ITypeSchemaWarning FromEventArgs(TypeSchemaWarningEventArgs args)
         {
             return new TypeSchemaWarning
             {
