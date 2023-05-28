@@ -81,12 +81,12 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         public event GeneratorEventDelegate GenerateComplete;
 
-        protected void OnGenerateStarted(SchemaDefinition schema)
+        protected void OnGenerateStarted(ISchemaDefinition schema)
         {
             GenerateStarted?.Invoke(this, schema);
         }
 
-        protected void OnGenerateComplete(SchemaDefinition schema)
+        protected void OnGenerateComplete(ISchemaDefinition schema)
         {
             GenerateComplete?.Invoke(this, schema);
         }
@@ -101,7 +101,7 @@ namespace Bam.Net.Data.Schema
 
         public string Namespace { get; set; }
                  
-        public void Generate(SchemaDefinition schema)
+        public void Generate(ISchemaDefinition schema)
         {
             Generate(schema, "./");
         }
@@ -111,12 +111,12 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="root"></param>
-        public void Generate(SchemaDefinition schema, string root)
+        public void Generate(ISchemaDefinition schema, string root)
         {
             Generate(schema, null, root, null);
         }
 
-        public void Generate(SchemaDefinition schema, string root, string partialsDir)
+        public void Generate(ISchemaDefinition schema, string root, string partialsDir)
         {
             Generate(schema, null, root, partialsDir);
         }
@@ -128,7 +128,7 @@ namespace Bam.Net.Data.Schema
         /// <param name="targetResolver">If specified, generated code will be 
         /// written to the stream returned by this function</param>
         /// <param name="root">The root file path to use if no target resolver is specified</param>
-        public void Generate(SchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null)
+        public void Generate(ISchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null)
         {
             if (string.IsNullOrEmpty(Namespace))
             {

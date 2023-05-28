@@ -9,14 +9,14 @@ namespace Bam.Net.Data.Schema
     {
         string Namespace { get; set; }
         IDaoTargetStreamResolver DaoTargetStreamResolver { get; set; }
-        void WriteContextClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root);
-        void WriteDaoClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
-        void WriteQueryClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
-        void WritePagedQueryClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
-        void WriteQiClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
-        void WriteCollectionClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
-        void WriteColumnsClass(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WriteContextClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root);
+        void WriteDaoClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WriteQueryClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WritePagedQueryClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WriteQiClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WriteCollectionClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WriteColumnsClass(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
 
-        void WritePartial(SchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
+        void WritePartial(ISchemaDefinition schema, Func<string, Stream> targetResolver, string root, Table table);
     }
 }

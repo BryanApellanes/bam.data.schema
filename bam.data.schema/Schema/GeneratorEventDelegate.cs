@@ -8,6 +8,6 @@ using System.Text;
 
 namespace Bam.Net.Data.Schema
 {
-    public delegate void GeneratorEventDelegate(DaoGenerator generator, SchemaDefinition schema);
+    public delegate void GeneratorEventDelegate(DaoGenerator generator, ISchemaDefinition schema);
     
 }
