@@ -14,12 +14,12 @@ namespace Bam.Net.Data.Repositories
         {
             database.ExecuteSql(WriteSchemaScript(database, types));
         }
-        public void CommitSchema(Database database, params Type[] types)
+        public void CommitSchema(IDatabase database, params Type[] types)
         {
             database.ExecuteSql(WriteSchemaScript(database, types));
         }
 
-        public ISqlStringBuilder WriteSchemaScript(Database database, IEnumerable<Type> types)
+        public ISqlStringBuilder WriteSchemaScript(IDatabase database, IEnumerable<Type> types)
         {
             return WriteSchemaScript(database, types.ToArray());
         }
@@ -30,13 +30,13 @@ namespace Bam.Net.Data.Repositories
         /// <param name="database"></param>
         /// <param name="types"></param>
         /// <returns></returns>
-        public ISqlStringBuilder WriteSchemaScript(Database database, params Type[] types)
+        public ISqlStringBuilder WriteSchemaScript(IDatabase database, params Type[] types)
         {
             TypeInheritanceSchemaGenerator schemaGenerator = new TypeInheritanceSchemaGenerator {Types = types};
             return WriteSchemaScript(database, schemaGenerator);
         }
 
-        public SqlStringBuilder WriteSchemaScript(Database database, TypeSchemaGenerator typeSchemaGenerator, SchemaManager schemaManager = null)
+        public SqlStringBuilder WriteSchemaScript(IDatabase database, TypeSchemaGenerator typeSchemaGenerator, SchemaManager schemaManager = null)
         {
             schemaManager = schemaManager ?? new SchemaManager { AutoSave = false };
             typeSchemaGenerator.SchemaManager = schemaManager;
@@ -44,7 +44,7 @@ namespace Bam.Net.Data.Repositories
             return WriteSchemaScript(database, LastSchemaDefinitionCreateResult);
         }
 
-        public SqlStringBuilder WriteSchemaScript(Database database, SchemaDefinitionCreateResult schemaDefinitionCreateResult)
+        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaDefinitionCreateResult schemaDefinitionCreateResult)
         {
             ISchemaDefinition schemaDefinition = schemaDefinitionCreateResult.SchemaDefinition;
             SchemaWriter writer = database.GetService<SchemaWriter>();
