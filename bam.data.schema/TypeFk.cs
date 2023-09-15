@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Bam.Net.Data.Repositories
 {
-	/// <summary>
-	/// Forein key descriptor for generated TypeSchemas
-	/// </summary>
-	public class TypeFk
+    /// <summary>
+    /// Forein key descriptor for generated TypeSchemas
+    /// </summary>
+    public class TypeFk
 	{
 		/// <summary>
 		/// The type of the Primary Key poco

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Serialization;
-using Bam.Net;
 using Bam.Net.Data;
 using Newtonsoft.Json;
 using Bam.Net.Configuration;
