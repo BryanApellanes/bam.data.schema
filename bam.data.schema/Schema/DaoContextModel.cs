@@ -7,7 +7,7 @@ namespace Bam.Net.Data.Schema
 {
     public class DaoContextModel
     {
-        public SchemaDefinition Model { get; set; }
+        public ISchemaDefinition Model { get; set; }
         public string Namespace { get; set; }
 
         public DaoTableSchemaModel[] Tables

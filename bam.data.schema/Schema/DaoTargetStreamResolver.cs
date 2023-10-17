@@ -5,7 +5,7 @@ namespace Bam.Net.Data.Schema
 {
     public class DaoTargetStreamResolver: IDaoTargetStreamResolver
     {
-        public Stream GetTargetContextStream(Func<string, Stream> targetResolver, string root, SchemaDefinition schema)
+        public Stream GetTargetContextStream(Func<string, Stream> targetResolver, string root, ISchemaDefinition schema)
         {
             string parameterValue = $"{schema.Name}Context";
             return GetTargetStream(targetResolver, root, parameterValue);

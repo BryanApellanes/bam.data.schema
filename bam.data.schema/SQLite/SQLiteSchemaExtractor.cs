@@ -170,7 +170,7 @@ ORDER BY SUBSTR(type, 2, 1), name";
         {
             if (!_pragmaTables.ContainsKey(tableName))
             {
-                _pragmaTables.Add(tableName, Database.GetDataTable(pragmaFormat._Format(tableName)));
+                _pragmaTables.Add(tableName, Database.GetDataTable(pragmaFormat.Format(tableName)));
             }
             return _pragmaTables[tableName];            
         }

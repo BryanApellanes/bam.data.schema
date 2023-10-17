@@ -391,17 +391,17 @@ namespace Bam.Net.Data.Repositories
                     PropertyInfo referencingProperty = null;
                     if (keyProperty == null)
                     {
-                        Message = "KeyProperty not found for type {0}"._Format(parentType.FullName);
+                        Message = "KeyProperty not found for type {0}".Format(parentType.FullName);
                         FireEvent(KeyPropertyNotFound, new TypeSchemaWarningEventArgs(){Warning = Bam.Net.Data.Repositories.TypeSchemaWarnings.KeyPropertyNotFound, ParentType = parentType});
                         keyProperty = new TypeSchemaPropertyInfo("Id", parentType, TableNameProvider);
                     }
 
-                    string referencingPropertyName = "{0}{1}"._Format(parentType.Name, keyProperty.Name);
+                    string referencingPropertyName = "{0}{1}".Format(parentType.Name, keyProperty.Name);
                     referencingProperty = foreignKeyType.GetProperty(referencingPropertyName);
 
                     if (referencingProperty == null)
                     {
-                        Message = "Referencing property not found {0}: Parent type ({1}), ForeignKeyType ({2})"._Format(referencingPropertyName, parentType.FullName, foreignKeyType.FullName);
+                        Message = "Referencing property not found {0}: Parent type ({1}), ForeignKeyType ({2})".Format(referencingPropertyName, parentType.FullName, foreignKeyType.FullName);
                         FireEvent(ReferencingPropertyNotFound, new TypeSchemaWarningEventArgs(){Warning = Bam.Net.Data.Repositories.TypeSchemaWarnings.ReferencingPropertyNotFound, ParentType = parentType, ForeignKeyType = foreignKeyType});
                         referencingProperty = new TypeSchemaPropertyInfo(referencingPropertyName, parentType, foreignKeyType, TableNameProvider);
                     }
@@ -409,7 +409,7 @@ namespace Bam.Net.Data.Repositories
                     PropertyInfo childParentProperty = foreignKeyType.GetProperty(parentType.Name);
                     if (childParentProperty == null)
                     {
-                        Message = "ChildParentProperty was not found {0}.{1}: Parent type({2}), ForeignKeyType ({3})"._Format(foreignKeyType.Name, parentType.Name, parentType.FullName, foreignKeyType.FullName);
+                        Message = "ChildParentProperty was not found {0}.{1}: Parent type({2}), ForeignKeyType ({3})".Format(foreignKeyType.Name, parentType.Name, parentType.FullName, foreignKeyType.FullName);
                         FireEvent(ChildParentPropertyNotFound, new TypeSchemaWarningEventArgs(){Warning = Bam.Net.Data.Repositories.TypeSchemaWarnings.ChildParentPropertyNotFound, ParentType = parentType, ForeignKeyType = foreignKeyType});
                         childParentProperty = new TypeSchemaPropertyInfo(parentType.Name, foreignKeyType, TableNameProvider);
                     }

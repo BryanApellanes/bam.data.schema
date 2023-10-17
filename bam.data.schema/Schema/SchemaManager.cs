@@ -95,7 +95,7 @@ namespace Bam.Net.Data.Schema
                 {
                     if (BackupExisting)
                     {
-                        string backUpPath = SchemaNameToFilePath("{0}_{1}_{2}"._Format(schemaName, DateTime.UtcNow.ToJulianDate(), 4.RandomLetters()));
+                        string backUpPath = SchemaNameToFilePath("{0}_{1}_{2}".Format(schemaName, DateTime.UtcNow.ToJulianDate(), 4.RandomLetters()));
                         File.Move(filePath, backUpPath);
                     }
                     else
@@ -863,7 +863,7 @@ namespace Bam.Net.Data.Schema
         
         private string SchemaNameToFilePath(string schemaName)
         {
-            string schemaFile = Path.Combine(SchemaTempPathProvider(new SchemaDefinition { Name = schemaName }), "{0}.json"._Format(schemaName));
+            string schemaFile = Path.Combine(SchemaTempPathProvider(new SchemaDefinition { Name = schemaName }), "{0}.json".Format(schemaName));
             return schemaFile;
         }
     }

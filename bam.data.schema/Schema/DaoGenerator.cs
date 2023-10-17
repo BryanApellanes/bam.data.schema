@@ -17,7 +17,7 @@ namespace Bam.Net.Data.Schema
     /// <summary>
     /// A code generator that writes Dao code for a SchemaDefinition
     /// </summary>
-    public partial class DaoGenerator
+    public partial class DaoGenerator : IDaoGenerator
     {
         readonly List<Stream> _resultStreams = new List<Stream>();
         public DaoGenerator(IDaoCodeWriter codeWriter, IDaoTargetStreamResolver targetStreamResolver = null)
@@ -38,12 +38,6 @@ namespace Bam.Net.Data.Schema
             Namespace = "DaoGenerated";
             TargetStreamResolver = new DaoTargetStreamResolver();
             this.Namespace = nameSpace;
-        }
-
-        public DaoGenerator(string ns, Action<string> resultInspector)
-            : this(ns)
-        {
-            this.RazorResultInspector = resultInspector;
         }
 
         public static List<string> DefaultReferenceAssemblies => new List<string>(AdHocCSharpCompiler.DefaultReferenceAssemblies);
@@ -67,10 +61,9 @@ namespace Bam.Net.Data.Schema
         public bool DisposeOnComplete { get; set; }
 
         public bool GenerateQiClasses { get; set; }
-        
-        public Action<string> RazorResultInspector { get; set; }
+
         #region events
-        
+
         /// <summary>
         /// The event that fires prior to code generation
         /// </summary>
@@ -90,17 +83,17 @@ namespace Bam.Net.Data.Schema
         {
             GenerateComplete?.Invoke(this, schema);
         }
-        
+
         #endregion events
 
-		/// <summary>
-		/// If the generator compiled generated files, this will be the FileInfo 
-		/// representing the compiled assembly
-		/// </summary>
-		public FileInfo DaoAssemblyFile { get; set; }
+        /// <summary>
+        /// If the generator compiled generated files, this will be the FileInfo 
+        /// representing the compiled assembly
+        /// </summary>
+        public FileInfo DaoAssemblyFile { get; set; }
 
         public string Namespace { get; set; }
-                 
+
         public void Generate(ISchemaDefinition schema)
         {
             Generate(schema, "./");
@@ -136,10 +129,10 @@ namespace Bam.Net.Data.Schema
             }
             DaoCodeWriter.Namespace = Namespace;
 
-            OnGenerateStarted(schema);            
-            
+            OnGenerateStarted(schema);
+
             DaoCodeWriter.WriteContextClass(schema, targetResolver, root);
-            
+
             bool writePartial = !string.IsNullOrEmpty(partialsDir);
             if (writePartial)
             {
@@ -165,7 +158,7 @@ namespace Bam.Net.Data.Schema
 
             OnGenerateComplete(schema);
         }
-        
+
         private static void EnsurePartialsDir(string partialsDir)
         {
             DirectoryInfo partials = new DirectoryInfo(partialsDir);
@@ -181,15 +174,15 @@ namespace Bam.Net.Data.Schema
                     typeof(DaoGenerator).Assembly,
                     //typeof(ServiceProxySystem).Assembly,
                     typeof(DataTypes).Assembly };
-                    //typeof(Resolver).Assembly};
+            //typeof(Resolver).Assembly};
             return assembliesToReference;
         }
-        
+
         protected virtual void WritePartialToStream(string code, Stream s)
         {
             WriteToStream(code, s);
         }
-        
+
         private static void WriteToStream(string text, Stream s)
         {
             using (StreamWriter sw = new StreamWriter(s))

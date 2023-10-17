@@ -171,7 +171,7 @@ namespace Bam.Net.Data.Schema
 
         protected virtual void SaveNameMap(SchemaManager schemaManager)
         {
-            NameMap.Save(Path.Combine(RuntimeSettings.ProcessDataFolder, "{0}_NameMap.json"._Format(schemaManager.CurrentSchema.Name)));
+            NameMap.Save(Path.Combine(RuntimeSettings.ProcessDataFolder, "{0}_NameMap.json".Format(schemaManager.CurrentSchema.Name)));
         }
 
         protected HashSet<string> GetKeyWords()
