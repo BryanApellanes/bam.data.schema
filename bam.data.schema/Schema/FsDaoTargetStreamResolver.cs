@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Bam.Net.Data.Schema
 {
-    public class DaoTargetStreamResolver: IDaoTargetStreamResolver
+    public class FsDaoTargetStreamResolver: IDaoTargetStreamResolver
     {
         public Stream GetTargetContextStream(Func<string, Stream> targetResolver, string root, ISchemaDefinition schema)
         {

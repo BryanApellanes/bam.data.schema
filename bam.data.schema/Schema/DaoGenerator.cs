@@ -17,7 +17,7 @@ namespace Bam.Net.Data.Schema
     /// <summary>
     /// A code generator that writes Dao code for a SchemaDefinition
     /// </summary>
-    public partial class DaoGenerator : IDaoGenerator
+    public class DaoGenerator : IDaoGenerator
     {
         readonly List<Stream> _resultStreams = new List<Stream>();
         public DaoGenerator(IDaoCodeWriter codeWriter, IDaoTargetStreamResolver targetStreamResolver = null)
@@ -26,8 +26,8 @@ namespace Bam.Net.Data.Schema
             SubscribeToEvents();
 
             Namespace = "DaoGenerated";
-            TargetStreamResolver = targetStreamResolver ?? new DaoTargetStreamResolver();
-            DaoCodeWriter = codeWriter; //?? new HandlebarsDaoCodeWriter(new HandlebarsDirectory("./Handlebars"), new HandlebarsEmbeddedResources(GetType().Assembly));
+            TargetStreamResolver = targetStreamResolver ?? new FsDaoTargetStreamResolver();
+            DaoCodeWriter = codeWriter; 
         }
 
         public DaoGenerator(string nameSpace)
@@ -36,7 +36,7 @@ namespace Bam.Net.Data.Schema
             SubscribeToEvents();
 
             Namespace = "DaoGenerated";
-            TargetStreamResolver = new DaoTargetStreamResolver();
+            TargetStreamResolver = new FsDaoTargetStreamResolver();
             this.Namespace = nameSpace;
         }
 
@@ -172,9 +172,7 @@ namespace Bam.Net.Data.Schema
         {
             Assembly[] assembliesToReference = new Assembly[]{
                     typeof(DaoGenerator).Assembly,
-                    //typeof(ServiceProxySystem).Assembly,
                     typeof(DataTypes).Assembly };
-            //typeof(Resolver).Assembly};
             return assembliesToReference;
         }
 

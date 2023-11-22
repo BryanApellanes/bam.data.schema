@@ -75,19 +75,22 @@ namespace Bam.Net.Data.Repositories
         public string SchemaName { get; set; }
 
         /// <summary>
-        /// If true, an Id column will be added to the generated dao tables
+        /// If true, an Id column is added to the generated dao tables
         /// </summary>
         public bool AddIdField { get; set; }
+
         /// <summary>
-        /// If true, audit fields Created and Modified will be added to the dao tables
+        /// If true, audit fields Created and Modified is added to the dao tables
         /// </summary>
         public bool AddAuditFields { get; set; }
+
         /// <summary>
-        /// If true, ModifiedBy will be added to the dao tables
+        /// If true, ModifiedBy is added to the dao tables
         /// </summary>
         public bool IncludeModifiedBy { get; set; }
+
         /// <summary>
-        /// If true, CreatedBy will be added to the dao tables
+        /// If true, CreatedBy is added to the dao tables
         /// </summary>
         public bool IncludeCreatedBy { get; set; }
 
@@ -100,7 +103,9 @@ namespace Bam.Net.Data.Repositories
             get;
             set;
         }
+
         public IEnumerable<Type> Types { get; set; }
+
         public SchemaDefinitionCreateResult CreateSchemaDefinition(string schemaName = null)
         {
             Args.ThrowIf(!Types.Any(), "No types specified");
