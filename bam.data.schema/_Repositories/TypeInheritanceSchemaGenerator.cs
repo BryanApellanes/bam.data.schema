@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using Bam.Net.Data.Schema;
+using Bam.Data.Schema;
 
 namespace Bam.Net.Data.Repositories
 {
@@ -15,9 +16,9 @@ namespace Bam.Net.Data.Repositories
     /// for inheritance relationships in the CLR types and
     /// breaks sub types into separate tables.
     /// </summary>
-    public class TypeInheritanceSchemaGenerator: TypeSchemaGenerator
+    public class TypeInheritanceSchemaGenerator: SchemaProvider
     {
-        public TypeInheritanceSchemaGenerator(ITypeTableNameProvider tableNameProvider = null, Func<ISchemaDefinition, ITypeSchema, string> schemaTempPathProvider = null)
+        public TypeInheritanceSchemaGenerator(ITypeTableNameProvider tableNameProvider = null, ITypeSchemaTempPathProvider schemaTempPathProvider = null)
             : base(tableNameProvider, schemaTempPathProvider)
         {
         }

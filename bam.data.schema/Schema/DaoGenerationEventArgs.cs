@@ -11,7 +11,7 @@ namespace Bam.Net.Data.Schema
 
         }
 
-        public SchemaDefinition SchemaDefinition { get; set; }
+        public DaoSchemaDefinition SchemaDefinition { get; set; }
 
         public Table Table { get; set; }
     }

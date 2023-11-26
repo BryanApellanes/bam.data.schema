@@ -16,11 +16,11 @@ namespace Bam.Net.Data.Schema
         public MappedSchemaDefinition(string filePath)
         {
             this.SchemaNameMap = new SchemaNameMap();
-            this.SchemaDefinition = new SchemaDefinition();
+            this.SchemaDefinition = new DaoSchemaDefinition();
             this.FilePath = filePath;
         }
 
-        public MappedSchemaDefinition(SchemaDefinition definition, SchemaNameMap nameMap)
+        public MappedSchemaDefinition(IDaoSchemaDefinition definition, SchemaNameMap nameMap)
             : this()
         {
             this.SchemaNameMap = nameMap;
@@ -29,7 +29,7 @@ namespace Bam.Net.Data.Schema
 
         public string FilePath { get; set; }
         public SchemaNameMap SchemaNameMap { get; set; }
-        public SchemaDefinition SchemaDefinition { get; set; }
+        public IDaoSchemaDefinition SchemaDefinition { get; set; }
 
         public static MappedSchemaDefinition Load(string filePath)
         {
@@ -52,7 +52,7 @@ namespace Bam.Net.Data.Schema
             Save(new FileInfo(filePath));
         }
 
-        public SchemaDefinition MapSchemaClassAndPropertyNames()
+        public IDaoSchemaDefinition MapSchemaClassAndPropertyNames()
         {
             return MapSchemaClassAndPropertyNames(SchemaNameMap, SchemaDefinition);
         }
@@ -64,7 +64,7 @@ namespace Bam.Net.Data.Schema
             this.ToJsonFile(file);
         }
 
-        public static SchemaDefinition MapSchemaClassAndPropertyNames(SchemaNameMap nameMap, SchemaDefinition schema)
+        public static IDaoSchemaDefinition MapSchemaClassAndPropertyNames(SchemaNameMap nameMap, IDaoSchemaDefinition schema)
         {
             SchemaManager mgr = new SchemaManager(schema) {AutoSave = false};
             Parallel.ForEach(nameMap.TableNamesToClassNames, (map) =>

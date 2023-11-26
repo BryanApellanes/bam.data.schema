@@ -8,6 +8,6 @@ namespace Bam.Net.Data.Schema
 {
     public interface IHasSchemaTempPathProvider
     {
-        Func<SchemaDefinition, string> SchemaTempPathProvider { get; set; }
+        Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }
     }
 }

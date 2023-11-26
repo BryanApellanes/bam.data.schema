@@ -20,7 +20,7 @@ namespace Bam.Net.Data.Repositories
             {
                 columnName = attr.Name;
             }
-            Column = new Column(columnName, TypeSchemaGenerator.GetColumnDataType(property));
+            Column = new Column(columnName, SchemaProvider.GetColumnDataType(property));
             if(attr != null)
             {
                 Column.AllowNull = attr.AllowNull;

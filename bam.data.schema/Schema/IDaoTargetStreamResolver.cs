@@ -7,7 +7,7 @@ namespace Bam.Net.Data.Schema
 {
     public interface IDaoTargetStreamResolver
     {
-        Stream GetTargetContextStream(Func<string, Stream> targetResolver, string rootDirectory, ISchemaDefinition schema);
+        Stream GetTargetContextStream(Func<string, Stream> targetResolver, string rootDirectory, IDaoSchemaDefinition schema);
         Stream GetTargetClassStream(Func<string, Stream> targetResolver, string rootDirectory, Table table);
         Stream GetTargetQueryClassStream(Func<string, Stream> targetResolver, string rootDirectory, Table table);
         Stream GetTargetPagedQueryClassStream(Func<string, Stream> targetResolver, string rootDirectory, Table table);

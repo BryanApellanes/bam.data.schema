@@ -135,7 +135,7 @@ namespace Bam.Net.Data.Repositories
 			string name = "Id";
 			if (DeclaringType != null) 
 			{
-				PropertyInfo keyProperty = TypeSchemaGenerator.GetKeyProperty(DeclaringType);
+				PropertyInfo keyProperty = SchemaProvider.GetKeyProperty(DeclaringType);
 				if (keyProperty != null) 
 				{
 					name = keyProperty.Name;
@@ -151,8 +151,8 @@ namespace Bam.Net.Data.Repositories
 
 		Type _foreignKeyTableType;
 		public ForeignKeyColumn ToForeignKeyColumn(ITypeTableNameProvider tableNameProvider = null) {
-            ForeignKeyColumn result = new ForeignKeyColumn(Name, TypeSchemaGenerator.GetTableNameForType(_foreignKeyTableType),
-                TypeSchemaGenerator.GetTableNameForType(DeclaringType, tableNameProvider))
+            ForeignKeyColumn result = new ForeignKeyColumn(Name, SchemaProvider.GetTableNameForType(_foreignKeyTableType),
+                SchemaProvider.GetTableNameForType(DeclaringType, tableNameProvider))
             {
                 DataType = DataTypes.ULong
             };

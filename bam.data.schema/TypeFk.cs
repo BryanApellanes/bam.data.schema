@@ -13,7 +13,7 @@ namespace Bam.Net.Data.Repositories
     /// <summary>
     /// Forein key descriptor for generated TypeSchemas
     /// </summary>
-    public class TypeFk
+    public class TypeFk : ITypeFk
 	{
 		/// <summary>
 		/// The type of the Primary Key poco

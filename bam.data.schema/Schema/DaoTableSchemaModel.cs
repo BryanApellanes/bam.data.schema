@@ -12,7 +12,7 @@ namespace Bam.Net.Data.Schema
     public class DaoTableSchemaModel
     {
         public ITable Model { get; set; }
-        public ISchemaDefinition Schema { get; set; }
+        public IDaoSchemaDefinition Schema { get; set; }
         public string Namespace { get; set; }
 
         public string CamelCasedPluralizedClassName => PluralizedClassName.CamelCase();

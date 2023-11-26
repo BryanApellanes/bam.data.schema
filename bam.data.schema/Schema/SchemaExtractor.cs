@@ -79,7 +79,7 @@ namespace Bam.Net.Data.Schema
         public SchemaNameMap NameMap { get; set; }
         public INameFormatter NameFormatter { get; set; }
 
-        public Func<SchemaDefinition, string> SchemaTempPathProvider { get; set; }
+        public Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }
 
         public virtual TableNameToClassName GetClassName(string tableName)
         {
@@ -111,20 +111,20 @@ namespace Bam.Net.Data.Schema
             return column;
         }
 
-        public virtual SchemaDefinition Extract()
+        public virtual DaoSchemaDefinition Extract()
         {
             SchemaManager schemaManager = new SchemaManager
             {
                 AutoSave = false,
                 SchemaTempPathProvider = SchemaTempPathProvider
             };
-            SchemaDefinition result = Extract(schemaManager);
+            DaoSchemaDefinition result = Extract(schemaManager);
             return result;
         }
 
-        public virtual SchemaDefinition Extract(SchemaManager schemaManager)
+        public virtual DaoSchemaDefinition Extract(SchemaManager schemaManager)
         {
-            SchemaDefinition result = new SchemaDefinition { Name = GetSchemaName() };
+            DaoSchemaDefinition result = new DaoSchemaDefinition { Name = GetSchemaName() };
             schemaManager.CurrentSchema = result;
 
             // GetTableNames
@@ -251,7 +251,6 @@ namespace Bam.Net.Data.Schema
                 "GetHashCode",
                 "ToString",
                 "GetType"
-
             });
 
         }

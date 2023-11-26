@@ -9,7 +9,7 @@ namespace Bam.Net.Data.Repositories
 {
     public class TypeSchemaScriptWriter
     {
-        public SchemaDefinitionCreateResult LastSchemaDefinitionCreateResult { get; set; }
+        public DaoSchemaDefinitionCreateResult LastSchemaDefinitionCreateResult { get; set; }
         public void CommitSchema(Database database, IEnumerable<Type> types)
         {
             database.ExecuteSql(WriteSchemaScript(database, types));
@@ -36,17 +36,17 @@ namespace Bam.Net.Data.Repositories
             return WriteSchemaScript(database, schemaGenerator);
         }
 
-        public SqlStringBuilder WriteSchemaScript(IDatabase database, TypeSchemaGenerator typeSchemaGenerator, SchemaManager schemaManager = null)
+        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaProvider typeSchemaGenerator, SchemaManager schemaManager = null)
         {
             schemaManager = schemaManager ?? new SchemaManager { AutoSave = false };
             typeSchemaGenerator.SchemaManager = schemaManager;
-            LastSchemaDefinitionCreateResult = typeSchemaGenerator.CreateSchemaDefinition();
+            LastSchemaDefinitionCreateResult = typeSchemaGenerator.CreateDaoSchemaDefinition();
             return WriteSchemaScript(database, LastSchemaDefinitionCreateResult);
         }
 
-        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaDefinitionCreateResult schemaDefinitionCreateResult)
+        public SqlStringBuilder WriteSchemaScript(IDatabase database, DaoSchemaDefinitionCreateResult schemaDefinitionCreateResult)
         {
-            ISchemaDefinition schemaDefinition = schemaDefinitionCreateResult.SchemaDefinition;
+            IDaoSchemaDefinition schemaDefinition = schemaDefinitionCreateResult.SchemaDefinition;
             SchemaWriter writer = database.GetService<SchemaWriter>();
             IEnumerable<ForeignKeyAttribute> fks = GetForeignKeyAttributes(schemaDefinition);
             
@@ -90,7 +90,7 @@ namespace Bam.Net.Data.Repositories
             return new T { Name = column.Name, AllowNull = column.AllowNull, DbDataType = column.DbDataType, MaxLength = column.MaxLength, Table = column.TableName };
         }
         
-        private static IEnumerable<ForeignKeyAttribute> GetForeignKeyAttributes(ISchemaDefinition schema)
+        private static IEnumerable<ForeignKeyAttribute> GetForeignKeyAttributes(IDaoSchemaDefinition schema)
         {
             foreach(ForeignKeyColumn fk in schema.ForeignKeys)
             {

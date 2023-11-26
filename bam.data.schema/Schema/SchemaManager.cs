@@ -26,38 +26,50 @@ namespace Bam.Net.Data.Schema
             this.ManageSchema(schemaFilePath);
         }
 
-        public SchemaManager(FileInfo schemaFile)
-            : this(schemaFile.FullName)
-        { }
-
-        public SchemaManager(SchemaDefinition schema)
+        public SchemaManager(IDaoSchemaDefinition schema)
             : this()
         {
             this.ManageSchema(schema);
         }
 
-        public Func<SchemaDefinition, string> SchemaTempPathProvider { get; set; }  
+        public IDaoCodeWriter DaoCodeWriter { get; set; }
+
+        public Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }  
 
         public bool AutoSave { get; set; }
 
-        SchemaDefinition _currentSchema;
+        IDaoSchemaDefinition _currentSchema;
         readonly object _currentSchemaLock = new object();
-        public SchemaDefinition CurrentSchema
+        public IDaoSchemaDefinition CurrentSchema
         {
             get
             {
-                return _currentSchemaLock.DoubleCheckLock<SchemaDefinition>(ref _currentSchema, () => LoadSchema($"Default_{DateTime.Now.ToJulianDate().ToString()}"));
+                return _currentSchemaLock.DoubleCheckLock(ref _currentSchema, () => LoadSchema($"Default_{DateTime.Now.ToJulianDate()}"));
             }
 
             set => _currentSchema = value;
         }
 
+        string _rootDir;
+        public string RootDir
+        {
+            get
+            {
+                return _rootDir ?? SchemaTempPathProvider(CurrentSchema);
+            }
+
+            set
+            {
+                _rootDir = value;
+            }
+        }
+
         public void ManageSchema(string schemaFile)
         {
-            SchemaDefinition schemaDefinition = schemaFile.FromJsonFile<SchemaDefinition>();
+            DaoSchemaDefinition schemaDefinition = schemaFile.FromJsonFile<DaoSchemaDefinition>();
             if (schemaDefinition == null)
             {
-                schemaDefinition = new SchemaDefinition();
+                schemaDefinition = new DaoSchemaDefinition();
                 schemaDefinition.ToJsonFile(schemaFile);
             }
 
@@ -65,7 +77,7 @@ namespace Bam.Net.Data.Schema
             ManageSchema(schemaDefinition);
         }
 
-        public void ManageSchema(SchemaDefinition schema)
+        public void ManageSchema(IDaoSchemaDefinition schema)
         {
             CurrentSchema = schema;
         }
@@ -75,7 +87,7 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         /// <param name="schemaName"></param>
         /// <returns></returns>
-        public SchemaDefinition SetSchema(string schemaName, bool useExisting = true)
+        public DaoSchemaDefinition SetSchema(string schemaName, bool useExisting = true)
         {
             string filePath = SchemaNameToFilePath(schemaName);
             lock (FileLock.Named(filePath))
@@ -92,7 +104,7 @@ namespace Bam.Net.Data.Schema
                         File.Delete(filePath);
                     }
                 }
-                SchemaDefinition schema = LoadSchema(schemaName);
+                DaoSchemaDefinition schema = LoadSchema(schemaName);
                 CurrentSchema = schema;
                 return schema;
             }
@@ -110,7 +122,7 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         /// <param name="schemaName"></param>
         /// <returns></returns>
-        public SchemaDefinition SetNewSchema(string schemaName)
+        public DaoSchemaDefinition SetNewSchema(string schemaName)
         {
             if (SchemaExists(schemaName))
             {
@@ -135,7 +147,7 @@ namespace Bam.Net.Data.Schema
             return File.Exists(SchemaNameToFilePath(schemaName));
         }
 
-        public SchemaDefinition GetCurrentSchema()
+        public IDaoSchemaDefinition GetCurrentSchema()
         {
             return CurrentSchema;
         }
@@ -144,7 +156,7 @@ namespace Bam.Net.Data.Schema
         {
             try
             {
-                SchemaDefinition schema = CurrentSchema;
+                IDaoSchemaDefinition schema = CurrentSchema;
                 Table t = new Table();
                 t.ClassName = className ?? tableName;
                 t.Name = tableName;
@@ -165,7 +177,7 @@ namespace Bam.Net.Data.Schema
         {
             try
             {
-                SchemaDefinition schema = CurrentSchema;
+                IDaoSchemaDefinition schema = CurrentSchema;
                 XrefTable x = new XrefTable(left, right);
                 ISchemaManagerResult managerResult = schema.AddXref(x);
                 if (AutoSave)
@@ -781,10 +793,10 @@ namespace Bam.Net.Data.Schema
         }
 
 
-        private SchemaDefinition LoadSchema(string schemaName)
+        private DaoSchemaDefinition LoadSchema(string schemaName)
         {
             string schemaFile = SchemaNameToFilePath(schemaName);
-            SchemaDefinition schema = SchemaDefinition.Load(schemaFile);
+            DaoSchemaDefinition schema = DaoSchemaDefinition.Load(schemaFile);
             schema.Name = schemaName;
             return schema;
         }
@@ -803,7 +815,9 @@ namespace Bam.Net.Data.Schema
 
         private DaoGenerator GetDaoGenerator(DirectoryInfo compileTo, bool keepSource, string partialsDir, bool compile, SchemaManagerResult managerResult, string nameSpace, DirectoryInfo daoDir)
         {
-            DaoGenerator generator = new DaoGenerator(nameSpace);
+            Args.ThrowIfNull(this.DaoCodeWriter, "DaoCodeWriter");
+
+            DaoGenerator generator = new DaoGenerator(this.DaoCodeWriter, nameSpace);
             if (compile)
             {
                 if (!compileTo.Exists)
@@ -852,7 +866,7 @@ namespace Bam.Net.Data.Schema
         
         private string SchemaNameToFilePath(string schemaName)
         {
-            string schemaFile = Path.Combine(SchemaTempPathProvider(new SchemaDefinition { Name = schemaName }), "{0}.json".Format(schemaName));
+            string schemaFile = Path.Combine(SchemaTempPathProvider(new DaoSchemaDefinition { Name = schemaName }), "{0}.json".Format(schemaName));
             return schemaFile;
         }
     }

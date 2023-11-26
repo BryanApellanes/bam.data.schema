@@ -15,9 +15,9 @@ namespace Bam.Net.Data.Schema
         event GeneratorEventDelegate GenerateComplete;
         event GeneratorEventDelegate GenerateStarted;
 
-        void Generate(ISchemaDefinition schema);
-        void Generate(ISchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null);
-        void Generate(ISchemaDefinition schema, string root);
-        void Generate(ISchemaDefinition schema, string root, string partialsDir);
+        void Generate(IDaoSchemaDefinition schema);
+        void Generate(IDaoSchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null);
+        void Generate(IDaoSchemaDefinition schema, string root);
+        void Generate(IDaoSchemaDefinition schema, string root, string partialsDir);
     }
 }

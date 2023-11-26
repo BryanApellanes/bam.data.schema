@@ -65,7 +65,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public override SchemaDefinition Extract()
+        public override DaoSchemaDefinition Extract()
         {
             if (!_analyzed)
             {

@@ -12,7 +12,7 @@ namespace Bam.Net.Data.Repositories
 	/// <summary>
 	/// Class that provides database schema like relationships
 	/// for CLR types.  This class should not be instantiated
-	/// directly, instead see <see cref="Bam.Net.Data.Repositories.TypeSchemaGenerator"/>
+	/// directly, instead see <see cref="Bam.Net.Data.Repositories.SchemaProvider"/>
 	/// </summary>
 	public class TypeSchema : ITypeSchema
 	{
@@ -27,7 +27,7 @@ namespace Bam.Net.Data.Repositories
         public override string ToString()
         {
             List<Type> sortedTables = Tables.ToList();
-            sortedTables.Sort((t1, t2) => t1.FullName.CompareTo(t2.FullName));
+            sortedTables.Sort((t1, t2) => (t1.FullName ?? string.Empty).CompareTo(t2.FullName));
             List<ITypeFk> sortedForeignKeys = ForeignKeys.ToList();
             sortedForeignKeys.Sort((f1, f2) => f1.Hash.CompareTo(f2.Hash));
             List<ITypeXref> sortedXrefs = Xrefs.ToList();

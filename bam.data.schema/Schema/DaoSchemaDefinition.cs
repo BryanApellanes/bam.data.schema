@@ -15,17 +15,17 @@ using YamlDotNet.Serialization;
 
 namespace Bam.Net.Data.Schema
 {
-    public class SchemaDefinition : ISchemaDefinition
+    public class DaoSchemaDefinition : IDaoSchemaDefinition
     {
         Dictionary<string, ITable> _tables = new Dictionary<string, ITable>();
         Dictionary<string, ColumnAttribute> _columns = new Dictionary<string, ColumnAttribute>();
 
-        public SchemaDefinition()
+        public DaoSchemaDefinition()
         {
             this.Name = "Default";
             this.DbType = "UnSpecified";
         }
-        public SchemaDefinition(string name): this()
+        public DaoSchemaDefinition(string name): this()
         {
             Name = name;
             File = $"{RuntimeSettings.ProcessDataFolder}\\{name}_schema_definition.json";
@@ -115,7 +115,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        internal ITable GetTable(string tableName)
+        public ITable GetTable(string tableName)
         {
             ITable table = null;
 			if (this._tables.ContainsKey(tableName))
@@ -160,7 +160,7 @@ namespace Bam.Net.Data.Schema
                     select xref).Select(x => new XrefInfo(tableName, x.Name, x.Left)).ToArray();
         }
 
-        internal IXrefTable GetXref(string tableName)
+        public IXrefTable GetXref(string tableName)
         {
             IXrefTable result = null;
             if (this._xrefs.ContainsKey(tableName))
@@ -296,12 +296,12 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         /// <param name="schemaFile"></param>
         /// <returns></returns>
-        public static SchemaDefinition Load(string schemaFile)
+        public static DaoSchemaDefinition Load(string schemaFile)
         {
-            SchemaDefinition schema = new SchemaDefinition {File = schemaFile};
+            DaoSchemaDefinition schema = new DaoSchemaDefinition {File = schemaFile};
             if (System.IO.File.Exists(schemaFile)) 
 			{
-	            schema = schemaFile.FromJsonFile<SchemaDefinition>();
+	            schema = schemaFile.FromJsonFile<DaoSchemaDefinition>();
             }
             else
             {
@@ -330,7 +330,7 @@ namespace Bam.Net.Data.Schema
             Save(this);
         }
 
-        public ISchemaDefinition CombineWith(ISchemaDefinition schemaDefinition)
+        public IDaoSchemaDefinition CombineWith(IDaoSchemaDefinition schemaDefinition)
         {
             foreach (Table table in schemaDefinition.Tables)
             {
@@ -351,7 +351,7 @@ namespace Bam.Net.Data.Schema
         }
         
         static readonly object _saveLock = new object();
-        private static void Save(SchemaDefinition schema)
+        private static void Save(DaoSchemaDefinition schema)
         {
             lock (_saveLock)
             {

@@ -11,9 +11,9 @@ using Bam.Net.Data.Schema;
 
 namespace Bam.Net.Data.Repositories
 {
-	public sealed class SchemaDefinitionCreateResult
+	public sealed class DaoSchemaDefinitionCreateResult
 	{
-		public SchemaDefinitionCreateResult(ISchemaDefinition schemaDefinition, TypeSchema typeSchema, KeyColumn[] missingKeyColumns = null, ForeignKeyColumn[] missingForeignKeyColumns = null) 
+		public DaoSchemaDefinitionCreateResult(IDaoSchemaDefinition schemaDefinition, TypeSchema typeSchema, KeyColumn[] missingKeyColumns = null, ForeignKeyColumn[] missingForeignKeyColumns = null) 
 		{
 			this.SchemaDefinition = schemaDefinition;
 			this.TypeSchema = typeSchema;
@@ -22,7 +22,7 @@ namespace Bam.Net.Data.Repositories
 
 		public TypeSchema TypeSchema { get; private set; }
 		public HashSet<ITypeSchemaWarning> TypeSchemaWarnings { get; set; }
-		public ISchemaDefinition SchemaDefinition { get; private set; }
+		public IDaoSchemaDefinition SchemaDefinition { get; private set; }
 		public SchemaWarnings Warnings { get; private set; }
 
 		public bool MissingColumns => Warnings.MissingKeyColumns.Length > 0 || Warnings.MissingForeignKeyColumns.Length > 0;

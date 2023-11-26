@@ -17,7 +17,7 @@ namespace Bam.Net.Data.Repositories
     /// has an IEnumerable property
     /// of the other type
     /// </summary>
-    public class TypeXref
+    public class TypeXref : ITypeXref
     {
         public TypeXref()
         {
@@ -42,7 +42,7 @@ namespace Bam.Net.Data.Repositories
         {
             get
             {
-                return TypeSchemaGenerator.GetTableNameForType(Left, TableNameProvider);
+                return SchemaProvider.GetTableNameForType(Left, TableNameProvider);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Bam.Net.Data.Repositories
         {
             get
             {
-                return TypeSchemaGenerator.GetTableNameForType(Right, TableNameProvider);
+                return SchemaProvider.GetTableNameForType(Right, TableNameProvider);
             }
         }
 

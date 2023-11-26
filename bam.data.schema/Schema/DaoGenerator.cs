@@ -20,24 +20,27 @@ namespace Bam.Net.Data.Schema
     public class DaoGenerator : IDaoGenerator
     {
         readonly List<Stream> _resultStreams = new List<Stream>();
-        public DaoGenerator(IDaoCodeWriter codeWriter, IDaoTargetStreamResolver targetStreamResolver = null)
-        {
-            DisposeOnComplete = true;
-            SubscribeToEvents();
+        public DaoGenerator(IDaoCodeWriter daoCodeWriter) : this(daoCodeWriter, new FsDaoTargetStreamResolver())
+        { }
 
-            Namespace = "DaoGenerated";
-            TargetStreamResolver = targetStreamResolver ?? new FsDaoTargetStreamResolver();
-            DaoCodeWriter = codeWriter; 
+        public DaoGenerator(IDaoCodeWriter codeWriter, IDaoTargetStreamResolver? targetStreamResolver)
+        {
+            this.DisposeOnComplete = true;
+            this.SubscribeToEvents();
+
+            this.Namespace = "DaoGenerated";
+            this.TargetStreamResolver = targetStreamResolver ?? new FsDaoTargetStreamResolver();
+            this.DaoCodeWriter = codeWriter; 
         }
 
-        public DaoGenerator(string nameSpace)
+        public DaoGenerator(IDaoCodeWriter codeWriter, string nameSpace)
         {
-            DisposeOnComplete = true;
-            SubscribeToEvents();
+            this.DisposeOnComplete = true;
+            this.SubscribeToEvents();
 
-            Namespace = "DaoGenerated";
-            TargetStreamResolver = new FsDaoTargetStreamResolver();
             this.Namespace = nameSpace;
+            this.TargetStreamResolver = new FsDaoTargetStreamResolver();
+            this.DaoCodeWriter = codeWriter;
         }
 
         public static List<string> DefaultReferenceAssemblies => new List<string>(AdHocCSharpCompiler.DefaultReferenceAssemblies);
@@ -74,12 +77,12 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         public event GeneratorEventDelegate GenerateComplete;
 
-        protected void OnGenerateStarted(ISchemaDefinition schema)
+        protected void OnGenerateStarted(IDaoSchemaDefinition schema)
         {
             GenerateStarted?.Invoke(this, schema);
         }
 
-        protected void OnGenerateComplete(ISchemaDefinition schema)
+        protected void OnGenerateComplete(IDaoSchemaDefinition schema)
         {
             GenerateComplete?.Invoke(this, schema);
         }
@@ -94,7 +97,7 @@ namespace Bam.Net.Data.Schema
 
         public string Namespace { get; set; }
 
-        public void Generate(ISchemaDefinition schema)
+        public void Generate(IDaoSchemaDefinition schema)
         {
             Generate(schema, "./");
         }
@@ -104,12 +107,12 @@ namespace Bam.Net.Data.Schema
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="root"></param>
-        public void Generate(ISchemaDefinition schema, string root)
+        public void Generate(IDaoSchemaDefinition schema, string root)
         {
             Generate(schema, null, root, null);
         }
 
-        public void Generate(ISchemaDefinition schema, string root, string partialsDir)
+        public void Generate(IDaoSchemaDefinition schema, string root, string partialsDir)
         {
             Generate(schema, null, root, partialsDir);
         }
@@ -121,7 +124,7 @@ namespace Bam.Net.Data.Schema
         /// <param name="targetResolver">If specified, generated code will be 
         /// written to the stream returned by this function</param>
         /// <param name="root">The root file path to use if no target resolver is specified</param>
-        public void Generate(ISchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null)
+        public void Generate(IDaoSchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null)
         {
             if (string.IsNullOrEmpty(Namespace))
             {
