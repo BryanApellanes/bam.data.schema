@@ -54,7 +54,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\bam.base\bam.base\bam.base.csproj" />
     <ProjectReference Include="..\..\bam.data\bam.data\bam.data.csproj" />
-    <ProjectReference Include="..\..\bam.javascript\bam.javascript\bam.javascript.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="_Repositories\" />
   </ItemGroup>
 
 </Project>

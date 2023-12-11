@@ -7,11 +7,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Bam.Data.Schema;
 using Bam.Net.Data.Schema;
 
 namespace Bam.Net.Data.Repositories
 {
-	public sealed class DaoSchemaDefinitionCreateResult
+    public sealed class DaoSchemaDefinitionCreateResult
 	{
 		public DaoSchemaDefinitionCreateResult(IDaoSchemaDefinition schemaDefinition, TypeSchema typeSchema, KeyColumn[] missingKeyColumns = null, ForeignKeyColumn[] missingForeignKeyColumns = null) 
 		{

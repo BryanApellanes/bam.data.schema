@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using Bam.Net.Data.Schema;
-using Bam.Data.Schema;
+using Bam.Net;
+using Bam.Net.Data;
+using Bam.Net.Data.Repositories;
 
-namespace Bam.Net.Data.Repositories
+namespace Bam.Data.Schema
 {
     /// <summary>
     /// A class used to generate TypeSchemas.  A TypeSchema is 
@@ -16,9 +18,9 @@ namespace Bam.Net.Data.Repositories
     /// for inheritance relationships in the CLR types and
     /// breaks sub types into separate tables.
     /// </summary>
-    public class TypeInheritanceSchemaGenerator: SchemaProvider
+    public class TypeInheritanceSchemaProvider : SchemaProvider
     {
-        public TypeInheritanceSchemaGenerator(ITypeTableNameProvider tableNameProvider = null, ITypeSchemaTempPathProvider schemaTempPathProvider = null)
+        public TypeInheritanceSchemaProvider(ITypeTableNameProvider tableNameProvider = null, ITypeSchemaTempPathProvider schemaTempPathProvider = null)
             : base(tableNameProvider, schemaTempPathProvider)
         {
         }

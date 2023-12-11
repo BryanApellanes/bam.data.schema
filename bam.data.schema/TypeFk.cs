@@ -39,7 +39,7 @@ namespace Bam.Net.Data.Repositories
 
 		/// <summary>
 		/// The property that represents the collection
-		/// of Foreign Keys that represent the same 
+		/// of Foreign Keys that reference the same 
 		/// Primary Key
 		/// </summary>
 		public PropertyInfo CollectionProperty { get; set; }

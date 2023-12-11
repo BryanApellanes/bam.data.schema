@@ -10,7 +10,7 @@ namespace Bam.Net.Data.Schema
         bool DisposeOnComplete { get; set; }
         bool GenerateQiClasses { get; set; }
         string Namespace { get; set; }
-        IDaoTargetStreamResolver TargetStreamResolver { get; set; }
+        //IDaoTargetStreamResolver TargetStreamResolver { get; set; }
 
         event GeneratorEventDelegate GenerateComplete;
         event GeneratorEventDelegate GenerateStarted;

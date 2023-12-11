@@ -1,3 +1,4 @@
+using Bam.Data.Schema;
 using System;
 using System.Linq;
 

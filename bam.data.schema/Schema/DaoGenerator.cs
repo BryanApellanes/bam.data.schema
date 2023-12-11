@@ -20,16 +20,13 @@ namespace Bam.Net.Data.Schema
     public class DaoGenerator : IDaoGenerator
     {
         readonly List<Stream> _resultStreams = new List<Stream>();
-        public DaoGenerator(IDaoCodeWriter daoCodeWriter) : this(daoCodeWriter, new FsDaoTargetStreamResolver())
-        { }
 
-        public DaoGenerator(IDaoCodeWriter codeWriter, IDaoTargetStreamResolver? targetStreamResolver)
+        public DaoGenerator(IDaoCodeWriter codeWriter)
         {
             this.DisposeOnComplete = true;
             this.SubscribeToEvents();
 
             this.Namespace = "DaoGenerated";
-            this.TargetStreamResolver = targetStreamResolver ?? new FsDaoTargetStreamResolver();
             this.DaoCodeWriter = codeWriter; 
         }
 
@@ -39,19 +36,12 @@ namespace Bam.Net.Data.Schema
             this.SubscribeToEvents();
 
             this.Namespace = nameSpace;
-            this.TargetStreamResolver = new FsDaoTargetStreamResolver();
             this.DaoCodeWriter = codeWriter;
         }
 
         public static List<string> DefaultReferenceAssemblies => new List<string>(AdHocCSharpCompiler.DefaultReferenceAssemblies);
 
         public IDaoCodeWriter DaoCodeWriter
-        {
-            get;
-            set;
-        }
-
-        public IDaoTargetStreamResolver TargetStreamResolver
         {
             get;
             set;
@@ -169,14 +159,6 @@ namespace Bam.Net.Data.Schema
             {
                 partials.Create();
             }
-        }
-
-        public static Assembly[] GetReferenceAssemblies()
-        {
-            Assembly[] assembliesToReference = new Assembly[]{
-                    typeof(DaoGenerator).Assembly,
-                    typeof(DataTypes).Assembly };
-            return assembliesToReference;
         }
 
         protected virtual void WritePartialToStream(string code, Stream s)

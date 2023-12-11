@@ -5,12 +5,12 @@ using Bam.Net;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using Newtonsoft.Json;
-using Bam.Net.Javascript;
+//using Bam.Net.Javascript;
 
 namespace Bam.Net.Data.Schema
 {
     [Proxy("schemaManager")]
-    public partial class SchemaManager : IHasSchemaTempPathProvider
+    public class SchemaManager : IHasSchemaTempPathProvider
     {
         public SchemaManager(bool autoSave = true)
         {
@@ -32,7 +32,6 @@ namespace Bam.Net.Data.Schema
             this.ManageSchema(schema);
         }
 
-        public IDaoCodeWriter DaoCodeWriter { get; set; }
 
         public Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }  
 
@@ -48,20 +47,6 @@ namespace Bam.Net.Data.Schema
             }
 
             set => _currentSchema = value;
-        }
-
-        string _rootDir;
-        public string RootDir
-        {
-            get
-            {
-                return _rootDir ?? SchemaTempPathProvider(CurrentSchema);
-            }
-
-            set
-            {
-                _rootDir = value;
-            }
         }
 
         public void ManageSchema(string schemaFile)
@@ -423,95 +408,7 @@ namespace Bam.Net.Data.Schema
             CurrentSchema.RemoveTable(tableName);
         }
 
-        public SchemaManagerResult GenerateDaoAssembly(FileInfo databaseDotJs, bool compile = false, bool keepSource = false, string genTo = "./tmp", string partialsDir = null)
-        {
-            string result = databaseDotJs.JsonFromJsLiteralFile("database");
-            return GenerateDaoAssembly(result, compile ? new DirectoryInfo(BinDir) : null, keepSource, genTo, partialsDir);
-        }
-
-        public SchemaManagerResult GenerateDaoAssembly(FileInfo databaseDotJs, DirectoryInfo compileTo, bool keepSource = false, string genTo = "./tmp", string partialsDir = null)
-        {
-            string result = databaseDotJs.JsonFromJsLiteralFile("database");
-
-            return GenerateDaoAssembly(result, compileTo, keepSource, genTo, partialsDir);
-        }
-
-        public SchemaManagerResult GenerateDaoAssembly(FileInfo databaseDotJs, DirectoryInfo compileTo, DirectoryInfo temp, DirectoryInfo partialsDir)
-        {
-            string databaseSchemaJson = databaseDotJs.JsonFromJsLiteralFile("database");
-            return GenerateDaoAssembly(databaseSchemaJson, compileTo, false, temp.FullName, partialsDir.FullName);
-        }
-
-        public SchemaManagerResult GenerateDaoAssembly(string simpleSchemaJson, DirectoryInfo compileTo, DirectoryInfo temp)
-        {
-            return GenerateDaoAssembly(simpleSchemaJson, compileTo, false, temp.FullName);
-        }
-
-        /// <summary>
-        /// Generate 
-        /// </summary>
-        /// <param name="simpleSchemaJson"></param>
-        /// <returns></returns>
-        public SchemaManagerResult GenerateDaoAssembly(string simpleSchemaJson, DirectoryInfo compileTo = null, bool keepSource = false, string tempDir = "./tmp", string partialsDir = null)
-        {
-            try
-            {
-                bool compile = compileTo != null;
-                SchemaManagerResult managerResult = new SchemaManagerResult("Generation completed");
-                dynamic rehydrated = JsonConvert.DeserializeObject<dynamic>(simpleSchemaJson);
-                if (rehydrated["nameSpace"] == null)// || rehydrated["schemaName"] == null)
-                {
-                    managerResult.ExceptionMessage = "Please specify nameSpace";
-                    managerResult.Message = string.Empty;
-                    managerResult.Success = false;
-                }
-                else if (rehydrated["schemaName"] == null)
-                {
-                    managerResult.ExceptionMessage = "Please specify schemaName";
-                    managerResult.Message = string.Empty;
-                    managerResult.Success = false;
-                }
-                else
-                {
-                    string nameSpace = (string)rehydrated["nameSpace"];
-                    string schemaName = (string)rehydrated["schemaName"];
-                    managerResult.Namespace = nameSpace;
-                    managerResult.SchemaName = schemaName;
-                    List<dynamic> foreignKeys = new List<dynamic>();
-
-                    SetSchema(schemaName, false);
-
-                    ProcessTables(rehydrated, foreignKeys);
-                    ProcessXrefs(rehydrated, foreignKeys);
-
-                    foreach (dynamic fk in foreignKeys)
-                    {
-                        AddColumn(fk.ForeignKeyTable, new Column(fk.ReferencingColumn, DataTypes.ULong));
-                        SetForeignKey(fk.PrimaryTable, fk.ForeignKeyTable, fk.ReferencingColumn);
-                    }
-
-                    DirectoryInfo daoDir = new DirectoryInfo(tempDir);
-                    if (!daoDir.Exists)
-                    {
-                        daoDir.Create();
-                    }
-
-                    DaoGenerator generator = GetDaoGenerator(compileTo, keepSource, partialsDir, compile, managerResult, nameSpace, daoDir);
-                    generator.Generate(CurrentSchema, daoDir.FullName, partialsDir);
-                    managerResult.DaoAssembly = generator.DaoAssemblyFile;
-                }
-                return managerResult;
-            }
-            catch (Exception ex)
-            {
-                SchemaManagerResult r = new SchemaManagerResult(ex.Message)
-                {
-                    StackTrace = ex.StackTrace ?? "", Success = false
-                };
-                return r;
-            }
-        }
-
+        
         /// <summary>
         /// Augmentations that are executed prior to adding columns and 
         /// foreign keys
@@ -532,7 +429,6 @@ namespace Bam.Net.Data.Schema
             set;
         }
 
-        public string BinDir => Path.Combine(RootDir, "bin");
 
         /// <summary>
         /// Adds a cross reference table (xref) which creates a many
@@ -557,56 +453,14 @@ namespace Bam.Net.Data.Schema
         }
 
 
-        /// <summary>
-        /// Gets the most recent set of exceptions that occurred during an attempted
-        /// Generate -> Compile
-        /// </summary>
-        public CompilerErrorCollection CompilerErrors
-        {
-            get;
-            private set;
-        }
 
-        public CompilerError[] GetErrors()
-        {
-            if (CompilerErrors == null)
-            {
-                return new CompilerError[] { };
-            }
-
-            CompilerError[] results = new CompilerError[CompilerErrors.Count];
-            for (int i = 0; i < results.Length; i++)
-            {
-                results[i] = CompilerErrors[i];
-            }
-
-            return results;
-        }
-
-        private void ProcessTables(dynamic rehydrated, List<dynamic> foreignKeys)
-        {
-            foreach (dynamic table in rehydrated["tables"])
-            {
-                string tableName = (string)table["name"];
-                Args.ThrowIfNullOrEmpty(tableName, "Table.name");
-                this.AddTable(tableName);
-
-                ExecutePreColumnAugmentations(tableName);
-
-                AddColumns(table, tableName);
-
-                AddForeignKeys(foreignKeys, table, tableName);
-
-                ExecutePostColumnAugmentations(tableName);
-            }
-        }
 
         internal void ExecutePostColumnAugmentations(string tableName)
         {
             ExecutePostColumnAugmentations(tableName, this);
         }
         
-        private void ExecutePostColumnAugmentations(string tableName, SchemaManager manager)
+        protected void ExecutePostColumnAugmentations(string tableName, SchemaManager manager)
         {
             foreach (SchemaManagerAugmentation augmentation in PostColumnAugmentations)
             {
@@ -627,7 +481,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        private static void AddForeignKeys(List<dynamic> foreignKeys, dynamic table, string tableName)
+        protected static void AddForeignKeys(List<dynamic> foreignKeys, dynamic table, string tableName)
         {
             if (table["fks"] != null)
             {
@@ -645,7 +499,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        private void AddColumns(dynamic table, string tableName)
+        protected void AddColumns(dynamic table, string tableName)
         {
             AddColumns(this, table, tableName);
         }
@@ -672,34 +526,12 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        private void ProcessXrefs(dynamic rehydrated, List<dynamic> foreignKeys)
-        {
-            ProcessXrefs(this, rehydrated, foreignKeys);
-        }
-
-        protected static void ProcessXrefs(SchemaManager manager, dynamic rehydrated, List<dynamic> foreignKeys)
-        {
-            if (rehydrated["xrefs"] != null)
-            {
-                foreach (dynamic xref in rehydrated["xrefs"])
-                {
-                    string leftTableName = (string)xref[0];
-                    string rightTableName = (string)xref[1];
-
-                    Args.ThrowIfNullOrEmpty(leftTableName, "xref[0]");
-                    Args.ThrowIfNullOrEmpty(rightTableName, "xref[1]");
-
-                    SetXref(manager, foreignKeys, leftTableName, rightTableName);
-                }
-
-            }
-        }
         public void SetXref(List<dynamic> foreignKeys, string leftTableName, string rightTableName)
         {
             SetXref(this, foreignKeys, leftTableName, rightTableName);
         }
 
-        private static void SetXref(SchemaManager manager, List<dynamic> foreignKeys, string leftTableName, string rightTableName)
+        protected static void SetXref(SchemaManager manager, List<dynamic> foreignKeys, string leftTableName, string rightTableName)
         {
             string xrefTableName = $"{leftTableName}{rightTableName}";
             string leftColumnName = $"{leftTableName}Id";
@@ -723,76 +555,6 @@ namespace Bam.Net.Data.Schema
             foreignKeys.Add(new { PrimaryTable = primaryTable, ForeignKeyTable = foreignKeyTable, ReferencingColumn = referencingColumnName });
         }
 
-        private FileInfo Compile(DirectoryInfo dir, DaoGenerator generator, string nameSpace, DirectoryInfo copyTo)
-        {
-            return Compile(new DirectoryInfo[] { dir }, generator, nameSpace, copyTo);
-        }
-
-        private FileInfo Compile(DirectoryInfo[] dirs, DaoGenerator generator, string nameSpace, DirectoryInfo copyTo)
-        {
-            string[] referenceAssemblies = DaoGenerator.DefaultReferenceAssemblies.ToArray();
-            for (int i = 0; i < referenceAssemblies.Length; i++)
-            {
-                string assembly = referenceAssemblies[i];
-                string binPath = Path.Combine(BinDir, assembly);
-
-                referenceAssemblies[i] = File.Exists(binPath) ? binPath : assembly;
-            }
-
-            CompilerResults results = AdHocCSharpCompiler.CompileDirectories(dirs, $"{nameSpace}.dll", referenceAssemblies, false);
-            if (results.Errors.Count > 0)
-            {
-                CompilerErrors = results.Errors;
-                return null;
-            }
-            else
-            {
-                CompilerErrors = null;
-                DirectoryInfo bin = new DirectoryInfo(BinDir);
-                if (!bin.Exists)
-                {
-                    bin.Create();
-                }
-
-                FileInfo dll = new FileInfo(results.CompiledAssembly.CodeBase.Replace("file:///", ""));
-
-                string binFile = Path.Combine(bin.FullName, dll.Name);
-                string copy = Path.Combine(copyTo.FullName, dll.Name);
-                if (File.Exists(binFile))
-                {
-                    BackupFile(binFile);
-                }
-                dll.CopyTo(binFile, true);
-                if (!binFile.ToLowerInvariant().Equals(copy.ToLowerInvariant()))
-                {
-                    if (File.Exists(copy))
-                    {
-                        BackupFile(copy);
-                    }
-
-                    dll.CopyTo(copy);
-                }
-
-                return new FileInfo(copy);
-            }
-        }
-
-        private static void BackupFile(string fileName)
-        {
-            FileInfo binFileInfo = new FileInfo(fileName);
-            FileInfo backupFile = new FileInfo(Path.Combine(
-                        binFileInfo.Directory.FullName,
-                        "backup",
-                        $"{Path.GetFileNameWithoutExtension(fileName)}_{"".RandomLetters(4)}_{DateTime.Now.ToJulianDate().ToString()}.dll"));
-
-            if (!backupFile.Directory.Exists)
-            {
-                backupFile.Directory.Create();
-            }
-            binFileInfo.MoveTo(backupFile.FullName);
-        }
-
-
         private DaoSchemaDefinition LoadSchema(string schemaName)
         {
             string schemaFile = SchemaNameToFilePath(schemaName);
@@ -813,56 +575,6 @@ namespace Bam.Net.Data.Schema
             return managerResult;
         }
 
-        private DaoGenerator GetDaoGenerator(DirectoryInfo compileTo, bool keepSource, string partialsDir, bool compile, SchemaManagerResult managerResult, string nameSpace, DirectoryInfo daoDir)
-        {
-            Args.ThrowIfNull(this.DaoCodeWriter, "DaoCodeWriter");
-
-            DaoGenerator generator = new DaoGenerator(this.DaoCodeWriter, nameSpace);
-            if (compile)
-            {
-                if (!compileTo.Exists)
-                {
-                    compileTo.Create();
-                }
-
-                generator.GenerateComplete += (gen, s) =>
-                {
-                    List<DirectoryInfo> daoDirs = new List<DirectoryInfo> {daoDir};
-                    if (!string.IsNullOrEmpty(partialsDir))
-                    {
-                        daoDirs.Add(new DirectoryInfo(partialsDir));
-                    }
-
-                    gen.DaoAssemblyFile = Compile(daoDirs.ToArray(), gen, nameSpace, compileTo);
-
-                    if (CompilerErrors != null)
-                    {
-                        managerResult.Success = false;
-                        managerResult.Message = string.Empty;
-                        foreach (CompilerError err in GetErrors())
-                        {
-                            managerResult.Message = $"{managerResult.Message}\r\nFile=>{err.FileName}\r\n{err.ErrorNumber}:::Line {err.Line}, Column {err.Column}::{err.ErrorText}";
-                        }
-                    }
-                    else
-                    {
-                        managerResult.Message = $"{managerResult.Message}\r\nDao Compiled";
-                        managerResult.Success = true;
-                    }
-
-                    if (!keepSource)
-                    {
-                        daoDir.Delete(true);
-                        daoDir.Refresh();
-                        if (daoDir.Exists)
-                        {
-                            daoDir.Delete();
-                        }
-                    }
-                };
-            }
-            return generator;
-        }
         
         private string SchemaNameToFilePath(string schemaName)
         {

@@ -22,8 +22,8 @@ namespace Bam.Net.Data.Schema
             SchemaTempPathProvider = sd => RuntimeSettings.ProcessDataFolder;
             _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.LeadingUnderscore, (tableName, columnName, propertyName) => $"_{columnName}");
             _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.TrailingUnderscore, (tableName, columnName, propertyName) => $"{columnName}_");
-            _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.TypePrefix, (tableName, columnName, propertyName) => $"{GetColumnDataType(tableName, columnName).ToString()}{columnName}");
-            _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.TypeSuffix, (tableName, columnName, propertyName) => $"{columnName}{GetColumnDataType(tableName, columnName).ToString()}");
+            _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.TypePrefix, (tableName, columnName, propertyName) => $"{GetColumnDataType(tableName, columnName)}{columnName}");
+            _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.TypeSuffix, (tableName, columnName, propertyName) => $"{columnName}{GetColumnDataType(tableName, columnName)}");
             _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.UnderscoreDelimit, (tableName, columnName, propertyName) => $"_{columnName}_");
             _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.Custom, (tableName, columnName, propertyName) => CustomNamingCollisionHandler(tableName, columnName, propertyName));
             _namingCollisionHandlers.Add(SchemaExtractorNamingCollisionStrategy.Invalid, (tableName, columnName, propertyName) => throw new InvalidOperationException("Invalid SchemaExtractorNamingCollisionStrategy specified"));

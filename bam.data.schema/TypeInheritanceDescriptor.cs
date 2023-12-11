@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Bam.Net;
+using Bam.Net.Data.Repositories;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Bam.Net.Data.Repositories
+namespace Bam.Data.Schema
 {
     public class TypeInheritanceDescriptor
     {
@@ -13,13 +11,13 @@ namespace Bam.Net.Data.Repositories
         {
             Type = type;
             RootType = type;
-            Chain = new List<TypeTable> {new TypeTable(type)};
+            Chain = new List<TypeTable> { new TypeTable(type) };
             Type baseType = type.BaseType;
-            while(baseType != typeof(object) && baseType != null)
+            while (baseType != typeof(object) && baseType != null)
             {
                 RootType = baseType;
                 Chain.Add(new TypeTable(baseType));
-                baseType = baseType.BaseType;                
+                baseType = baseType.BaseType;
             }
         }
         public Type Type { get; set; }

@@ -25,11 +25,13 @@ namespace Bam.Net.Data.Schema
             this.Name = "Default";
             this.DbType = "UnSpecified";
         }
+
         public DaoSchemaDefinition(string name): this()
         {
             Name = name;
             File = $"{RuntimeSettings.ProcessDataFolder}\\{name}_schema_definition.json";
         }
+
         /// <summary>
         /// Gets or sets the type of the database that this SchemaDefinition was
         /// extracted from.  May be null.

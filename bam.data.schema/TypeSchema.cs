@@ -1,6 +1,7 @@
 /*
 	Copyright © Bryan Apellanes 2015  
 */
+using Bam.Data.Schema;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Bam.Net.Data.Repositories
 {
-	/// <summary>
-	/// Class that provides database schema like relationships
-	/// for CLR types.  This class should not be instantiated
-	/// directly, instead see <see cref="Bam.Net.Data.Repositories.SchemaProvider"/>
-	/// </summary>
-	public class TypeSchema : ITypeSchema
+    /// <summary>
+    /// Class that provides database schema like relationships
+    /// for CLR types.  This class should not be instantiated
+    /// directly, instead see <see cref="Bam.Data.Schema.SchemaProvider"/>
+    /// </summary>
+    public class TypeSchema : ITypeSchema
 	{
         public TypeSchema() { }
         public HashSet<ITypeSchemaWarning> Warnings { get; set; }

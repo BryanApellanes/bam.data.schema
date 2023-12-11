@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bam.Data.Schema;
 using Bam.Net.Data.Schema;
 
 namespace Bam.Net.Data.Repositories
@@ -32,7 +33,7 @@ namespace Bam.Net.Data.Repositories
         /// <returns></returns>
         public ISqlStringBuilder WriteSchemaScript(IDatabase database, params Type[] types)
         {
-            TypeInheritanceSchemaGenerator schemaGenerator = new TypeInheritanceSchemaGenerator {Types = types};
+            TypeInheritanceSchemaProvider schemaGenerator = new TypeInheritanceSchemaProvider {Types = types};
             return WriteSchemaScript(database, schemaGenerator);
         }
 
