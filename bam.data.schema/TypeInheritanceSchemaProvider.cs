@@ -20,7 +20,7 @@ namespace Bam.Data.Schema
     /// </summary>
     public class TypeInheritanceSchemaProvider : SchemaProvider
     {
-        public TypeInheritanceSchemaProvider(ITypeTableNameProvider tableNameProvider = null, ITypeSchemaTempPathProvider schemaTempPathProvider = null)
+        public TypeInheritanceSchemaProvider(ITypeTableNameProvider tableNameProvider = null, ISchemaTempPathProvider schemaTempPathProvider = null)
             : base(tableNameProvider, schemaTempPathProvider)
         {
         }

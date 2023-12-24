@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Bam.Data.Schema
 {
-    public interface ITypeSchemaTempPathProvider
+    public interface ISchemaTempPathProvider
     {
         string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition, ITypeSchema typeSchema);
 

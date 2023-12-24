@@ -47,7 +47,7 @@ namespace Bam.Net.Data.Repositories
 
         public SqlStringBuilder WriteSchemaScript(IDatabase database, DaoSchemaDefinitionCreateResult schemaDefinitionCreateResult)
         {
-            IDaoSchemaDefinition schemaDefinition = schemaDefinitionCreateResult.SchemaDefinition;
+            IDaoSchemaDefinition schemaDefinition = schemaDefinitionCreateResult.DaoSchemaDefinition;
             SchemaWriter writer = database.GetService<SchemaWriter>();
             IEnumerable<ForeignKeyAttribute> fks = GetForeignKeyAttributes(schemaDefinition);
             

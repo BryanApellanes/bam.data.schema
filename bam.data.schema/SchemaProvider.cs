@@ -22,7 +22,7 @@ namespace Bam.Data.Schema
         public SchemaProvider()
         {
             DefaultDataTypeBehavior = DefaultDataTypeBehaviors.Exclude;
-            TypeSchemaTempPathProvider = new TypeSchemaTempPathProvider();
+            TypeSchemaTempPathProvider = new SchemaTempPathProvider();
             SchemaManager = new CuidSchemaManager(false);
             TypeSchemaWarnings = new HashSet<ITypeSchemaWarning>();
             TableNameProvider = new EchoTypeTableNameProvider();
@@ -30,10 +30,10 @@ namespace Bam.Data.Schema
             Types = new List<Type>();
         }
 
-        public SchemaProvider(ITypeTableNameProvider tableNameProvider, ITypeSchemaTempPathProvider schemaTempPathProvider)
+        public SchemaProvider(ITypeTableNameProvider tableNameProvider, ISchemaTempPathProvider schemaTempPathProvider)
         {
             DefaultDataTypeBehavior = DefaultDataTypeBehaviors.Exclude;
-            TypeSchemaTempPathFuncProvider = schemaTempPathProvider ?? new TypeSchemaTempPathProvider();
+            TypeSchemaTempPathFuncProvider = schemaTempPathProvider ?? new SchemaTempPathProvider();
             SchemaManager = new CuidSchemaManager(false);
             TypeSchemaWarnings = new HashSet<ITypeSchemaWarning>();
             TableNameProvider = tableNameProvider;
@@ -99,7 +99,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        protected ITypeSchemaTempPathProvider TypeSchemaTempPathFuncProvider
+        protected ISchemaTempPathProvider TypeSchemaTempPathFuncProvider
         {
             get;
             set;
@@ -111,31 +111,31 @@ namespace Bam.Data.Schema
         /// <summary>
         /// The event that fires when schema creation begins
         /// </summary>
-        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "SchemaName (parameter): {SchemaName}")]
+        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Creating dao schema started: '{SchemaName}'")]
         public event EventHandler CreatingSchemaStarted;
 
         /// <summary>
         /// The event that fires when type schema creation begins
         /// </summary>
-        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "SchemaName (parameter): {SchemaName}")]
+        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Creating type schema started: '{SchemaName}'")]
         public event EventHandler CreatingTypeSchemaStarted;
 
         /// <summary>
         /// The event that fires when type schema creation completes
         /// </summary>
-        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "SchemaName (parameter): {SchemaName}")]
+        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Creating type schema finished: '{SchemaName}'")]
         public event EventHandler CreatingTypeSchemaFinished;
 
         /// <summary>
         /// The event that fires when dao schema creation begins
         /// </summary>
-        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "SchemaName (parameter || types.Md5() ): {SchemaName}")]
+        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Writing dao schema started: '{SchemaName}'")]
         public event EventHandler WritingDaoSchemaStarted;
 
         /// <summary>
         /// The event that fires when dao schema creation completes
         /// </summary>
-        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "SchemaName (parameter || types.Md5() ): {SchemaName}")]
+        [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Writing dao schema finished: '{SchemaName}'")]
         public event EventHandler WritingDaoSchemaFinished;
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace Bam.Data.Schema
             // fks
             foreach (TypeFk foreignKey in foreignKeyTypes)
             {
-                TypeSchemaPropertyInfo keyInfo = foreignKey.PrimaryKeyProperty as TypeSchemaPropertyInfo;
+                TypeSchemaPropertyInfo? keyInfo = foreignKey.PrimaryKeyProperty as TypeSchemaPropertyInfo;
                 if (keyInfo != null)
                 {
                     KeyColumn key = keyInfo.ToKeyColumn();
@@ -280,7 +280,7 @@ namespace Bam.Data.Schema
 
             foreach (TypeFk foreignKey in foreignKeyTypes)
             {
-                TypeSchemaPropertyInfo fkInfo = foreignKey.ForeignKeyProperty as TypeSchemaPropertyInfo;
+                TypeSchemaPropertyInfo? fkInfo = foreignKey.ForeignKeyProperty as TypeSchemaPropertyInfo;
                 if (fkInfo != null)
                 {
                     PropertyInfo keyProperty = GetKeyProperty(foreignKey.PrimaryKeyType, missingKeyColumns);
@@ -393,9 +393,10 @@ namespace Bam.Data.Schema
 
             return xrefTypes;
         }
+
         protected internal static bool AreXrefs(Type left, Type right)
         {
-            return AreXrefs(left, right, out PropertyInfo ignoreLeft, out PropertyInfo ignoreRight);
+            return AreXrefs(left, right, out _, out _);
         }
 
         protected internal static bool AreXrefs(Type left, Type right, out PropertyInfo leftEnumerable, out PropertyInfo rightEnumerable)

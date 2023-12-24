@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace Bam.Data.Schema
 {
-    public class TypeSchemaTempPathProvider : ITypeSchemaTempPathProvider
+    public class SchemaTempPathProvider : ISchemaTempPathProvider
     {
-        public static implicit operator Func<IDaoSchemaDefinition, ITypeSchema, string>(TypeSchemaTempPathProvider typeSchemaTempPathProvider)
+        public static implicit operator Func<IDaoSchemaDefinition, ITypeSchema, string>(SchemaTempPathProvider typeSchemaTempPathProvider)
         {
             return typeSchemaTempPathProvider.GetSchemaTempPath;
         }
 
-        public TypeSchemaTempPathProvider() { }
+        public SchemaTempPathProvider() { }
 
         private Func<IDaoSchemaDefinition, ITypeSchema, string>? impl;
-        public TypeSchemaTempPathProvider(Func<IDaoSchemaDefinition, ITypeSchema, string>? impl)
+        public SchemaTempPathProvider(Func<IDaoSchemaDefinition, ITypeSchema, string>? impl)
         {
             this.impl = impl;
         }
 
-        public string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition, ITypeSchema typeSchema)
+        public virtual string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition, ITypeSchema typeSchema)
         {
             if(impl != null)
             {
@@ -33,7 +33,7 @@ namespace Bam.Data.Schema
             return GetSchemaTempPath(schemaDefinition); // This implementation ignores typeSchema
         }
 
-        public string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition)
+        public virtual string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition)
         {
             if (impl != null)
             {
