@@ -53,6 +53,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\bam.base\bam.base\bam.base.csproj" />
+    <ProjectReference Include="..\..\bam.data\bam.data.firebird\bam.data.firebird.csproj" />
+    <ProjectReference Include="..\..\bam.data\bam.data.mssql\bam.data.mssql.csproj" />
+    <ProjectReference Include="..\..\bam.data\bam.data.mysql\bam.data.mysql.csproj" />
+    <ProjectReference Include="..\..\bam.data\bam.data.oracle\bam.data.oracle.csproj" />
+    <ProjectReference Include="..\..\bam.data\bam.data.postgres\bam.data.postgres.csproj" />
     <ProjectReference Include="..\..\bam.data\bam.data\bam.data.csproj" />
   </ItemGroup>
 
