@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Bam.Net.Data.Schema
 {
-    public class AddColumnAugmentation: SchemaManagerAugmentation
+    public class AddColumnAugmentation: DaoSchemaManagerAugmentation
     {
         public string ColumnName { get; set; }
         public DataTypes DataType { get; set; }
         public bool AllowNull { get; set; }
-        public override void Execute(string tableName, SchemaManager manager)
+        public override void Execute(string tableName, DaoSchemaManager manager)
         {
             manager.AddColumn(tableName, new Column(ColumnName, DataType, AllowNull));
         }

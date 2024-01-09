@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bam.Net.Data.Schema
 {
-    public enum SchemaExtractorNamingCollisionStrategy
+    public enum DaoSchemaExtractorNamingCollisionStrategy
     {
         Invalid,
         TypeSuffix,

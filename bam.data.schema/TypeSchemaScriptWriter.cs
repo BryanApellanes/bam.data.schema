@@ -37,9 +37,9 @@ namespace Bam.Net.Data.Repositories
             return WriteSchemaScript(database, schemaGenerator);
         }
 
-        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaProvider typeSchemaGenerator, SchemaManager schemaManager = null)
+        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaProvider typeSchemaGenerator, DaoSchemaManager schemaManager = null)
         {
-            schemaManager = schemaManager ?? new SchemaManager { AutoSave = false };
+            schemaManager = schemaManager ?? new DaoSchemaManager { AutoSave = false };
             typeSchemaGenerator.SchemaManager = schemaManager;
             LastSchemaDefinitionCreateResult = typeSchemaGenerator.CreateDaoSchemaDefinition();
             return WriteSchemaScript(database, LastSchemaDefinitionCreateResult);

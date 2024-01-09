@@ -16,7 +16,7 @@ namespace Bam.Net.Data.Repositories
         bool IncludeModifiedBy { get; set; }
         string Instant { get; }
         string Message { get; set; }
-        SchemaManager SchemaManager { get; set; }
+        DaoSchemaManager SchemaManager { get; set; }
         string SchemaName { get; set; }
         ITypeTableNameProvider TableNameProvider { get; set; }
         IEnumerable<Type> Types { get; set; }

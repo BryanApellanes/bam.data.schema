@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Bam.Net.Data.SQLite
 {
-    public class SQLiteSchemaExtractor : SchemaExtractor
+    public class SQLiteSchemaExtractor : DaoSchemaExtractor
     {
         const string pragmaFormat = "PRAGMA TABLE_INFO('{0}')";
         

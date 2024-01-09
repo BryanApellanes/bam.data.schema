@@ -173,9 +173,9 @@ namespace Bam.Net.Data.Schema
             return result;
         }
 
-        public ISchemaManagerResult AddXref(IXrefTable xref)
+        public IDaoSchemaManagerResult AddXref(IXrefTable xref)
         {
-            ISchemaManagerResult r = new SchemaManagerResult($"XrefTable {xref.Name} was added.");
+            IDaoSchemaManagerResult r = new DaoSchemaManagerResult($"XrefTable {xref.Name} was added.");
             try
             {
                 xref.ConnectionName = this.Name;
@@ -213,9 +213,9 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public ISchemaManagerResult AddTable(ITable table)
+        public IDaoSchemaManagerResult AddTable(ITable table)
         {
-            SchemaManagerResult r = new SchemaManagerResult($"Table {table.Name} was added.");
+            DaoSchemaManagerResult r = new DaoSchemaManagerResult($"Table {table.Name} was added.");
             try
             {
                 table.ConnectionName = this.Name;
@@ -237,9 +237,9 @@ namespace Bam.Net.Data.Schema
             return r;
         }
 
-        public ISchemaManagerResult AddForeignKey(IForeignKeyColumn fk)
+        public IDaoSchemaManagerResult AddForeignKey(IForeignKeyColumn fk)
         {
-            SchemaManagerResult r = new SchemaManagerResult($"ForeignKey {fk.ReferenceName} was added.");
+            DaoSchemaManagerResult r = new DaoSchemaManagerResult($"ForeignKey {fk.ReferenceName} was added.");
             try
             {
                 if (!this._foreignKeys.Contains(fk))
@@ -271,7 +271,7 @@ namespace Bam.Net.Data.Schema
             return r;
         }
         
-        private void SetErrorDetails(ISchemaManagerResult r, Exception ex)
+        private void SetErrorDetails(IDaoSchemaManagerResult r, Exception ex)
         {
             this.LastException = ex;
             r.Message = ex.Message;

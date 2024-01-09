@@ -18,7 +18,7 @@ namespace Bam.Net.Data.Schema
             this.DataType = DataTypes.ULong;
             this.AllowNull = false;
         }
-        public override void Execute(string tableName, SchemaManager manager)
+        public override void Execute(string tableName, DaoSchemaManager manager)
         {
             base.Execute(tableName, manager);
             manager.SetKeyColumn(tableName, ColumnName);

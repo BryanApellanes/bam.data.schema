@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace Bam.Net.Data.MsSql
 {
-    public class MsSqlSchemaExtractor : SchemaExtractor
+    public class MsSqlSchemaExtractor : DaoSchemaExtractor
     {
         // TODO: update this to retrieve all meta data using fewer queries along the lines of  
         //SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH FROM {GetSchemaName()}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'TestTable'

@@ -12,15 +12,15 @@ using YamlDotNet.Serialization;
 
 namespace Bam.Net.Data.Schema
 {
-    public class SchemaManagerResult : ISchemaManagerResult
+    public class DaoSchemaManagerResult : IDaoSchemaManagerResult
     {
-        public SchemaManagerResult(string message)
+        public DaoSchemaManagerResult(string message)
         {
             this.Message = message;
             this.Success = true;
         }
 
-        public SchemaManagerResult(string message, bool success)
+        public DaoSchemaManagerResult(string message, bool success)
         {
             this.Message = message;
             this.Success = success;

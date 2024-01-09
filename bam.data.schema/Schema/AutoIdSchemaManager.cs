@@ -15,7 +15,7 @@ namespace Bam.Net.Data.Schema
     /// schema and related Data Access Objects from a *.db.js
     /// file
     /// </summary>
-    public class AutoIdSchemaManager: SchemaManager
+    public class AutoIdSchemaManager: DaoSchemaManager
     {
         public AutoIdSchemaManager(bool autoSave = true, bool caps = false):base(autoSave)
         {

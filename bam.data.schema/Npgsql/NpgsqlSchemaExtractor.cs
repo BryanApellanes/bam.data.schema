@@ -7,7 +7,7 @@ using Npgsql;
 
 namespace Bam.Net.Data.Npgsql
 {
-    public class NpgsqlSchemaExtractor : SchemaExtractor
+    public class NpgsqlSchemaExtractor : DaoSchemaExtractor
     {
         public NpgsqlSchemaExtractor(NpgsqlDatabase database)
         {

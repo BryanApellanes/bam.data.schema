@@ -8,7 +8,7 @@ using CsQuery.ExtensionMethods;
 
 namespace Bam.Net.Data.Schema
 {
-    public class ReverseDaoSchemaExtractor : SchemaExtractor
+    public class ReverseDaoSchemaExtractor : DaoSchemaExtractor
     {
         public ReverseDaoSchemaExtractor(Assembly assembly, string nameSpace)
         {

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Bam.Net.Data.Schema
 {
-    public interface ISchemaExtractor
+    public interface IDaoSchemaExtractor
     {
         SchemaNameMap NameMap { get; set; }
         DaoSchemaDefinition Extract();

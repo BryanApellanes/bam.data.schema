@@ -10,23 +10,23 @@ using Newtonsoft.Json;
 namespace Bam.Net.Data.Schema
 {
     [Proxy("schemaManager")]
-    public class SchemaManager : IHasSchemaTempPathProvider
+    public class DaoSchemaManager : IHasSchemaTempPathProvider
     {
-        public SchemaManager(bool autoSave = true)
+        public DaoSchemaManager(bool autoSave = true)
         {
-            PreColumnAugmentations = new List<SchemaManagerAugmentation>();
-            PostColumnAugmentations = new List<SchemaManagerAugmentation>();
+            PreColumnAugmentations = new List<DaoSchemaManagerAugmentation>();
+            PostColumnAugmentations = new List<DaoSchemaManagerAugmentation>();
             SchemaTempPathProvider = sd => Path.Combine(RuntimeSettings.ProcessDataFolder, "Schemas");
             AutoSave = autoSave;
         }
 
-        public SchemaManager(string schemaFilePath)
+        public DaoSchemaManager(string schemaFilePath)
             : this()
         {
             this.ManageSchema(schemaFilePath);
         }
 
-        public SchemaManager(IDaoSchemaDefinition schema)
+        public DaoSchemaManager(IDaoSchemaDefinition schema)
             : this()
         {
             this.ManageSchema(schema);
@@ -137,7 +137,7 @@ namespace Bam.Net.Data.Schema
             return CurrentSchema;
         }
 
-        public ISchemaManagerResult AddTable(string tableName, string className = null)
+        public IDaoSchemaManagerResult AddTable(string tableName, string className = null)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace Bam.Net.Data.Schema
                 Table t = new Table();
                 t.ClassName = className ?? tableName;
                 t.Name = tableName;
-                ISchemaManagerResult managerResult = schema.AddTable(t);
+                IDaoSchemaManagerResult managerResult = schema.AddTable(t);
                 if (AutoSave)
                 {
                     schema.Save();
@@ -158,13 +158,13 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public ISchemaManagerResult AddXref(string left, string right)
+        public IDaoSchemaManagerResult AddXref(string left, string right)
         {
             try
             {
                 IDaoSchemaDefinition schema = CurrentSchema;
                 XrefTable x = new XrefTable(left, right);
-                ISchemaManagerResult managerResult = schema.AddXref(x);
+                IDaoSchemaManagerResult managerResult = schema.AddXref(x);
                 if (AutoSave)
                 {
                     schema.Save();
@@ -185,7 +185,7 @@ namespace Bam.Net.Data.Schema
         /// <param name="columnName"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public ISchemaManagerResult SetColumnPropertyName(string tableName, string columnName, string propertyName)
+        public IDaoSchemaManagerResult SetColumnPropertyName(string tableName, string columnName, string propertyName)
         {
             try
             {
@@ -195,7 +195,7 @@ namespace Bam.Net.Data.Schema
                 {
                     CurrentSchema.Save();
                 }
-                return new SchemaManagerResult("column property name set");
+                return new DaoSchemaManagerResult("column property name set");
             }
             catch (Exception ex)
             {
@@ -203,7 +203,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public ISchemaManagerResult SetTableClassName(string tableName, string className)
+        public IDaoSchemaManagerResult SetTableClassName(string tableName, string className)
         {
             try
             {
@@ -218,7 +218,7 @@ namespace Bam.Net.Data.Schema
                 {
                     CurrentSchema.Save();
                 }
-                return new SchemaManagerResult("class name set");
+                return new DaoSchemaManagerResult("class name set");
             }
             catch (Exception ex)
             {
@@ -226,7 +226,7 @@ namespace Bam.Net.Data.Schema
             }
         }
         
-        public ISchemaManagerResult AddColumn(string tableName, string columnName, DataTypes dataType = DataTypes.String)
+        public IDaoSchemaManagerResult AddColumn(string tableName, string columnName, DataTypes dataType = DataTypes.String)
         {
             return AddColumn(tableName, new Column(columnName, dataType));
         }
@@ -237,7 +237,7 @@ namespace Bam.Net.Data.Schema
         /// <param name="tableName"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public ISchemaManagerResult AddColumn(string tableName, Column column)
+        public IDaoSchemaManagerResult AddColumn(string tableName, Column column)
         {
             try
             {
@@ -247,7 +247,7 @@ namespace Bam.Net.Data.Schema
                 {
                     CurrentSchema.Save();
                 }
-                return new SchemaManagerResult("column added");
+                return new DaoSchemaManagerResult("column added");
             }
             catch (Exception ex)
             {
@@ -255,7 +255,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public ISchemaManagerResult RemoveColumn(string tableName, string columnName)
+        public IDaoSchemaManagerResult RemoveColumn(string tableName, string columnName)
         {
             try
             {
@@ -265,7 +265,7 @@ namespace Bam.Net.Data.Schema
                 {
                     CurrentSchema.Save();
                 }
-                return new SchemaManagerResult("column removed");
+                return new DaoSchemaManagerResult("column removed");
             }
             catch (Exception ex)
             {
@@ -273,7 +273,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public ISchemaManagerResult SetKeyColumn(string tableName, string columnName)
+        public IDaoSchemaManagerResult SetKeyColumn(string tableName, string columnName)
         {
             try
             {
@@ -283,7 +283,7 @@ namespace Bam.Net.Data.Schema
                 {
                     CurrentSchema.Save();
                 }
-                return new SchemaManagerResult("Key column set");
+                return new DaoSchemaManagerResult("Key column set");
             }
             catch (Exception ex)
             {
@@ -291,7 +291,7 @@ namespace Bam.Net.Data.Schema
             }
         }
 
-        public ISchemaManagerResult SetForeignKey(string targetTable, string referencingTable, string referencingColumn, string referencedKey = null, INameFormatter nameFormatter = null)
+        public IDaoSchemaManagerResult SetForeignKey(string targetTable, string referencingTable, string referencingColumn, string referencedKey = null, INameFormatter nameFormatter = null)
         {
             try
             {
@@ -348,7 +348,7 @@ namespace Bam.Net.Data.Schema
             });
         }
 
-        protected virtual SchemaManagerResult SetForeignKey(ITable table, ITable target, IForeignKeyColumn fk)
+        protected virtual DaoSchemaManagerResult SetForeignKey(ITable table, ITable target, IForeignKeyColumn fk)
         {
             CurrentSchema.AddForeignKey(fk);
             table.RemoveColumn(fk.Name);
@@ -359,7 +359,7 @@ namespace Bam.Net.Data.Schema
             {
                 CurrentSchema.Save();
             }
-            return new SchemaManagerResult("ForeignKeyColumn set");
+            return new DaoSchemaManagerResult("ForeignKeyColumn set");
         }
 
         protected void SetXrefs(XrefTable[] xrefs)
@@ -413,7 +413,7 @@ namespace Bam.Net.Data.Schema
         /// Augmentations that are executed prior to adding columns and 
         /// foreign keys
         /// </summary>
-        public List<SchemaManagerAugmentation> PreColumnAugmentations
+        public List<DaoSchemaManagerAugmentation> PreColumnAugmentations
         {
             get;
             set;
@@ -423,7 +423,7 @@ namespace Bam.Net.Data.Schema
         /// Augmentations that are executed after adding columns 
         /// and foreign keys
         /// </summary>
-        public List<SchemaManagerAugmentation> PostColumnAugmentations
+        public List<DaoSchemaManagerAugmentation> PostColumnAugmentations
         {
             get;
             set;
@@ -460,9 +460,9 @@ namespace Bam.Net.Data.Schema
             ExecutePostColumnAugmentations(tableName, this);
         }
         
-        protected void ExecutePostColumnAugmentations(string tableName, SchemaManager manager)
+        protected void ExecutePostColumnAugmentations(string tableName, DaoSchemaManager manager)
         {
-            foreach (SchemaManagerAugmentation augmentation in PostColumnAugmentations)
+            foreach (DaoSchemaManagerAugmentation augmentation in PostColumnAugmentations)
             {
                 augmentation.Execute(tableName, manager);
             }
@@ -473,9 +473,9 @@ namespace Bam.Net.Data.Schema
             ExecutePreColumnAugmentations(tableName, this);
         }
         
-        protected static void ExecutePreColumnAugmentations(string tableName, SchemaManager manager)
+        protected static void ExecutePreColumnAugmentations(string tableName, DaoSchemaManager manager)
         {
-            foreach (SchemaManagerAugmentation augmentation in manager.PreColumnAugmentations)
+            foreach (DaoSchemaManagerAugmentation augmentation in manager.PreColumnAugmentations)
             {
                 augmentation.Execute(tableName, manager);
             }
@@ -504,7 +504,7 @@ namespace Bam.Net.Data.Schema
             AddColumns(this, table, tableName);
         }
 
-        private static void AddColumns(SchemaManager manager, dynamic table, string tableName)
+        private static void AddColumns(DaoSchemaManager manager, dynamic table, string tableName)
         {
             if (table["cols"] != null)
             {
@@ -531,7 +531,7 @@ namespace Bam.Net.Data.Schema
             SetXref(this, foreignKeys, leftTableName, rightTableName);
         }
 
-        protected static void SetXref(SchemaManager manager, List<dynamic> foreignKeys, string leftTableName, string rightTableName)
+        protected static void SetXref(DaoSchemaManager manager, List<dynamic> foreignKeys, string leftTableName, string rightTableName)
         {
             string xrefTableName = $"{leftTableName}{rightTableName}";
             string leftColumnName = $"{leftTableName}Id";
@@ -564,9 +564,9 @@ namespace Bam.Net.Data.Schema
         }
 
 
-        private static SchemaManagerResult GetErrorResult(Exception ex)
+        private static DaoSchemaManagerResult GetErrorResult(Exception ex)
         {
-            SchemaManagerResult managerResult = new SchemaManagerResult(ex.Message);
+            DaoSchemaManagerResult managerResult = new DaoSchemaManagerResult(ex.Message);
             managerResult.ExceptionMessage = ex.Message;
             managerResult.Success = false;
 #if DEBUG

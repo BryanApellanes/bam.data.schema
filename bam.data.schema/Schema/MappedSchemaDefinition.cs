@@ -66,7 +66,7 @@ namespace Bam.Net.Data.Schema
 
         public static IDaoSchemaDefinition MapSchemaClassAndPropertyNames(SchemaNameMap nameMap, IDaoSchemaDefinition schema)
         {
-            SchemaManager mgr = new SchemaManager(schema) {AutoSave = false};
+            DaoSchemaManager mgr = new DaoSchemaManager(schema) {AutoSave = false};
             Parallel.ForEach(nameMap.TableNamesToClassNames, (map) =>
             {
                 mgr.SetTableClassName(map.TableName, map.ClassName);

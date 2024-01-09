@@ -9,7 +9,7 @@ using MySql.Data.MySqlClient;
 
 namespace Bam.Net.Data.MySql
 {
-    public class MySqlSchemaExtractor : SchemaExtractor
+    public class MySqlSchemaExtractor : DaoSchemaExtractor
     {
         public MySqlSchemaExtractor(MySqlDatabase database)
             : base()

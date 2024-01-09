@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Bam.Net.Data.Schema
 {
-	public class SchemaExtractorEventArgs: EventArgs
+	public class DaoSchemaExtractorEventArgs: EventArgs
 	{
-		public SchemaExtractorEventArgs() {}
+		public DaoSchemaExtractorEventArgs() {}
 		public string Table { get; set; }
 		public string Column { get; set; }
         public string Property { get; set; }

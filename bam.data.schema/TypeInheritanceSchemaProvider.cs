@@ -25,7 +25,7 @@ namespace Bam.Data.Schema
         {
         }
 
-        protected override void AddSchemaTables(TypeSchema typeSchema, SchemaManager schemaManager, ITypeTableNameProvider tableNameProvider = null)
+        protected override void AddSchemaTables(TypeSchema typeSchema, DaoSchemaManager schemaManager, ITypeTableNameProvider tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
             foreach (Type topType in typeSchema.Tables)

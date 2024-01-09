@@ -7,7 +7,7 @@ using Bam.Net.Data.Schema;
 
 namespace Bam.Net.Data.FirebirdSql
 {
-    public class FirebirdSqlSchemaExtractor : SchemaExtractor
+    public class FirebirdSqlSchemaExtractor : DaoSchemaExtractor
     {
         public FirebirdSqlSchemaExtractor(FirebirdSqlDatabase database)
         {

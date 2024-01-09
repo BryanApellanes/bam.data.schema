@@ -14,7 +14,7 @@ namespace Bam.Net.Data.Schema
     /// add a Created and Modified column and 
     /// optionally a ModifiedBy column.
     /// </summary>
-    public class AddAuditColumnsAugmentation : SchemaManagerAugmentation
+    public class AddAuditColumnsAugmentation : DaoSchemaManagerAugmentation
     {
         public AddAuditColumnsAugmentation()
         {
@@ -23,7 +23,7 @@ namespace Bam.Net.Data.Schema
 
         public bool IncludeModifiedBy { get; set; }
 		public bool IncludeCreatedBy { get; set; }
-        public override void Execute(string tableName, SchemaManager manager)
+        public override void Execute(string tableName, DaoSchemaManager manager)
         {
             manager.AddColumn(tableName, new Column("Created", DataTypes.DateTime, false));
             manager.AddColumn(tableName, new Column("Modified", DataTypes.DateTime, false));

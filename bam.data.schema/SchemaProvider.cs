@@ -71,7 +71,7 @@ namespace Bam.Data.Schema
             return $"SchemaFor_{type.Namespace}";
         }
 
-        public SchemaManager SchemaManager { get; set; }
+        public DaoSchemaManager SchemaManager { get; set; }
 
         public ITypeTableNameProvider TableNameProvider
         {
@@ -256,7 +256,7 @@ namespace Bam.Data.Schema
             return new TypeSchema { Name = GetSchemaNameOrDefault(name), Tables = tableTypes, ForeignKeys = foreignKeyTypes, Xrefs = xrefTypes, DefaultDataTypeBehavior = DefaultDataTypeBehavior, Warnings = TypeSchemaWarnings };
         }
 
-        protected internal virtual void WriteDaoSchema(TypeSchema typeSchema, SchemaManager schemaManager, List<KeyColumn> missingKeyColumns = null, List<ForeignKeyColumn> missingForeignKeyColumns = null, ITypeTableNameProvider tableNameProvider = null)
+        protected internal virtual void WriteDaoSchema(TypeSchema typeSchema, DaoSchemaManager schemaManager, List<KeyColumn> missingKeyColumns = null, List<ForeignKeyColumn> missingForeignKeyColumns = null, ITypeTableNameProvider tableNameProvider = null)
         {
             AddSchemaTables(typeSchema, schemaManager, tableNameProvider);
 
@@ -309,7 +309,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        protected virtual void AddSchemaTables(TypeSchema typeSchema, SchemaManager schemaManager, ITypeTableNameProvider tableNameProvider = null)
+        protected virtual void AddSchemaTables(TypeSchema typeSchema, DaoSchemaManager schemaManager, ITypeTableNameProvider tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
             foreach (Type tableType in typeSchema.Tables)
@@ -576,7 +576,7 @@ namespace Bam.Data.Schema
             return dataType;
         }
 
-        protected virtual void AddPropertyColumns(Type type, SchemaManager schemaManager, DefaultDataTypeBehaviors defaultDataTypeBehavior, ITypeTableNameProvider tableNameProvider = null)
+        protected virtual void AddPropertyColumns(Type type, DaoSchemaManager schemaManager, DefaultDataTypeBehaviors defaultDataTypeBehavior, ITypeTableNameProvider tableNameProvider = null)
         {
             string tableName = GetTableNameForType(type, tableNameProvider);
             foreach (PropertyInfo property in type.GetProperties().Where(p => p.CanWrite))
@@ -585,7 +585,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        protected virtual void AddPropertyColumn(SchemaManager schemaManager, DefaultDataTypeBehaviors defaultDataTypeBehavior, string tableName, PropertyInfo property)
+        protected virtual void AddPropertyColumn(DaoSchemaManager schemaManager, DefaultDataTypeBehaviors defaultDataTypeBehavior, string tableName, PropertyInfo property)
         {
             DataTypes dataType = GetColumnDataType(property);
             if (dataType == DataTypes.Default)
@@ -611,7 +611,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        protected static void AddSchemaColumn(SchemaManager schemaManager, string tableName, PropertyInfo property, DataTypes dataType)
+        protected static void AddSchemaColumn(DaoSchemaManager schemaManager, string tableName, PropertyInfo property, DataTypes dataType)
         {
             if (!property.IsEnumerable() || property.PropertyType == typeof(string))
             {
