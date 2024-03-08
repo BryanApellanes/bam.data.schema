@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Provides convention based namespaces for data related object definitions.
+    /// </summary>
     public class DataNamespaces
     {
         public const string DefaultBaseNamespace = "ApplicationDataTypes";

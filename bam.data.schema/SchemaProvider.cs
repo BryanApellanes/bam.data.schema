@@ -12,8 +12,7 @@ namespace Bam.Data.Schema
 {
     /// <summary>
     /// A class used to generate TypeSchemas and DaoSchemaDefinitions.  A TypeSchema is 
-    /// a class that provides database schema like relationship
-	/// descriptors for CLR types.
+    /// a class that provides database schema like relationship descriptors for CLR types.
     /// </summary>
     public class SchemaProvider : Loggable, IHasTypeSchemaTempPathProvider, ISchemaProvider
     {
