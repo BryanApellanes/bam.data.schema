@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bam.Net.Data.Schema;
+using Bam.Data.Schema;
 using System.Data.SQLite;
 using System.IO;
 using System.Data;
 
-namespace Bam.Net.Data.SQLite
+namespace Bam.Data.SQLite
 {
     public class SQLiteSchemaExtractor : DaoSchemaExtractor
     {

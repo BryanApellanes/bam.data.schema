@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public class MappedSchemaDefinition
     {

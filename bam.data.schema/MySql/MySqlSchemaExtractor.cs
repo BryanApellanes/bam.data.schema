@@ -4,10 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bam.Net.Data.Schema;
+using Bam.Data.Schema;
 using MySql.Data.MySqlClient;
 
-namespace Bam.Net.Data.MySql
+namespace Bam.Data.MySql
 {
     public class MySqlSchemaExtractor : DaoSchemaExtractor
     {

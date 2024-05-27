@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public class CuidSchemaManager: UuidSchemaManager
     {

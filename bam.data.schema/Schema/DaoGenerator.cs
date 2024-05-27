@@ -8,11 +8,11 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.CodeDom.Compiler;
-using Bam.Net.Logging;
+using Bam.Logging;
 using Microsoft.CSharp;
-using Bam.Net.ServiceProxy;
+using Bam.ServiceProxy;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     /// <summary>
     /// A code generator that writes Dao code for a SchemaDefinition

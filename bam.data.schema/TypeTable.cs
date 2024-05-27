@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bam.Net.Data.Schema;
+using Bam.Data.Schema;
 using Newtonsoft.Json;
 
-namespace Bam.Net.Data.Repositories
+namespace Bam.Data.Repositories
 {
     /// <summary>
     /// Used to describe the shape of a database table

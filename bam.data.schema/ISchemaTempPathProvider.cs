@@ -1,5 +1,5 @@
-﻿using Bam.Net.Data.Repositories;
-using Bam.Net.Data.Schema;
+﻿using Bam.Data.Repositories;
+using Bam.Data.Schema;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using Bam.Net.Data.Schema;
-using Bam.Net;
-using Bam.Net.Data;
-using Bam.Net.Data.Repositories;
+using Bam.Data.Schema;
+using Bam;
+using Bam.Data;
+using Bam.Data.Repositories;
 
 namespace Bam.Data.Schema
 {

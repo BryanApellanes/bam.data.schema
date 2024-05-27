@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Bam.Data;
-using Bam.Net.Data.Repositories;
-using Bam.Net.ServiceProxy.Encryption;
+using Bam.Data.Repositories;
+using Bam.ServiceProxy.Encryption;
 using CsQuery.ExtensionMethods;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public class ReverseDaoSchemaExtractor : DaoSchemaExtractor
     {

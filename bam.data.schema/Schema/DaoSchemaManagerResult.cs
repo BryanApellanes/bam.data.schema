@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public class DaoSchemaManagerResult : IDaoSchemaManagerResult
     {

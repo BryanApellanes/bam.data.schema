@@ -2,11 +2,11 @@
 	Copyright © Bryan Apellanes 2015  
 */
 using System.Reflection;
-using Bam.Net;
-using Bam.Net.Data;
-using Bam.Net.Data.Repositories;
-using Bam.Net.Data.Schema;
-using Bam.Net.Logging;
+using Bam;
+using Bam.Data;
+using Bam.Data.Repositories;
+using Bam.Data.Schema;
+using Bam.Logging;
 
 namespace Bam.Data.Schema
 {

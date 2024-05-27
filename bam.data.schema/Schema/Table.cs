@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Bam.Net;
-using Bam.Net.Data;
+using Bam;
+using Bam.Data;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     /// <summary>
     /// A database Table

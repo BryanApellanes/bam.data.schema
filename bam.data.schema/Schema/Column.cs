@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//using Bam.Net.Presentation.Html;
+//using Bam.Presentation.Html;
 using System.Text.RegularExpressions;
-using Bam.Net;
-using Bam.Net.Data;
+using Bam;
+using Bam.Data;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public partial class Column : IColumn
     {

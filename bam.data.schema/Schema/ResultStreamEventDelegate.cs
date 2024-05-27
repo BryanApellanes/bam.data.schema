@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public delegate void ResultStreamEventDelegate(string code, Stream stream); 
     

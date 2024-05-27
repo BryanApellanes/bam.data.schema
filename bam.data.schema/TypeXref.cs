@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using Bam.Data.Schema;
 
-namespace Bam.Net.Data.Repositories
+namespace Bam.Data.Repositories
 {
     /// <summary>
     /// Used to describe a many to many 

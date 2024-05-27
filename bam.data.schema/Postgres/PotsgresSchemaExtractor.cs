@@ -1,6 +1,6 @@
-﻿using Bam.Net.Data.Npgsql;
+﻿using Bam.Data.Npgsql;
 
-namespace Bam.Net.Data.Postgres
+namespace Bam.Data.Postgres
 {
     public class PostgresSchemaExtractor: NpgsqlSchemaExtractor
     {

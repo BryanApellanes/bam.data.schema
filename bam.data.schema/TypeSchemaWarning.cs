@@ -1,8 +1,8 @@
 using System;
 using Bam.Data.Schema;
-using Bam.Net.Data.Schema;
+using Bam.Data.Schema;
 
-namespace Bam.Net.Data.Repositories
+namespace Bam.Data.Repositories
 {
     public class TypeSchemaWarning : ITypeSchemaWarning
     {

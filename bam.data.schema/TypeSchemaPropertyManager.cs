@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Bam.Net;
+using Bam;
 
-namespace Bam.Net.Data.Repositories
+namespace Bam.Data.Repositories
 {
     public class TypeSchemaPropertyManager
     {

@@ -1,13 +1,13 @@
 /*
 	Copyright © Bryan Apellanes 2015  
 */
-using Bam.Net;
+using Bam;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using Newtonsoft.Json;
-//using Bam.Net.Javascript;
+//using Bam.Javascript;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     [Proxy("schemaManager")]
     public class DaoSchemaManager : IHasSchemaTempPathProvider

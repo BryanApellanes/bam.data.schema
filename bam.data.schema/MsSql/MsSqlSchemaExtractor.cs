@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bam.Net.Data.Schema;
-using Bam.Net.Data;
+using Bam.Data.Schema;
+using Bam.Data;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Bam.Net.Data.MsSql
+namespace Bam.Data.MsSql
 {
     public class MsSqlSchemaExtractor : DaoSchemaExtractor
     {

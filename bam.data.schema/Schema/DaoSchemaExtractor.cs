@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bam.Net.Logging;
+using Bam.Logging;
 using System.IO;
-using Bam.Net.Configuration;
+using Bam.Configuration;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public abstract class DaoSchemaExtractor : Loggable, IDaoSchemaExtractor, IHasSchemaTempPathProvider
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Bam.Net.Data.Npqsql;
-using Bam.Net.Data.Schema;
+using Bam.Data.Npqsql;
+using Bam.Data.Schema;
 using Npgsql;
 
-namespace Bam.Net.Data.Npgsql
+namespace Bam.Data.Npgsql
 {
     public class NpgsqlSchemaExtractor : DaoSchemaExtractor
     {

@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Serialization;
-using Bam.Net.Data;
+using Bam.Data;
 using Newtonsoft.Json;
-using Bam.Net.Configuration;
-using Bam.Net.Data.Repositories;
+using Bam.Configuration;
+using Bam.Data.Repositories;
 using YamlDotNet.Serialization;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     public class DaoSchemaDefinition : IDaoSchemaDefinition
     {

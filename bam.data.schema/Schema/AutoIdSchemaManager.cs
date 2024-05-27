@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bam.Net.Data.Schema
+namespace Bam.Data.Schema
 {
     /// <summary>
     /// A schema manager that will automatically add a
