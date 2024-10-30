@@ -19,7 +19,7 @@ namespace Bam.Data.Schema
     /// </summary>
     public class DaoGenerator : IDaoGenerator
     {
-        readonly List<Stream> _resultStreams = new List<Stream>();
+        private readonly List<Stream> _resultStreams = new List<Stream>();
 
         public DaoGenerator(IDaoCodeWriter codeWriter)
         {
@@ -38,8 +38,6 @@ namespace Bam.Data.Schema
             this.Namespace = nameSpace;
             this.DaoCodeWriter = codeWriter;
         }
-
-        public static List<string> DefaultReferenceAssemblies => new List<string>(AdHocCSharpCompiler.DefaultReferenceAssemblies);
 
         public IDaoCodeWriter DaoCodeWriter
         {
