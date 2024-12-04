@@ -35,7 +35,7 @@ namespace Bam.Data.Schema
 
         public string GetTableName(string className)
         {
-            TableNameToClassName lookup = TableNamesToClassNames.FirstOrDefault(t => t.ClassName.Equals(className));
+            TableNameToClassName? lookup = TableNamesToClassNames.FirstOrDefault(t => t.ClassName.Equals(className));
             if (lookup != null)
             {
                 return lookup.TableName;
@@ -45,7 +45,7 @@ namespace Bam.Data.Schema
 
         public string GetClassName(string tableName)
         {
-            TableNameToClassName lookup = TableNamesToClassNames.FirstOrDefault(t => t.TableName.Equals(tableName));
+            TableNameToClassName? lookup = TableNamesToClassNames.FirstOrDefault(t => t.TableName.Equals(tableName));
             if (lookup != null)
             {
                 return lookup.TableName;
@@ -56,7 +56,7 @@ namespace Bam.Data.Schema
         public string GetColumnName(string className, string propertyName)
         {
             string tableName = GetTableName(className);
-            ColumnNameToPropertyName lookup = ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(tableName) && c.PropertyName.Equals(propertyName));
+            ColumnNameToPropertyName? lookup = ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(tableName) && c.PropertyName.Equals(propertyName));
             if (lookup != null)
             {
                 return lookup.ColumnName;
@@ -67,7 +67,7 @@ namespace Bam.Data.Schema
 
         public string GetPropertyName(string tableName, string columnName)
         {
-            ColumnNameToPropertyName lookup = ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(tableName) && c.ColumnName.Equals(columnName));
+            ColumnNameToPropertyName? lookup = ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(tableName) && c.ColumnName.Equals(columnName));
             if (lookup != null)
             {
                 return lookup.PropertyName;
@@ -92,7 +92,7 @@ namespace Bam.Data.Schema
         private void Remove(ColumnNameToPropertyName columnNameToPropertyName, bool favorTable)
         {
             // favoring single return queries for readability; despite performance hit
-            ColumnNameToPropertyName toRemove = favorTable ? ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(columnNameToPropertyName.TableName) && c.ColumnName.Equals(columnNameToPropertyName.ColumnName)) : ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(columnNameToPropertyName.TableName) && c.PropertyName.Equals(columnNameToPropertyName.PropertyName));
+            ColumnNameToPropertyName? toRemove = favorTable ? ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(columnNameToPropertyName.TableName) && c.ColumnName.Equals(columnNameToPropertyName.ColumnName)) : ColumnNamesToPropertyNames.FirstOrDefault(c => c.TableName.Equals(columnNameToPropertyName.TableName) && c.PropertyName.Equals(columnNameToPropertyName.PropertyName));
             if (toRemove != null)
             {
                 ColumnNamesToPropertyNames.Remove(toRemove);
@@ -102,7 +102,7 @@ namespace Bam.Data.Schema
         private void Remove(TableNameToClassName tableNameToClassName, bool favorTable)
         {
             // favoring single return queries for readability; despite performance hit
-            TableNameToClassName toRemove = favorTable ? TableNamesToClassNames.FirstOrDefault(c => c.TableName.Equals(tableNameToClassName.TableName)) : TableNamesToClassNames.FirstOrDefault(c => c.ClassName.Equals(tableNameToClassName.ClassName));
+            TableNameToClassName? toRemove = favorTable ? TableNamesToClassNames.FirstOrDefault(c => c.TableName.Equals(tableNameToClassName.TableName)) : TableNamesToClassNames.FirstOrDefault(c => c.ClassName.Equals(tableNameToClassName.ClassName));
             if (toRemove != null)
             {
                 TableNamesToClassNames.Remove(toRemove);

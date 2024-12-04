@@ -11,43 +11,43 @@ namespace Bam.Data.Schema
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetClassStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetClassStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             string parameterValue = table.ClassName;
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetQueryClassStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetQueryClassStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             string parameterValue = $"{table.ClassName}Query";
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetPagedQueryClassStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetPagedQueryClassStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             string parameterValue = $"{table.ClassName}PagedQuery";
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetQiClassStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetQiClassStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             string parameterValue = $"Qi/{table.ClassName}";
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetCollectionStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetCollectionStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             string parameterValue = $"{table.ClassName}Collection";
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetColumnsClassStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetColumnsClassStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             string parameterValue = $"{table.ClassName}Columns";
             return GetTargetStream(targetResolver, root, parameterValue);
         }
 
-        public Stream GetTargetPartialClassStream(Func<string, Stream> targetResolver, string root, Table table)
+        public Stream GetTargetPartialClassStream(Func<string, Stream> targetResolver, string root, ITable table)
         {
             if(targetResolver != null)
             {
@@ -62,24 +62,24 @@ namespace Bam.Data.Schema
             return f.OpenWrite();            
         }
 
-        public Stream GetTargetStream(Func<string, Stream> targetResolver, string root, string parameterValue)
+        public Stream GetTargetStream(Func<string, Stream>? targetResolver, string root, string parameterValue)
         {
-            Stream s = new MemoryStream();
+            Stream stream;
             if (targetResolver != null)
             {
-                s = targetResolver(parameterValue);
+                stream = targetResolver(parameterValue);
             }
             else
             {
                 string path = Path.Combine(root, $"{parameterValue}.cs");
-                FileInfo f = new FileInfo(path);
-                if (!f.Directory.Exists)
+                FileInfo file = new FileInfo(path);
+                if (file.Directory != null && file.Directory.Exists == false)
                 {
-                    f.Directory.Create();
+                    file.Directory.Create();
                 }
-                s = f.OpenWrite();
+                stream = file.OpenWrite();
             }
-            return s;
+            return stream;
         }
     }
 }

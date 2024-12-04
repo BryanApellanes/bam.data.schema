@@ -406,7 +406,7 @@ namespace Bam.Data.Schema
 
         /// <summary>
         /// A string representation of the UtcNow at the time
-        /// of reference.  <see cref="Net.Instant" />
+        /// of reference.  <see cref="Bam.Instant" />
         /// </summary>
         public string Instant => new Instant(DateTime.UtcNow).ToString();
 
@@ -427,7 +427,7 @@ namespace Bam.Data.Schema
         /// the IEnumerable doesn't have a property referencing
         /// the current Type's key (the Type's key is determined
         /// by whether a property has the KeyAttribute custom attribute or
-        /// the name of "Id")
+        /// the name of "Id").
         /// </summary>
         [Verbosity(VerbosityLevel.Warning, SenderMessageFormat = "[{Instant}]:: ReferencingPropertyNotFound: {Message}\r\n")]
         public event EventHandler ReferencingPropertyNotFound;
@@ -442,7 +442,7 @@ namespace Bam.Data.Schema
         public event EventHandler ChildParentPropertyNotFound;
 
         /// <summary>
-        /// Get the types for each IEnumerable property of the specified type
+        /// Get the types for each IEnumerable property of the specified type.
         /// </summary>
         /// <param name="parentType"></param>
         /// <returns></returns>

@@ -15,7 +15,7 @@ using Bam.ServiceProxy;
 namespace Bam.Data.Schema
 {
     /// <summary>
-    /// A code generator that writes Dao code for a SchemaDefinition
+    /// A code generator that writes Dao code for a SchemaDefinition.
     /// </summary>
     public class DaoGenerator : IDaoGenerator
     {
@@ -130,7 +130,7 @@ namespace Bam.Data.Schema
                 EnsurePartialsDir(partialsDir);
             }
 
-            foreach (Table table in schema.Tables)
+            foreach (ITable table in schema.Tables)
             {
                 if (writePartial)
                 {

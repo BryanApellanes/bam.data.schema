@@ -67,7 +67,7 @@ namespace Bam.Data.Schema
                 else
                 {
                     _file = new FileInfo(value);
-                    if (!_file.Directory.Exists)
+                    if (_file.Directory?.Exists == false)
                     {
                         _file.Directory.Create();
                     }
@@ -105,14 +105,10 @@ namespace Bam.Data.Schema
                     {
                         table.ConnectionName = this.Name;
                     }
-					if (!this._tables.ContainsKey(table.Name))
+					if (!this._tables.TryAdd(table.Name, table))
 					{
-						this._tables.Add(table.Name, table);
-					}
-					else
-					{
-						throw Args.Exception<InvalidOperationException>("Table named {0} defined more than once", table.Name);
-					}
+                        throw Args.Exception<InvalidOperationException>("Table named {0} defined more than once", table.Name);
+                    }
                 }
             }
         }
@@ -120,9 +116,9 @@ namespace Bam.Data.Schema
         public ITable GetTable(string tableName)
         {
             ITable table = null;
-			if (this._tables.ContainsKey(tableName))
+			if (this._tables.TryGetValue(tableName, out var table1))
 			{
-				table = this._tables[tableName];
+				table = table1;
 			}
             return table;
         }

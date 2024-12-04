@@ -18,13 +18,13 @@ namespace Bam.Data.Schema
 
         public SchemaTempPathProvider() { }
 
-        private Func<IDaoSchemaDefinition, ITypeSchema, string>? impl;
-        public SchemaTempPathProvider(Func<IDaoSchemaDefinition, ITypeSchema, string>? impl)
+        private Func<IDaoSchemaDefinition, ITypeSchema?, string>? impl;
+        public SchemaTempPathProvider(Func<IDaoSchemaDefinition, ITypeSchema?, string>? impl)
         {
             this.impl = impl;
         }
 
-        public virtual string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition, ITypeSchema typeSchema)
+        public virtual string GetSchemaTempPath(IDaoSchemaDefinition schemaDefinition, ITypeSchema? typeSchema)
         {
             if(impl != null)
             {
