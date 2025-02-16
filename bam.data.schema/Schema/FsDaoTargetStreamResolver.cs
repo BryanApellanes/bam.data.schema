@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace Bam.Data.Schema
+﻿namespace Bam.Data.Schema
 {
     public class FsDaoTargetStreamResolver: IDaoTargetStreamResolver
     {

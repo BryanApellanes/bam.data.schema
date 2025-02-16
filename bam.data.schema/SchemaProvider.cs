@@ -2,10 +2,7 @@
 	Copyright © Bryan Apellanes 2015  
 */
 using System.Reflection;
-using Bam;
-using Bam.Data;
 using Bam.Data.Repositories;
-using Bam.Data.Schema;
 using Bam.Logging;
 
 namespace Bam.Data.Schema

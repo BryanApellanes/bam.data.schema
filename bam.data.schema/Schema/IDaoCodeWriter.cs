@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
-namespace Bam.Data.Schema
+﻿namespace Bam.Data.Schema
 {
     public interface IDaoCodeWriter
     {

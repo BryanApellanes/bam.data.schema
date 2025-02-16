@@ -1,16 +1,6 @@
 /*
 	Copyright © Bryan Apellanes 2015  
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Reflection;
-using System.CodeDom.Compiler;
-using Bam.Logging;
-using Microsoft.CSharp;
-using Bam.ServiceProxy;
 
 namespace Bam.Data.Schema
 {

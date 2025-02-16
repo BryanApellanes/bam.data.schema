@@ -1,14 +1,8 @@
 /*
 	Copyright © Bryan Apellanes 2015  
 */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using System.Text.RegularExpressions;
-using Bam;
-using Bam.Data;
 
 namespace Bam.Data.Schema
 {

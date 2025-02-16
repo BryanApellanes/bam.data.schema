@@ -2,7 +2,6 @@
 	Copyright © Bryan Apellanes 2015  
 */
 using Bam.Data.Schema;
-using Bam.Data.Schema;
 using Bam.Logging;
 
 namespace Bam.Data.Repositories

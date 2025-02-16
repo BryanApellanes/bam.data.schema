@@ -1,16 +1,9 @@
 /*
 	Copyright © Bryan Apellanes 2015  
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+
 using System.Xml.Serialization;
-using Bam.Data;
 using Newtonsoft.Json;
-using Bam.Configuration;
-using Bam.Data.Repositories;
 using YamlDotNet.Serialization;
 
 namespace Bam.Data.Schema

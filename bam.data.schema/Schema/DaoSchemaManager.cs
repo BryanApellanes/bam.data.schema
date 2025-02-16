@@ -1,10 +1,9 @@
 /*
 	Copyright © Bryan Apellanes 2015  
 */
-using Bam;
-using System.CodeDom.Compiler;
+
 using System.ComponentModel;
-using Newtonsoft.Json;
+
 //using Bam.Javascript;
 
 namespace Bam.Data.Schema

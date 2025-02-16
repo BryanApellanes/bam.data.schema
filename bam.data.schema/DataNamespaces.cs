@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bam.Data.Schema
+﻿namespace Bam.Data.Schema
 {
     /// <summary>
     /// Provides convention based namespaces for data related object definitions.

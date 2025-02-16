@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Bam.Data;
 using Bam.Data.Repositories;
-using Bam.ServiceProxy.Encryption;
-using CsQuery.ExtensionMethods;
 
 namespace Bam.Data.Schema
 {

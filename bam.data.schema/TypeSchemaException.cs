@@ -1,6 +1,4 @@
 using Bam.Data.Schema;
-using System;
-using System.Linq;
 
 namespace Bam.Data.Repositories
 {
