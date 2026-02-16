@@ -1,7 +1,15 @@
 ﻿namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// A model that wraps a <see cref="ForeignKeyColumn"/> with a namespace for use in code generation templates.
+    /// </summary>
     public class ForeignKeyColumnModel
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="ForeignKeyColumnModel"/> with the specified foreign key column and namespace.
+        /// </summary>
+        /// <param name="fk">The foreign key column to wrap.</param>
+        /// <param name="nameSpace">The namespace for the generated code.</param>
         public ForeignKeyColumnModel(ForeignKeyColumn fk, string nameSpace)
         {
             ForeignKeyColumn = fk;

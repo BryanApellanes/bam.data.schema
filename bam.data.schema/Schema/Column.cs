@@ -7,8 +7,14 @@ using System.Text.RegularExpressions;
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Represents a database column with name, data type, nullability, and other schema metadata used by the DAO code generator.
+    /// </summary>
     public partial class Column : IColumn
     {
+        /// <summary>
+        /// Initializes a new empty instance of <see cref="Column"/>.
+        /// </summary>
         public Column()
         {
         }
@@ -27,6 +33,13 @@ namespace Bam.Data.Schema
             this.Key = true;
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="Column"/> with the specified name, data type, nullability, and optional max length.
+        /// </summary>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="dataType">The data type of the column.</param>
+        /// <param name="allowNull">Whether the column allows null values.</param>
+        /// <param name="maxLength">The maximum length for the column, if applicable.</param>
         public Column(string columnName, DataTypes dataType, bool allowNull = true, string maxLength = "")
         {
             this.Name = columnName;
@@ -40,10 +53,16 @@ namespace Bam.Data.Schema
             this.TableName = tableName;
         }
 
+        /// <summary>
+        /// Gets or sets the name of the table this column belongs to.
+        /// </summary>
         [Exclude]
         public string TableName { get; set; }
 
         string _tableClassName;
+        /// <summary>
+        /// Gets or sets the PascalCase class name derived from the table name.
+        /// </summary>
         [Exclude]
         public string TableClassName
         {
@@ -65,6 +84,9 @@ namespace Bam.Data.Schema
         }
 
         string name;
+        /// <summary>
+        /// Gets or sets the column name, with whitespace automatically removed.
+        /// </summary>
         public string Name
         {
             get => name;
@@ -82,6 +104,11 @@ namespace Bam.Data.Schema
             set => _propertyName = GetPropertyName(value);
         }
 
+        /// <summary>
+        /// Converts a column name to a valid C# property name using PascalCase and removing non-alphanumeric characters.
+        /// </summary>
+        /// <param name="name">The column name to convert.</param>
+        /// <returns>A valid C# property name derived from the column name.</returns>
         public static string GetPropertyName(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -104,6 +131,9 @@ namespace Bam.Data.Schema
         //[DropDown(typeof(DataTypes))] 
         public virtual DataTypes DataType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum length for the column, if applicable.
+        /// </summary>
         public string MaxLength { get; set; }
 
         /// <summary>
@@ -206,12 +236,18 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether this column allows null values.
+        /// </summary>
         public virtual bool AllowNull
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Gets or sets whether this column is the primary key column.
+        /// </summary>
         [Exclude]
         public virtual bool Key
         {

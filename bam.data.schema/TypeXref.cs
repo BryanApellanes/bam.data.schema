@@ -20,7 +20,14 @@ namespace Bam.Data.Repositories
         {
             TableNameProvider = new EchoTypeTableNameProvider();
         }
+        /// <summary>
+        /// Gets or sets the left type in the many-to-many relationship.
+        /// </summary>
         public Type Left { get; set; }
+
+        /// <summary>
+        /// Gets or sets the right type in the many-to-many relationship.
+        /// </summary>
         public Type Right { get; set; }
 
         /// <summary>
@@ -33,8 +40,14 @@ namespace Bam.Data.Repositories
             set;
         }
 
+        /// <summary>
+        /// Gets or sets the provider used to determine table names from types.
+        /// </summary>
         public ITypeTableNameProvider TableNameProvider { get; set; }
 
+        /// <summary>
+        /// Gets the DAO table name for the left type.
+        /// </summary>
         public string LeftDaoName
         {
             get
@@ -48,6 +61,9 @@ namespace Bam.Data.Repositories
             return $"Left:{Left.FullName}.{LeftCollectionProperty.Name},Right:{Right.FullName}.{RightCollectionProperty.Name}";
         }
 
+        /// <summary>
+        /// Gets the SHA1 hash of this cross-reference descriptor's string representation.
+        /// </summary>
         public string Hash
         {
             get
@@ -66,6 +82,9 @@ namespace Bam.Data.Repositories
             set;
         }
 
+        /// <summary>
+        /// Gets the DAO table name for the right type.
+        /// </summary>
         public string RightDaoName
         {
             get
@@ -116,11 +135,17 @@ namespace Bam.Data.Repositories
             get { return RightCollectionProperty.PropertyType.IsArray ? "Array" : "List"; }
         }
 
+        /// <summary>
+        /// Gets "Length" if the right collection is an array, or "Count" if it is a list. Used by the code generator.
+        /// </summary>
         public string RightLengthOrCount
         {
             get { return RightCollectionProperty.PropertyType.IsArray ? "Length" : "Count"; }
         }
 
+        /// <summary>
+        /// Gets "Length" if the left collection is an array, or "Count" if it is a list. Used by the code generator.
+        /// </summary>
         public string LeftLengthOrCount
         {
             get { return LeftCollectionProperty.PropertyType.IsArray ? "Length" : "Count"; }

@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Bam.Data.Repositories
 {
     /// <summary>
-    /// Forein key descriptor for generated TypeSchemas
+    /// Foreign key descriptor for generated TypeSchemas, representing a parent-child relationship between CLR types.
     /// </summary>
     public class TypeFk : ITypeFk
 	{
@@ -50,6 +50,9 @@ namespace Bam.Data.Repositories
         {
             return $"PK:{PrimaryKeyType.FullName}.{PrimaryKeyProperty.Name},FK:{ForeignKeyType.FullName}.{ForeignKeyProperty.Name}";
         }
+        /// <summary>
+        /// Gets the SHA1 hash of this foreign key descriptor's string representation, used for identity comparison.
+        /// </summary>
         public string Hash
         {
             get

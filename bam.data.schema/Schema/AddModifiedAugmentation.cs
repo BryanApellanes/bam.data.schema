@@ -4,6 +4,9 @@
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// A schema manager augmentation that adds a non-nullable "Modified" DateTime column to a table.
+    /// </summary>
     public class AddModifiedAugmentation: AddColumnAugmentation
     {
         public AddModifiedAugmentation()

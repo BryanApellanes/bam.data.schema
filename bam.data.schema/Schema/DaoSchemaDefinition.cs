@@ -8,6 +8,9 @@ using YamlDotNet.Serialization;
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Represents a complete DAO schema definition containing tables, columns, foreign keys, and cross-reference tables. Can be serialized to/from JSON.
+    /// </summary>
     public class DaoSchemaDefinition : IDaoSchemaDefinition
     {
         Dictionary<string, ITable> _tables = new Dictionary<string, ITable>();
@@ -37,6 +40,9 @@ namespace Bam.Data.Schema
         public string Name { get; set; }
 
         FileInfo _file;
+        /// <summary>
+        /// Gets or sets the file path where this schema definition is stored. Setting this value creates the parent directory if it does not exist.
+        /// </summary>
         [Exclude]
         public string File
         {
@@ -68,11 +74,19 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Removes the specified table from the schema.
+        /// </summary>
+        /// <param name="table">The table to remove.</param>
         public void RemoveTable(ITable table)
         {
             RemoveTable(table.Name);
         }
 
+        /// <summary>
+        /// Removes the table with the specified name from the schema.
+        /// </summary>
+        /// <param name="tableName">The name of the table to remove.</param>
         public void RemoveTable(string tableName)
         {
             if (this._tables.ContainsKey(tableName))
@@ -81,6 +95,9 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Gets or sets the tables in this schema definition.
+        /// </summary>
         public ITable[] Tables
         {
             get
@@ -106,6 +123,11 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Gets the table with the specified name, or null if not found.
+        /// </summary>
+        /// <param name="tableName">The name of the table to retrieve.</param>
+        /// <returns>The table if found; otherwise null.</returns>
         public ITable GetTable(string tableName)
         {
             ITable table = null;
@@ -117,6 +139,9 @@ namespace Bam.Data.Schema
         }
 
         readonly List<IForeignKeyColumn> _foreignKeys = new List<IForeignKeyColumn>();
+        /// <summary>
+        /// Gets or sets the foreign key columns defined in this schema.
+        /// </summary>
         public IForeignKeyColumn[] ForeignKeys
         {
             get => this._foreignKeys.ToArray();
@@ -128,6 +153,9 @@ namespace Bam.Data.Schema
         }
 
         Dictionary<string, IXrefTable> _xrefs = new Dictionary<string, IXrefTable>();
+        /// <summary>
+        /// Gets or sets the cross-reference (many-to-many) tables in this schema.
+        /// </summary>
         public IXrefTable[] Xrefs
         {
             get => _xrefs.Values.ToArray();
@@ -137,6 +165,11 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Gets the cross-reference info entries where the specified table is the left side.
+        /// </summary>
+        /// <param name="tableName">The table name to find left cross-references for.</param>
+        /// <returns>An array of cross-reference info entries.</returns>
         public IXrefInfo[] LeftXrefsFor(string tableName)
         {
             return (from xref in Xrefs
@@ -144,6 +177,11 @@ namespace Bam.Data.Schema
                     select xref).Select(x => new XrefInfo(tableName, x.Name, x.Right)).ToArray();
         }
 
+        /// <summary>
+        /// Gets the cross-reference info entries where the specified table is the right side.
+        /// </summary>
+        /// <param name="tableName">The table name to find right cross-references for.</param>
+        /// <returns>An array of cross-reference info entries.</returns>
         public IXrefInfo[] RightXrefsFor(string tableName)
         {
             return (from xref in Xrefs
@@ -151,6 +189,11 @@ namespace Bam.Data.Schema
                     select xref).Select(x => new XrefInfo(tableName, x.Name, x.Left)).ToArray();
         }
 
+        /// <summary>
+        /// Gets the cross-reference table with the specified name, or null if not found.
+        /// </summary>
+        /// <param name="tableName">The name of the xref table to retrieve.</param>
+        /// <returns>The xref table if found; otherwise null.</returns>
         public IXrefTable GetXref(string tableName)
         {
             IXrefTable result = null;
@@ -162,6 +205,11 @@ namespace Bam.Data.Schema
             return result;
         }
 
+        /// <summary>
+        /// Adds or updates a cross-reference table in this schema definition.
+        /// </summary>
+        /// <param name="xref">The cross-reference table to add or update.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult AddXref(IXrefTable xref)
         {
             IDaoSchemaManagerResult r = new DaoSchemaManagerResult($"XrefTable {xref.Name} was added.");
@@ -186,6 +234,10 @@ namespace Bam.Data.Schema
             return r;
         }
 
+        /// <summary>
+        /// Removes the cross-reference table with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the xref table to remove.</param>
         public void RemoveXref(string name)
         {
             if (_xrefs.ContainsKey(name))
@@ -194,6 +246,10 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Removes the specified cross-reference table.
+        /// </summary>
+        /// <param name="xrefTable">The xref table to remove.</param>
         public void RemoveXref(IXrefTable xrefTable)
         {
             if (_xrefs.ContainsKey(xrefTable.Name))
@@ -202,6 +258,11 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Adds or updates a table in this schema definition.
+        /// </summary>
+        /// <param name="table">The table to add or update.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult AddTable(ITable table)
         {
             DaoSchemaManagerResult r = new DaoSchemaManagerResult($"Table {table.Name} was added.");
@@ -226,6 +287,11 @@ namespace Bam.Data.Schema
             return r;
         }
 
+        /// <summary>
+        /// Adds or updates a foreign key in this schema definition.
+        /// </summary>
+        /// <param name="fk">The foreign key column to add or update.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult AddForeignKey(IForeignKeyColumn fk)
         {
             DaoSchemaManagerResult r = new DaoSchemaManagerResult($"ForeignKey {fk.ReferenceName} was added.");
@@ -321,6 +387,11 @@ namespace Bam.Data.Schema
             Save(this);
         }
 
+        /// <summary>
+        /// Merges another schema definition into this one by adding all of its tables, foreign keys, and cross-reference tables.
+        /// </summary>
+        /// <param name="schemaDefinition">The schema definition to merge into this one.</param>
+        /// <returns>This schema definition after merging.</returns>
         public IDaoSchemaDefinition CombineWith(IDaoSchemaDefinition schemaDefinition)
         {
             foreach (Table table in schemaDefinition.Tables)

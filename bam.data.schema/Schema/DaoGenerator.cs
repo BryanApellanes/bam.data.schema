@@ -11,6 +11,10 @@ namespace Bam.Data.Schema
     {
         private readonly List<Stream> _resultStreams = new List<Stream>();
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoGenerator"/> with the specified code writer and a default namespace of "DaoGenerated".
+        /// </summary>
+        /// <param name="codeWriter">The code writer used to emit DAO source files.</param>
         public DaoGenerator(IDaoCodeWriter codeWriter)
         {
             this.DisposeOnComplete = true;
@@ -20,6 +24,11 @@ namespace Bam.Data.Schema
             this.DaoCodeWriter = codeWriter; 
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoGenerator"/> with the specified code writer and namespace.
+        /// </summary>
+        /// <param name="codeWriter">The code writer used to emit DAO source files.</param>
+        /// <param name="nameSpace">The namespace for generated DAO classes.</param>
         public DaoGenerator(IDaoCodeWriter codeWriter, string nameSpace)
         {
             this.DisposeOnComplete = true;
@@ -29,6 +38,9 @@ namespace Bam.Data.Schema
             this.DaoCodeWriter = codeWriter;
         }
 
+        /// <summary>
+        /// Gets or sets the code writer used to emit DAO source files.
+        /// </summary>
         public IDaoCodeWriter DaoCodeWriter
         {
             get;
@@ -41,6 +53,9 @@ namespace Bam.Data.Schema
         /// </summary>
         public bool DisposeOnComplete { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether to generate Qi (query interface) classes alongside DAO classes.
+        /// </summary>
         public bool GenerateQiClasses { get; set; }
 
         #region events
@@ -73,8 +88,15 @@ namespace Bam.Data.Schema
         /// </summary>
         public FileInfo DaoAssemblyFile { get; set; }
 
+        /// <summary>
+        /// Gets or sets the namespace to use for generated DAO classes.
+        /// </summary>
         public string Namespace { get; set; }
 
+        /// <summary>
+        /// Generates code for the specified schema using the current directory as the output root.
+        /// </summary>
+        /// <param name="schema">The schema to generate code for.</param>
         public void Generate(IDaoSchemaDefinition schema)
         {
             Generate(schema, "./");
@@ -90,6 +112,12 @@ namespace Bam.Data.Schema
             Generate(schema, null, root, null);
         }
 
+        /// <summary>
+        /// Generates code for the specified schema, writing output to the specified root directory and partial classes to the partials directory.
+        /// </summary>
+        /// <param name="schema">The schema to generate code for.</param>
+        /// <param name="root">The root file path for generated output.</param>
+        /// <param name="partialsDir">The directory for partial class files.</param>
         public void Generate(IDaoSchemaDefinition schema, string root, string partialsDir)
         {
             Generate(schema, null, root, partialsDir);

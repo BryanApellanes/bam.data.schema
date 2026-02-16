@@ -1,5 +1,8 @@
 ﻿namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Resolves output streams for generated DAO source files by writing to the file system, or using a custom target resolver function if provided.
+    /// </summary>
     public class FsDaoTargetStreamResolver: IDaoTargetStreamResolver
     {
         public Stream GetTargetContextStream(Func<string, Stream> targetResolver, string root, IDaoSchemaDefinition schema)

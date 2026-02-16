@@ -6,6 +6,9 @@ using Bam.Logging;
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Abstract base class for extracting database schema definitions from a live database, converting table and column metadata into a <see cref="DaoSchemaDefinition"/>.
+    /// </summary>
     public abstract class DaoSchemaExtractor : Loggable, IDaoSchemaExtractor, IHasSchemaTempPathProvider
     {
         readonly Dictionary<DaoSchemaExtractorNamingCollisionStrategy, Func<string, string, string, string>> _namingCollisionHandlers = new Dictionary<DaoSchemaExtractorNamingCollisionStrategy, Func<string, string, string, string>>();
@@ -25,20 +28,63 @@ namespace Bam.Data.Schema
             SchemaExtractorNamingCollisionStrategy = DaoSchemaExtractorNamingCollisionStrategy.TrailingUnderscore;
         }
 
+        /// <summary>
+        /// Gets the database this extractor reads schema metadata from.
+        /// </summary>
         public Database Database { get; protected set; }
 
+        /// <summary>
+        /// Occurs when a table begins processing.
+        /// </summary>
         public event EventHandler ProcessingTable;
+        /// <summary>
+        /// Occurs when a table finishes processing.
+        /// </summary>
         public event EventHandler ProcessingTableComplete;
+
+        /// <summary>
+        /// Occurs when a column begins processing.
+        /// </summary>
         public event EventHandler ProcessingColumn;
+
+        /// <summary>
+        /// Occurs when a column finishes processing.
+        /// </summary>
         public event EventHandler ProcessingColumnComplete;
+
+        /// <summary>
+        /// Occurs when a foreign key begins processing.
+        /// </summary>
         public event EventHandler ProcessingForeignKey;
+
+        /// <summary>
+        /// Occurs when a foreign key finishes processing.
+        /// </summary>
         public event EventHandler ProcessingForeignComplete;
 
+        /// <summary>
+        /// Occurs before a class name is formatted from a table name.
+        /// </summary>
         public event EventHandler ClassNameFormatting;
+
+        /// <summary>
+        /// Occurs after a class name has been formatted from a table name.
+        /// </summary>
         public event EventHandler ClassNameFormatted;
 
+        /// <summary>
+        /// Occurs before a property name is formatted from a column name.
+        /// </summary>
         public event EventHandler PropertyNameFormatting;
+
+        /// <summary>
+        /// Occurs after a property name has been formatted from a column name.
+        /// </summary>
         public event EventHandler PropertyNameFormatted;
+
+        /// <summary>
+        /// Occurs when a property name collision with a reserved keyword or containing type is avoided.
+        /// </summary>
         public event EventHandler PropertyNameCollisionAvoided;
 
         public abstract string GetSchemaName();
@@ -69,22 +115,53 @@ namespace Bam.Data.Schema
         /// desired propertyName
         /// </summary>
         public Func<string, string, string, string> CustomNamingCollisionHandler { get; set; }
+        /// <summary>
+        /// Gets or sets the strategy for resolving property name collisions with reserved keywords.
+        /// </summary>
         public DaoSchemaExtractorNamingCollisionStrategy SchemaExtractorNamingCollisionStrategy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mapping between database names and C# class/property names.
+        /// </summary>
         public SchemaNameMap NameMap { get; set; }
+
+        /// <summary>
+        /// Gets or sets the formatter used for deriving class and property names from table and column names.
+        /// </summary>
         public INameFormatter NameFormatter { get; set; }
 
+        /// <summary>
+        /// Gets or sets a function that provides a temporary path for schema output based on the schema definition.
+        /// </summary>
         public Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }
 
+        /// <summary>
+        /// Gets the C# class name for the specified database table name using the configured name formatter.
+        /// </summary>
+        /// <param name="tableName">The database table name.</param>
+        /// <returns>A mapping from table name to class name.</returns>
         public virtual TableNameToClassName GetClassName(string tableName)
         {
             return new TableNameToClassName { TableName = tableName, ClassName = NameFormatter.FormatClassName(tableName) };
         }
 
+        /// <summary>
+        /// Gets the C# property name for the specified column in the specified table using the configured name formatter.
+        /// </summary>
+        /// <param name="tableName">The database table name.</param>
+        /// <param name="columnName">The database column name.</param>
+        /// <returns>A mapping from column name to property name.</returns>
         public virtual ColumnNameToPropertyName GetPropertyName(string tableName, string columnName)
         {
             return new ColumnNameToPropertyName { TableName = tableName, ColumnName = columnName, PropertyName = NameFormatter.FormatPropertyName(tableName, columnName) };
         }
 
+        /// <summary>
+        /// Creates a <see cref="Column"/> from the database metadata for the specified table and column, applying name formatting and collision avoidance.
+        /// </summary>
+        /// <param name="tableName">The database table name.</param>
+        /// <param name="columnName">The database column name.</param>
+        /// <returns>A new <see cref="Column"/> with metadata populated from the database.</returns>
         public Column CreateColumn(string tableName, string columnName)
         {
             FireEvent(PropertyNameFormatting, new DaoSchemaExtractorEventArgs { Column = columnName });
@@ -105,6 +182,10 @@ namespace Bam.Data.Schema
             return column;
         }
 
+        /// <summary>
+        /// Extracts a <see cref="DaoSchemaDefinition"/> from the database using a non-auto-saving schema manager.
+        /// </summary>
+        /// <returns>The extracted schema definition.</returns>
         public virtual DaoSchemaDefinition Extract()
         {
             DaoSchemaManager schemaManager = new DaoSchemaManager
@@ -116,6 +197,11 @@ namespace Bam.Data.Schema
             return result;
         }
 
+        /// <summary>
+        /// Extracts a <see cref="DaoSchemaDefinition"/> from the database using the specified schema manager, populating tables, columns, keys, and foreign keys.
+        /// </summary>
+        /// <param name="schemaManager">The schema manager to use for building the schema.</param>
+        /// <returns>The extracted schema definition.</returns>
         public virtual DaoSchemaDefinition Extract(DaoSchemaManager schemaManager)
         {
             DaoSchemaDefinition result = new DaoSchemaDefinition { Name = GetSchemaName() };

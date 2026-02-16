@@ -12,12 +12,34 @@ namespace Bam.Data.Repositories
     /// </summary>
     public class TypeSchema : ITypeSchema
 	{
+        /// <summary>
+        /// Initializes a new empty instance of <see cref="TypeSchema"/>.
+        /// </summary>
         public TypeSchema() { }
+
+        /// <summary>
+        /// Gets or sets the set of warnings generated during schema creation.
+        /// </summary>
         public HashSet<ITypeSchemaWarning> Warnings { get; set; }
+
+		/// <summary>
+		/// Gets or sets the set of CLR types that map to database tables.
+		/// </summary>
 		public HashSet<Type> Tables { get; set; }
+
+		/// <summary>
+		/// Gets or sets the set of foreign key relationships between types.
+		/// </summary>
 		public HashSet<ITypeFk> ForeignKeys { get; set; }
+
+		/// <summary>
+		/// Gets or sets the set of many-to-many cross-reference relationships between types.
+		/// </summary>
 		public HashSet<ITypeXref> Xrefs { get; set; }
 
+		/// <summary>
+		/// Gets or sets how to treat properties whose type is not explicitly supported.
+		/// </summary>
 		public DefaultDataTypeBehaviors DefaultDataTypeBehavior { get; set; }
 
         public override string ToString()
@@ -41,6 +63,9 @@ namespace Bam.Data.Repositories
         public string Hash => ToString().Sha1();
 
         string _name;
+        /// <summary>
+        /// Gets or sets the name of this TypeSchema. Defaults to the <see cref="Hash"/> value if not explicitly set.
+        /// </summary>
         public string Name
         {
             get

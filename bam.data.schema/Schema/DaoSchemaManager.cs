@@ -8,6 +8,9 @@ using System.ComponentModel;
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Manages the construction and persistence of DAO schema definitions, including adding tables, columns, foreign keys, and cross-reference tables.
+    /// </summary>
     [Proxy("schemaManager")]
     public class DaoSchemaManager : IHasSchemaTempPathProvider
     {
@@ -32,12 +35,21 @@ namespace Bam.Data.Schema
         }
 
 
-        public Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }  
+        /// <summary>
+        /// Gets or sets a function that provides a temporary file path based on a schema definition.
+        /// </summary>
+        public Func<IDaoSchemaDefinition, string> SchemaTempPathProvider { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether schema changes are automatically saved to disk after each modification.
+        /// </summary>
         public bool AutoSave { get; set; }
 
         IDaoSchemaDefinition _currentSchema;
         readonly object _currentSchemaLock = new object();
+        /// <summary>
+        /// Gets or sets the current schema definition being managed. Lazily loads a default schema if not explicitly set.
+        /// </summary>
         public IDaoSchemaDefinition CurrentSchema
         {
             get
@@ -48,6 +60,10 @@ namespace Bam.Data.Schema
             set => _currentSchema = value;
         }
 
+        /// <summary>
+        /// Loads the schema from the specified JSON file and sets it as the current managed schema.
+        /// </summary>
+        /// <param name="schemaFile">The file path of the schema JSON file.</param>
         public void ManageSchema(string schemaFile)
         {
             DaoSchemaDefinition schemaDefinition = schemaFile.FromJsonFile<DaoSchemaDefinition>();
@@ -61,6 +77,10 @@ namespace Bam.Data.Schema
             ManageSchema(schemaDefinition);
         }
 
+        /// <summary>
+        /// Sets the specified schema definition as the current managed schema.
+        /// </summary>
+        /// <param name="schema">The schema definition to manage.</param>
         public void ManageSchema(IDaoSchemaDefinition schema)
         {
             CurrentSchema = schema;
@@ -116,26 +136,51 @@ namespace Bam.Data.Schema
             return SetSchema(schemaName);
         }
 
+        /// <summary>
+        /// Gets the table with the specified name from the current schema.
+        /// </summary>
+        /// <param name="tableName">The name of the table to retrieve.</param>
+        /// <returns>The table if found; otherwise null.</returns>
         public ITable GetTable(string tableName)
         {
             return CurrentSchema.GetTable(tableName);
         }
 
+        /// <summary>
+        /// Gets the cross-reference table with the specified name from the current schema.
+        /// </summary>
+        /// <param name="tableName">The name of the xref table to retrieve.</param>
+        /// <returns>The xref table if found; otherwise null.</returns>
         public IXrefTable GetXref(string tableName)
         {
             return CurrentSchema.GetXref(tableName);
         }
 
+        /// <summary>
+        /// Determines whether a schema file exists for the specified schema name.
+        /// </summary>
+        /// <param name="schemaName">The schema name to check.</param>
+        /// <returns>True if the schema file exists; otherwise false.</returns>
         public bool SchemaExists(string schemaName)
         {
             return File.Exists(SchemaNameToFilePath(schemaName));
         }
 
+        /// <summary>
+        /// Gets the current schema definition being managed.
+        /// </summary>
+        /// <returns>The current schema definition.</returns>
         public IDaoSchemaDefinition GetCurrentSchema()
         {
             return CurrentSchema;
         }
 
+        /// <summary>
+        /// Adds a table with the specified name and optional class name to the current schema.
+        /// </summary>
+        /// <param name="tableName">The name of the table to add.</param>
+        /// <param name="className">The optional C# class name; defaults to the table name if not specified.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult AddTable(string tableName, string className = null)
         {
             try
@@ -157,6 +202,12 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Adds a cross-reference (many-to-many) relationship between the two specified tables.
+        /// </summary>
+        /// <param name="left">The left table name.</param>
+        /// <param name="right">The right table name.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult AddXref(string left, string right)
         {
             try
@@ -202,6 +253,12 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Sets the C# class name for the specified table and updates all related foreign key class names.
+        /// </summary>
+        /// <param name="tableName">The table name to set the class name for.</param>
+        /// <param name="className">The C# class name to assign.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult SetTableClassName(string tableName, string className)
         {
             try
@@ -225,6 +282,13 @@ namespace Bam.Data.Schema
             }
         }
         
+        /// <summary>
+        /// Adds a column with the specified name and data type to the specified table.
+        /// </summary>
+        /// <param name="tableName">The name of the table to add the column to.</param>
+        /// <param name="columnName">The name of the column to add.</param>
+        /// <param name="dataType">The data type of the column; defaults to String.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult AddColumn(string tableName, string columnName, DataTypes dataType = DataTypes.String)
         {
             return AddColumn(tableName, new Column(columnName, dataType));
@@ -254,6 +318,12 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Removes the specified column from the specified table.
+        /// </summary>
+        /// <param name="tableName">The name of the table to remove the column from.</param>
+        /// <param name="columnName">The name of the column to remove.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult RemoveColumn(string tableName, string columnName)
         {
             try
@@ -272,6 +342,12 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Sets the specified column as the primary key for the specified table.
+        /// </summary>
+        /// <param name="tableName">The name of the table.</param>
+        /// <param name="columnName">The name of the column to designate as the key.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult SetKeyColumn(string tableName, string columnName)
         {
             try
@@ -290,6 +366,15 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Sets a foreign key relationship between the referencing table and the target table.
+        /// </summary>
+        /// <param name="targetTable">The primary key (referenced) table name.</param>
+        /// <param name="referencingTable">The foreign key (referencing) table name.</param>
+        /// <param name="referencingColumn">The column on the referencing table that holds the foreign key.</param>
+        /// <param name="referencedKey">The key column on the target table; defaults to the target table's key or "Id".</param>
+        /// <param name="nameFormatter">An optional name formatter for setting class names on the foreign key.</param>
+        /// <returns>The result of the operation.</returns>
         public IDaoSchemaManagerResult SetForeignKey(string targetTable, string referencingTable, string referencingColumn, string referencedKey = null, INameFormatter nameFormatter = null)
         {
             try
@@ -394,6 +479,9 @@ namespace Bam.Data.Schema
         }
 
         readonly object _sync = new object();
+        /// <summary>
+        /// Saves the current schema definition to its JSON file.
+        /// </summary>
         public void Save()
         {
             lock (_sync)
@@ -402,6 +490,10 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Removes the specified table from the current schema.
+        /// </summary>
+        /// <param name="tableName">The name of the table to remove.</param>
         public void RemoveTable(string tableName)
         {
             CurrentSchema.RemoveTable(tableName);

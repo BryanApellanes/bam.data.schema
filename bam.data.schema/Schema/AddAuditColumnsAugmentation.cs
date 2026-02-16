@@ -16,8 +16,21 @@ namespace Bam.Data.Schema
 
         }
 
+        /// <summary>
+        /// Gets or sets whether to add a ModifiedBy column.
+        /// </summary>
         public bool IncludeModifiedBy { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether to add a CreatedBy column.
+		/// </summary>
 		public bool IncludeCreatedBy { get; set; }
+
+        /// <summary>
+        /// Adds Created, Modified, and optionally ModifiedBy and CreatedBy columns to the specified table.
+        /// </summary>
+        /// <param name="tableName">The name of the table to augment.</param>
+        /// <param name="manager">The schema manager to add columns to.</param>
         public override void Execute(string tableName, DaoSchemaManager manager)
         {
             manager.AddColumn(tableName, new Column("Created", DataTypes.DateTime, false));
