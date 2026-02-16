@@ -4,10 +4,17 @@ using System.Data;
 
 namespace Bam.Data.SQLite
 {
+    /// <summary>
+    /// Extracts schema definitions from a SQLite database using PRAGMA and SQLITE_MASTER metadata.
+    /// </summary>
     public class SQLiteSchemaExtractor : DaoSchemaExtractor
     {
         const string pragmaFormat = "PRAGMA TABLE_INFO('{0}')";
         
+        /// <summary>
+        /// Initializes a new instance of <see cref="SQLiteSchemaExtractor"/> for the specified database.
+        /// </summary>
+        /// <param name="database">The SQLite database to extract schema from.</param>
         public SQLiteSchemaExtractor(SQLiteDatabase database)
             : base()
         {
@@ -16,11 +23,13 @@ namespace Bam.Data.SQLite
             _pragmaTables = new Dictionary<string, DataTable>();
         }
 
+        /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)
         {
             return TranslateDataType(GetColumnDbDataType(tableName, columnName));
         }
 
+        /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
             DataTable pragmaTable = GetPragmaTable(tableName);            
@@ -35,11 +44,13 @@ namespace Bam.Data.SQLite
             return "text";
         }
 
+        /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
             return string.Empty;
         }
 
+        /// <inheritdoc />
         public override string[] GetColumnNames(string tableName)
         {
             DataTable pragmaTable = GetPragmaTable(tableName);
@@ -51,6 +62,7 @@ namespace Bam.Data.SQLite
             return columnNames.ToArray();
         }
 
+        /// <inheritdoc />
         public override bool GetColumnNullable(string tableName, string columnName)
         {
             DataTable pragmaTable = GetPragmaTable(tableName);
@@ -64,6 +76,7 @@ namespace Bam.Data.SQLite
             return true;
         }
 
+        /// <inheritdoc />
         public override ForeignKeyColumn[] GetForeignKeyColumns()
         {
             string sql = @"SELECT sql 
@@ -102,6 +115,7 @@ ORDER BY SUBSTR(type, 2, 1), name";
             return results.ToArray();
         }
 
+        /// <inheritdoc />
         public override string GetKeyColumnName(string tableName)
         {
             DataTable pragmaTable = GetPragmaTable(tableName);
@@ -115,11 +129,13 @@ ORDER BY SUBSTR(type, 2, 1), name";
             return string.Empty;
         }
 
+        /// <inheritdoc />
         public override string GetSchemaName()
         {
             return Database.ConnectionName;
         }
 
+        /// <inheritdoc />
         public override string[] GetTableNames()
         {
             string sql = "SELECT Name from SQLITE_MASTER where Type = 'table' and Name <> 'sqlite_sequence'";

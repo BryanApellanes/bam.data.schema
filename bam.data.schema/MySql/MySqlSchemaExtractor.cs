@@ -4,8 +4,15 @@ using MySql.Data.MySqlClient;
 
 namespace Bam.Data.MySql
 {
+    /// <summary>
+    /// Extracts schema definitions from a MySQL database using INFORMATION_SCHEMA views.
+    /// </summary>
     public class MySqlSchemaExtractor : DaoSchemaExtractor
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="MySqlSchemaExtractor"/> for the specified database.
+        /// </summary>
+        /// <param name="database">The MySQL database to extract schema from.</param>
         public MySqlSchemaExtractor(MySqlDatabase database)
             : base()
         {
@@ -13,32 +20,38 @@ namespace Bam.Data.MySql
             ConnectionString = database.ConnectionString;
             _tableIndexes = new Dictionary<string, DataTable>();
         }
+        /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)
         {
             return TranslateDataType(GetColumnDbDataType(tableName, columnName));
         }
 
+        /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
             return GetColumnAttribute(tableName, columnName, "DATA_TYPE");
         }
 
+        /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
             return GetColumnAttribute(tableName, columnName, "CHARACTER_MAXIMUM_LENGTH");
         }
 
+        /// <inheritdoc />
         public override bool GetColumnNullable(string tableName, string columnName)
         {
             return GetColumnAttribute(tableName, columnName, "IS_NULLABLE").IsAffirmative();
         }
 
+        /// <inheritdoc />
         public override string[] GetColumnNames(string tableName)
         {
             string sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = @SchemaName AND TABLE_NAME = @TableName";
             return Database.QuerySingleColumn<string>(sql, new { SchemaName = GetSchemaName(), TableName = tableName }).ToArray();
         }
 
+        /// <inheritdoc />
         public override ForeignKeyColumn[] GetForeignKeyColumns()
         {
             string sql = @"SELECT 
@@ -62,6 +75,7 @@ WHERE
             return results.ToArray();
         }
 
+        /// <inheritdoc />
         public override string GetKeyColumnName(string tableName)
         {
             DataTable indexes = GetTableIndex(tableName);
@@ -75,11 +89,13 @@ WHERE
             return string.Empty;
         }
 
+        /// <inheritdoc />
         public override string GetSchemaName()
         {
             return Database.ConnectionName;
         }
 
+        /// <inheritdoc />
         public override string[] GetTableNames()
         {
             string sql = $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{GetSchemaName()}'";

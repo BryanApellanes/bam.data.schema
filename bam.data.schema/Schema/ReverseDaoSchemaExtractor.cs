@@ -3,8 +3,16 @@ using Bam.Data.Repositories;
 
 namespace Bam.Data.Schema
 {
+    /// <summary>
+    /// Extracts a schema definition from compiled DAO types in an assembly, reversing the code generation process to reconstruct the schema.
+    /// </summary>
     public class ReverseDaoSchemaExtractor : DaoSchemaExtractor
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="ReverseDaoSchemaExtractor"/> for the specified assembly and namespace.
+        /// </summary>
+        /// <param name="assembly">The assembly containing compiled DAO types.</param>
+        /// <param name="nameSpace">The namespace to search for DAO types within the assembly.</param>
         public ReverseDaoSchemaExtractor(Assembly assembly, string nameSpace)
         {
             Assembly = assembly;
@@ -12,7 +20,14 @@ namespace Bam.Data.Schema
             DataTypeTranslator = new DataTypeTranslator();
         }
         
+        /// <summary>
+        /// Gets or sets the assembly containing the DAO types to extract schema from.
+        /// </summary>
         public Assembly Assembly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the namespace to search for DAO types.
+        /// </summary>
         public string Namespace { get; set; }
 
         private Dictionary<string, Type> _daoTypes;
@@ -21,6 +36,9 @@ namespace Bam.Data.Schema
 
         private bool _analyzed;
         private readonly object _analyzeLock = new object();
+        /// <summary>
+        /// Analyzes the assembly to discover DAO types and their column attributes. Must be called before extraction.
+        /// </summary>
         public void Analyze()
         {
             if (!_analyzed)
@@ -60,6 +78,7 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <inheritdoc />
         public override DaoSchemaDefinition Extract()
         {
             if (!_analyzed)
@@ -69,6 +88,7 @@ namespace Bam.Data.Schema
             return base.Extract();
         }
 
+        /// <inheritdoc />
         public override string GetSchemaName()
         {
             HashSet<string> uniqueSchemaNames = new HashSet<string>();
@@ -89,21 +109,25 @@ namespace Bam.Data.Schema
             return uniqueSchemaNames.FirstOrDefault();
         }
 
+        /// <inheritdoc />
         public override string[] GetTableNames()
         {
             return _daoTypes.Keys.ToArray();
         }
 
+        /// <inheritdoc />
         public override string GetKeyColumnName(string tableName)
         {
             return Dao.GetKeyColumnName(_daoTypes[tableName]);
         }
 
+        /// <inheritdoc />
         public override string[] GetColumnNames(string tableName)
         {
             return _columnAttributes[tableName].Select(c => c.Name).ToArray();
         }
 
+        /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)
         {
             ColumnAttribute columnAttribute = GetColumnAttribute(tableName, columnName);
@@ -111,21 +135,25 @@ namespace Bam.Data.Schema
             return DataTypeTranslator.TranslateDataType(columnAttribute.DbDataType);
         }
         
+        /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
             return GetColumnAttribute(tableName, columnName).DbDataType;
         }
 
+        /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
             return GetColumnAttribute(tableName, columnName).MaxLength;
         }
 
+        /// <inheritdoc />
         public override bool GetColumnNullable(string tableName, string columnName)
         {
             return GetColumnAttribute(tableName, columnName).AllowNull;
         }
 
+        /// <inheritdoc />
         public override ForeignKeyColumn[] GetForeignKeyColumns()
         {
             List<ForeignKeyColumn> foreignKeyColumns = new List<ForeignKeyColumn>();

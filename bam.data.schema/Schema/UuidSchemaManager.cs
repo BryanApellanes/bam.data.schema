@@ -12,6 +12,10 @@ namespace Bam.Data.Schema
     /// </summary>
     public class UuidSchemaManager: AutoIdSchemaManager
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="UuidSchemaManager"/>, adding a Uuid column augmentation.
+        /// </summary>
+        /// <param name="autoSave">Whether to automatically save schema changes to disk.</param>
         public UuidSchemaManager(bool autoSave = true) : base(autoSave)
         {
             PreColumnAugmentations.Add(new AddColumnAugmentation { ColumnName = "Uuid", DataType = DataTypes.String, AllowNull = false });

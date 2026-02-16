@@ -10,13 +10,26 @@ namespace Bam.Data.Schema
     /// </summary>
     public class SchemaNameMapNameFormatter: INameFormatter
     {
+        /// <summary>
+        /// Initializes a new empty instance of <see cref="SchemaNameMapNameFormatter"/>.
+        /// </summary>
         public SchemaNameMapNameFormatter() { }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="SchemaNameMapNameFormatter"/> with the specified name map.
+        /// </summary>
+        /// <param name="nameMap">The schema name map to use for lookups.</param>
         public SchemaNameMapNameFormatter(SchemaNameMap nameMap)
         {
             this.NameMap = nameMap;
         }
 
+        /// <summary>
+        /// Gets or sets the schema name map used for lookups.
+        /// </summary>
         public SchemaNameMap NameMap { get; set; }
+
+        /// <inheritdoc />
         public string FormatClassName(string tableName)
         {
             if (NameMap != null)
@@ -26,6 +39,7 @@ namespace Bam.Data.Schema
             return tableName;
         }
 
+        /// <inheritdoc />
         public string FormatPropertyName(string tableName, string columnName)
         {
             if (NameMap != null)

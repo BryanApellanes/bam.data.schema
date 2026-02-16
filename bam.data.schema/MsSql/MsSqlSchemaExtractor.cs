@@ -4,12 +4,19 @@ using System.Data.SqlClient;
 
 namespace Bam.Data.MsSql
 {
+    /// <summary>
+    /// Extracts schema definitions from a Microsoft SQL Server database using INFORMATION_SCHEMA views.
+    /// </summary>
     public class MsSqlSchemaExtractor : DaoSchemaExtractor
     {
         // TODO: update this to retrieve all meta data using fewer queries along the lines of  
         //SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH FROM {GetSchemaName()}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'TestTable'
       
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="MsSqlSchemaExtractor"/> for the specified database.
+        /// </summary>
+        /// <param name="database">The MS SQL database to extract schema from.</param>
         public MsSqlSchemaExtractor(MsSqlDatabase database)
             : base()
         {
@@ -17,39 +24,50 @@ namespace Bam.Data.MsSql
             ConnectionString = database.ConnectionString;
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="MsSqlSchemaExtractor"/> with the specified database and name formatter.
+        /// </summary>
+        /// <param name="database">The MS SQL database to extract schema from.</param>
+        /// <param name="nameFormatter">The name formatter to use for class and property name resolution.</param>
         public MsSqlSchemaExtractor(MsSqlDatabase database, INameFormatter nameFormatter): this(database)
         {
             this.NameFormatter = nameFormatter;
         }
 
+        /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)
         {
             return TranslateDataType(GetColumnDbDataType(tableName, columnName).ToLowerInvariant());
         }
 
+        /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
-            return GetColumnAttribute(tableName, columnName, "DATA_TYPE").ToString();            
+            return GetColumnAttribute(tableName, columnName, "DATA_TYPE").ToString();
         }
 
+        /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
             object value = GetColumnAttribute(tableName, columnName, "CHARACTER_MAXIMUM_LENGTH");
             return value == null ? "MAX" : value.ToString();
         }
 
+        /// <inheritdoc />
         public override string[] GetColumnNames(string tableName)
         {
             string sql = $"SELECT COLUMN_NAME FROM {GetSchemaName()}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @TableName";
             return Database.QuerySingleColumn<string>(sql, new { TableName = tableName }.ToDbParameters(Database).ToArray()).ToArray();
         }
 
+        /// <inheritdoc />
         public override bool GetColumnNullable(string tableName, string columnName)
         {
             string sql = "SELECT COLUMNPROPERTY(OBJECT_ID(@TableName, 'U'), @ColumnName, 'AllowsNull')";
             return Database.QuerySingle<int>(sql, new { TableName = tableName, ColumnName = columnName }.ToDbParameters(Database).ToArray()) == 1;
         }
 
+        /// <inheritdoc />
         public override ForeignKeyColumn[] GetForeignKeyColumns()
         {
             DataTable foreignKeyData = GetForeignKeyData(Database);
@@ -68,6 +86,7 @@ namespace Bam.Data.MsSql
             return results.ToArray();
         }
 
+        /// <inheritdoc />
         public override string GetKeyColumnName(string tableName)
         {
             string sql = $@"SELECT COLUMN_NAME
@@ -77,11 +96,13 @@ AND TABLE_NAME = @TableName";
             return Database.QuerySingle<string>(sql, new { TableName = tableName }.ToDbParameters(Database).ToArray());            
         }
 
+        /// <inheritdoc />
         public override string GetSchemaName()
         {
             return Database.ConnectionName;
         }
 
+        /// <inheritdoc />
         public override string[] GetTableNames()
         {
             string sql = $"SELECT TABLE_NAME FROM {GetSchemaName()}.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";

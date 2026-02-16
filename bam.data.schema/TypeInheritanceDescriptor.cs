@@ -45,6 +45,10 @@ namespace Bam.Data.Schema
         /// </summary>
         public List<TypeTable> Chain { get; }
 
+        /// <summary>
+        /// Returns a formatted string representation of the inheritance chain, showing table names and their columns indented by depth.
+        /// </summary>
+        /// <returns>A multi-line string describing the inheritance chain and its columns.</returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();

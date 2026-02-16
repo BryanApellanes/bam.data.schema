@@ -11,6 +11,9 @@ namespace Bam.Data.Schema
     /// </summary>
     public class AddAuditColumnsAugmentation : DaoSchemaManagerAugmentation
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="AddAuditColumnsAugmentation"/>.
+        /// </summary>
         public AddAuditColumnsAugmentation()
         {
 

@@ -11,6 +11,11 @@ namespace Bam.Data.Schema
     /// </summary>
     public class TypeInheritanceSchemaProvider : SchemaProvider
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="TypeInheritanceSchemaProvider"/> with the specified table name and temp path providers.
+        /// </summary>
+        /// <param name="tableNameProvider">The provider to use for determining table names from CLR types; defaults to <see cref="EchoTypeTableNameProvider"/> if null.</param>
+        /// <param name="schemaTempPathProvider">The provider for temporary file paths during schema generation; defaults to <see cref="SchemaTempPathProvider"/> if null.</param>
         public TypeInheritanceSchemaProvider(ITypeTableNameProvider tableNameProvider = null, ISchemaTempPathProvider schemaTempPathProvider = null)
             : base(tableNameProvider, schemaTempPathProvider)
         {

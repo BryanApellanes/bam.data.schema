@@ -13,8 +13,14 @@ namespace Bam.Data.Schema
     /// </summary>
     public class SchemaProvider : Loggable, IHasTypeSchemaTempPathProvider, ISchemaProvider
     {
+        /// <summary>
+        /// The default schema name used when no explicit name is provided.
+        /// </summary>
         public const string DefaultSchemaName = "BamSchema";
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="SchemaProvider"/> with default settings.
+        /// </summary>
         public SchemaProvider()
         {
             DefaultDataTypeBehavior = DefaultDataTypeBehaviors.Exclude;
@@ -26,6 +32,11 @@ namespace Bam.Data.Schema
             Types = new List<Type>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="SchemaProvider"/> with the specified table name provider and schema temp path provider.
+        /// </summary>
+        /// <param name="tableNameProvider">The provider to use for determining table names from CLR types.</param>
+        /// <param name="schemaTempPathProvider">The provider for temporary file paths during schema generation.</param>
         public SchemaProvider(ITypeTableNameProvider tableNameProvider, ISchemaTempPathProvider schemaTempPathProvider)
         {
             DefaultDataTypeBehavior = DefaultDataTypeBehaviors.Exclude;
@@ -37,6 +48,7 @@ namespace Bam.Data.Schema
             Types = new List<Type>();
         }
 
+        /// <inheritdoc />
         public DataNamespaces GetDataNamespaces()
         {
             Type? type = Types.FirstOrDefault();
@@ -47,6 +59,7 @@ namespace Bam.Data.Schema
             return DataNamespaces.For(type);
         }
 
+        /// <inheritdoc />
         public string GetSchemaNameOrDefault(string? name = null)
         {
             if (Types.Any())
@@ -57,6 +70,7 @@ namespace Bam.Data.Schema
             return name ?? DefaultSchemaName;
         }
 
+        /// <inheritdoc />
         public string GetSchemaName(IEnumerable<Type> types)
         {
             Type type = Types.First();
@@ -67,8 +81,10 @@ namespace Bam.Data.Schema
             return $"SchemaFor_{type.Namespace}";
         }
 
+        /// <inheritdoc />
         public DaoSchemaManager SchemaManager { get; set; }
 
+        /// <inheritdoc />
         public ITypeTableNameProvider TableNameProvider
         {
             get;
@@ -76,6 +92,7 @@ namespace Bam.Data.Schema
         }
 
         Func<IDaoSchemaDefinition, ITypeSchema, string>? _typeSchemaTempPathProvider;
+        /// <inheritdoc />
         public Func<IDaoSchemaDefinition, ITypeSchema, string>? TypeSchemaTempPathProvider
         {
             get
@@ -102,6 +119,7 @@ namespace Bam.Data.Schema
         }
 
 
+        /// <inheritdoc />
         public event EventHandler DifferentTypeNamespacesFound;
 
         /// <summary>
@@ -170,14 +188,17 @@ namespace Bam.Data.Schema
             set;
         }
 
+        /// <inheritdoc />
         public IEnumerable<Type> Types { get; set; }
 
+        /// <inheritdoc />
         public DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(string schemaName = null)
         {
             Args.ThrowIf(!Types.Any(), "No types specified");
             return CreateDaoSchemaDefinition(Types, schemaName);
         }
 
+        /// <inheritdoc />
         public DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(IEnumerable<Type> types, string schemaName = null)
         {
             SchemaName = schemaName ?? "null";
@@ -204,13 +225,16 @@ namespace Bam.Data.Schema
             return result;
         }
 
+        /// <inheritdoc />
         public HashSet<ITypeSchemaWarning> TypeSchemaWarnings { get; set; }
 
+        /// <inheritdoc />
         public TypeSchema CreateTypeSchema()
         {
             return CreateTypeSchema(Types);
         }
 
+        /// <inheritdoc />
         public TypeSchema CreateTypeSchema(string name, params Type[] types)
         {
             return CreateTypeSchema(types, name);
@@ -407,6 +431,7 @@ namespace Bam.Data.Schema
         /// </summary>
         public string Instant => new Instant(DateTime.UtcNow).ToString();
 
+        /// <inheritdoc />
         public string Message { get; set; }
 
         /// <summary>

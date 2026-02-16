@@ -14,6 +14,10 @@ namespace Bam.Data.Schema
     [Proxy("schemaManager")]
     public class DaoSchemaManager : IHasSchemaTempPathProvider
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoSchemaManager"/> with the specified auto-save setting.
+        /// </summary>
+        /// <param name="autoSave">Whether to automatically save schema changes to disk after each modification.</param>
         public DaoSchemaManager(bool autoSave = true)
         {
             PreColumnAugmentations = new List<DaoSchemaManagerAugmentation>();
@@ -22,12 +26,20 @@ namespace Bam.Data.Schema
             AutoSave = autoSave;
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoSchemaManager"/> by loading the schema from the specified file path.
+        /// </summary>
+        /// <param name="schemaFilePath">The path to the schema JSON file.</param>
         public DaoSchemaManager(string schemaFilePath)
             : this()
         {
             this.ManageSchema(schemaFilePath);
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoSchemaManager"/> managing the specified schema definition.
+        /// </summary>
+        /// <param name="schema">The schema definition to manage.</param>
         public DaoSchemaManager(IDaoSchemaDefinition schema)
             : this()
         {
@@ -527,6 +539,11 @@ namespace Bam.Data.Schema
         /// </summary>
         /// <param name="leftTableName"></param>
         /// <param name="rightTableName"></param>
+        /// <summary>
+        /// Creates a cross-reference (many-to-many) join table between the two specified tables, with Id, Uuid, and foreign key columns.
+        /// </summary>
+        /// <param name="leftTableName">The left table name.</param>
+        /// <param name="rightTableName">The right table name.</param>
         public void SetXref(string leftTableName, string rightTableName)
         {
             string xrefTableName = $"{leftTableName}{rightTableName}";
@@ -617,6 +634,12 @@ namespace Bam.Data.Schema
             }
         }
 
+        /// <summary>
+        /// Creates a cross-reference table between the two specified tables, adding foreign key entries to the provided list.
+        /// </summary>
+        /// <param name="foreignKeys">The list to add foreign key descriptors to.</param>
+        /// <param name="leftTableName">The left table name.</param>
+        /// <param name="rightTableName">The right table name.</param>
         public void SetXref(List<dynamic> foreignKeys, string leftTableName, string rightTableName)
         {
             SetXref(this, foreignKeys, leftTableName, rightTableName);

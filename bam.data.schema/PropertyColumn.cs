@@ -40,6 +40,11 @@ namespace Bam.Data.Repositories
         /// Gets or sets the database column definition derived from the property.
         /// </summary>
         public Column Column { get; set; }
+
+        /// <summary>
+        /// Returns a string representation of this property-column mapping, showing the column name.
+        /// </summary>
+        /// <returns>A string containing the column name in curly braces.</returns>
         public override string ToString()
         {
             return $"{{{Column.Name}}}";

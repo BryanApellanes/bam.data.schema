@@ -16,6 +16,9 @@ namespace Bam.Data.Repositories
     /// </summary>
     public class TypeXref : ITypeXref
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="TypeXref"/> with a default table name provider.
+        /// </summary>
         public TypeXref()
         {
             TableNameProvider = new EchoTypeTableNameProvider();
@@ -56,6 +59,10 @@ namespace Bam.Data.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns a string representation of this cross-reference, showing the left and right type/property pairs.
+        /// </summary>
+        /// <returns>A string in the format "Left:Type.Property,Right:Type.Property".</returns>
         public override string ToString()
         {
             return $"Left:{Left.FullName}.{LeftCollectionProperty.Name},Right:{Right.FullName}.{RightCollectionProperty.Name}";
@@ -151,6 +158,11 @@ namespace Bam.Data.Repositories
             get { return LeftCollectionProperty.PropertyType.IsArray ? "Length" : "Count"; }
         }
 
+		/// <summary>
+		/// Determines whether the specified object is a <see cref="TypeXref"/> with the same left and right types (in either order).
+		/// </summary>
+		/// <param name="obj">The object to compare with.</param>
+		/// <returns>True if the cross-references involve the same two types; otherwise false.</returns>
 		public override bool Equals(object obj)
 		{
 			TypeXref compareTo = obj as TypeXref;
@@ -163,6 +175,10 @@ namespace Bam.Data.Repositories
 			return base.Equals(obj);
 		}
 
+		/// <summary>
+		/// Returns a hash code based on the sum of the left and right type hash codes.
+		/// </summary>
+		/// <returns>A hash code for this cross-reference descriptor.</returns>
 		public override int GetHashCode()
 		{
             return this.Left.GetHashCode() + this.Right.GetHashCode();

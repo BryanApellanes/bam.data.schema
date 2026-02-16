@@ -255,11 +255,20 @@ namespace Bam.Data.Schema
             set;
         }
 
+        /// <summary>
+        /// Returns a hash code based on the lowercased "TableName.Name" string.
+        /// </summary>
+        /// <returns>A hash code for this column.</returns>
         public override int GetHashCode()
         {
             return $"{this.TableName}.{this.Name}".ToLowerInvariant().GetHashCode();
         }
 
+        /// <summary>
+        /// Determines whether the specified object is a <see cref="Column"/> with the same hash code.
+        /// </summary>
+        /// <param name="obj">The object to compare with.</param>
+        /// <returns>True if the columns have the same table name and column name; otherwise false.</returns>
         public override bool Equals(object obj)
         {
             if (obj is Column col)

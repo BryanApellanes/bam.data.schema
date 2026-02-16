@@ -64,13 +64,13 @@ namespace Bam.Data.Schema
         /// </summary>
         public string SchemaName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the file info of the generated DAO assembly, if applicable.
+        /// </summary>
         [Exclude]
         [JsonIgnore]
         [YamlIgnore]
         [XmlIgnore]
-        /// <summary>
-        /// Gets or sets the file info of the generated DAO assembly, if applicable.
-        /// </summary>
 		public FileInfo DaoAssembly { get; set; }
     }
 }

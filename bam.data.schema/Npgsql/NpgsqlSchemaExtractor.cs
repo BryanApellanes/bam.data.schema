@@ -5,8 +5,15 @@ using Npgsql;
 
 namespace Bam.Data.Npgsql
 {
+    /// <summary>
+    /// Extracts schema definitions from a PostgreSQL database using Npgsql and information_schema views.
+    /// </summary>
     public class NpgsqlSchemaExtractor : DaoSchemaExtractor
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="NpgsqlSchemaExtractor"/> for the specified database.
+        /// </summary>
+        /// <param name="database">The Npgsql database to extract schema from.</param>
         public NpgsqlSchemaExtractor(NpgsqlDatabase database)
         {
             Database = database;
@@ -20,24 +27,35 @@ namespace Bam.Data.Npgsql
         readonly Dictionary<string, Dictionary<string, DataRow>> _columnDefinitions;
         readonly Dictionary<string, NpgsqlForeignKeyDescriptor[]> _foreignKeyDefinitions;
 
+        /// <summary>
+        /// Gets or sets the database catalog name used in queries.
+        /// </summary>
         public string TableCatalog { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database schema name used in queries (e.g., "public").
+        /// </summary>
         public string TableSchema { get; set; }
         
+        /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)
         {
             return TranslateDataType(GetColumnDbDataType(tableName, columnName));
         }
 
+        /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
             return GetTableColumnInfo(tableName, columnName, "data_type");
         }
 
+        /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
             return GetTableColumnInfo(tableName, columnName, "character_maximum_length");
         }
 
+        /// <inheritdoc />
         public override string[] GetColumnNames(string tableName)
         {
             if (!_columnDefinitions.ContainsKey(tableName))
@@ -48,12 +66,14 @@ namespace Bam.Data.Npgsql
             return _columnDefinitions[tableName].Keys.ToArray();
         }
 
+        /// <inheritdoc />
         public override bool GetColumnNullable(string tableName, string columnName)
         {
             string nullable = GetTableColumnInfo(tableName, columnName, "is_nullable");
             return nullable.IsAffirmative();
         }
 
+        /// <inheritdoc />
         public override ForeignKeyColumn[] GetForeignKeyColumns()
         {
             List<ForeignKeyColumn> results = new List<ForeignKeyColumn>();
@@ -72,6 +92,7 @@ namespace Bam.Data.Npgsql
         }
 
         Dictionary<string, string> _keyColumns;
+        /// <inheritdoc />
         public override string GetKeyColumnName(string tableName)
         {
             if (!_keyColumns.ContainsKey(tableName))
@@ -89,12 +110,14 @@ AND    i.indisprimary;";
             return _keyColumns[tableName];
         }
 
+        /// <inheritdoc />
         public override string GetSchemaName()
         {
             return TableSchema;
         }
 
         string[] _tableNames;
+        /// <inheritdoc />
         public override string[] GetTableNames()
         {
             if (_tableNames == null)

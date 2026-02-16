@@ -16,12 +16,19 @@ namespace Bam.Data.Schema
         Dictionary<string, ITable> _tables = new Dictionary<string, ITable>();
         Dictionary<string, ColumnAttribute> _columns = new Dictionary<string, ColumnAttribute>();
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoSchemaDefinition"/> with default name and database type.
+        /// </summary>
         public DaoSchemaDefinition()
         {
             this.Name = "Default";
             this.DbType = "UnSpecified";
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoSchemaDefinition"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the schema definition.</param>
         public DaoSchemaDefinition(string name): this()
         {
             Name = name;

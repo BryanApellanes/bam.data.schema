@@ -47,6 +47,9 @@ namespace Bam.Data.Schema
         {
         }
 
+        /// <summary>
+        /// Gets the data type of this foreign key column. Always returns <see cref="DataTypes.ULong"/>.
+        /// </summary>
         public override DataTypes DataType
         {
             get => DataTypes.ULong;
@@ -115,6 +118,10 @@ namespace Bam.Data.Schema
             set => _referencingClass = value;
         }
 
+        /// <summary>
+        /// Returns the reference name of this foreign key column.
+        /// </summary>
+        /// <returns>The foreign key constraint reference name.</returns>
         public override string ToString()
         {
             return this.ReferenceName;

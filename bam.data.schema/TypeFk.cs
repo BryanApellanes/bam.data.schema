@@ -46,6 +46,10 @@ namespace Bam.Data.Repositories
 		/// </summary>
 		public PropertyInfo ChildParentProperty { get; set; }
 
+        /// <summary>
+        /// Returns a string representation of this foreign key descriptor showing the primary key and foreign key type/property pairs.
+        /// </summary>
+        /// <returns>A string in the format "PK:Type.Property,FK:Type.Property".</returns>
         public override string ToString()
         {
             return $"PK:{PrimaryKeyType.FullName}.{PrimaryKeyProperty.Name},FK:{ForeignKeyType.FullName}.{ForeignKeyProperty.Name}";
@@ -61,6 +65,11 @@ namespace Bam.Data.Repositories
             }
         }
 
+		/// <summary>
+		/// Determines whether the specified object is a <see cref="TypeFk"/> with the same primary key and foreign key types.
+		/// </summary>
+		/// <param name="obj">The object to compare with.</param>
+		/// <returns>True if the objects have the same primary key and foreign key types; otherwise false.</returns>
 		public override bool Equals(object obj) 
 		{
 			TypeFk compareTo = obj as TypeFk;
@@ -71,7 +80,11 @@ namespace Bam.Data.Repositories
 			return base.Equals(obj);
 		}
 
-		public override int GetHashCode() 
+		/// <summary>
+		/// Returns a hash code based on the primary key and foreign key types.
+		/// </summary>
+		/// <returns>A hash code for this foreign key descriptor.</returns>
+		public override int GetHashCode()
 		{
             return this.GetHashCode(PrimaryKeyType, ForeignKeyType);
 		}

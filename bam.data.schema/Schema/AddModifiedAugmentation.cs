@@ -9,6 +9,9 @@ namespace Bam.Data.Schema
     /// </summary>
     public class AddModifiedAugmentation: AddColumnAugmentation
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="AddModifiedAugmentation"/> with "Modified" as the column name.
+        /// </summary>
         public AddModifiedAugmentation()
         {
             this.ColumnName = "Modified";

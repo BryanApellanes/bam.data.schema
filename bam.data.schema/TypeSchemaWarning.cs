@@ -22,17 +22,30 @@ namespace Bam.Data.Repositories
         /// </summary>
         public Type ForeignKeyType { get; set; }
 
+        /// <summary>
+        /// Returns a string representation of this warning, including the warning type, parent type, and optional foreign key type.
+        /// </summary>
+        /// <returns>A descriptive string of the warning.</returns>
         public override string ToString()
         {
             string fkString = ForeignKeyType != null ? $", ForeignKeyType={ForeignKeyType?.Name}" : "";
             return $"{Warning.ToString()}: ParentType={ParentType?.Name ?? "null"}" + fkString;
         }
 
+        /// <summary>
+        /// Returns a hash code based on the string representation of this warning.
+        /// </summary>
+        /// <returns>A hash code for this warning.</returns>
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Determines whether the specified object is a <see cref="TypeSchemaWarning"/> with the same warning type, parent type, and foreign key type.
+        /// </summary>
+        /// <param name="obj">The object to compare with.</param>
+        /// <returns>True if the warnings are equivalent; otherwise false.</returns>
         public override bool Equals(object obj)
         {
             if (obj is TypeSchemaWarning typeSchemaWarning)

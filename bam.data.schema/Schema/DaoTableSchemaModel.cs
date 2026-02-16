@@ -5,14 +5,34 @@
     /// </summary>
     public class DaoTableSchemaModel
     {
+        /// <summary>
+        /// Gets or sets the table model containing columns and foreign keys.
+        /// </summary>
         public ITable Model { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent schema definition.
+        /// </summary>
         public IDaoSchemaDefinition Schema { get; set; }
+
+        /// <summary>
+        /// Gets or sets the namespace for generated code.
+        /// </summary>
         public string Namespace { get; set; }
 
+        /// <summary>
+        /// Gets the camelCased pluralized class name for the table, used in code generation.
+        /// </summary>
         public string CamelCasedPluralizedClassName => PluralizedClassName.CamelCase();
 
+        /// <summary>
+        /// Gets the pluralized class name for the table.
+        /// </summary>
         public string PluralizedClassName => Model.ClassName.Pluralize();
 
+        /// <summary>
+        /// Gets the foreign key column models with numeric suffixes appended to reference names for disambiguation.
+        /// </summary>
         public ForeignKeyColumnModel[] SuffixedForeignKeys
         {
             get
@@ -47,6 +67,9 @@
             }
         }
         
+        /// <summary>
+        /// Gets the columns that are not foreign keys, used in code generation.
+        /// </summary>
         public NonForeignKeyColumnModel[] NonForeignKeyColumns
         {
             get
@@ -55,6 +78,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the foreign keys that reference this table, wrapped as models for code generation.
+        /// </summary>
         public ReferencingForeignKeyModel[] ReferencingForeignKeys
         {
             get
@@ -63,6 +89,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the cross-reference info entries where this table is the left side.
+        /// </summary>
         public XrefInfoModel[] LeftXrefs
         {
             get
@@ -71,6 +100,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets the cross-reference info entries where this table is the right side.
+        /// </summary>
         public XrefInfoModel[] RightXrefs
         {
             get

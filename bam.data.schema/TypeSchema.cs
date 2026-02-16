@@ -42,6 +42,10 @@ namespace Bam.Data.Repositories
 		/// </summary>
 		public DefaultDataTypeBehaviors DefaultDataTypeBehavior { get; set; }
 
+        /// <summary>
+        /// Returns a string representation of this type schema, including sorted tables, foreign key hashes, and cross-reference hashes.
+        /// </summary>
+        /// <returns>A multi-line string representing the schema structure.</returns>
         public override string ToString()
         {
             List<Type> sortedTables = Tables.ToList();

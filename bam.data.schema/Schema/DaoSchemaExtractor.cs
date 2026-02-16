@@ -12,6 +12,9 @@ namespace Bam.Data.Schema
     public abstract class DaoSchemaExtractor : Loggable, IDaoSchemaExtractor, IHasSchemaTempPathProvider
     {
         readonly Dictionary<DaoSchemaExtractorNamingCollisionStrategy, Func<string, string, string, string>> _namingCollisionHandlers = new Dictionary<DaoSchemaExtractorNamingCollisionStrategy, Func<string, string, string, string>>();
+        /// <summary>
+        /// Initializes a new instance of <see cref="DaoSchemaExtractor"/> with default naming strategies and collision handlers.
+        /// </summary>
         public DaoSchemaExtractor()
         {
             NameMap = new SchemaNameMap();
@@ -87,18 +90,75 @@ namespace Bam.Data.Schema
         /// </summary>
         public event EventHandler PropertyNameCollisionAvoided;
 
+        /// <summary>
+        /// Gets the schema name from the database.
+        /// </summary>
+        /// <returns>The schema name.</returns>
         public abstract string GetSchemaName();
+
+        /// <summary>
+        /// Gets the names of all tables in the database.
+        /// </summary>
+        /// <returns>An array of table names.</returns>
         public abstract string[] GetTableNames();
+
+        /// <summary>
+        /// Gets the name of the primary key column for the specified table.
+        /// </summary>
+        /// <param name="tableName">The table name.</param>
+        /// <returns>The key column name, or empty if none found.</returns>
         public abstract string GetKeyColumnName(string tableName);
+
+        /// <summary>
+        /// Gets the names of all columns in the specified table.
+        /// </summary>
+        /// <param name="tableName">The table name.</param>
+        /// <returns>An array of column names.</returns>
         public abstract string[] GetColumnNames(string tableName);
+
+        /// <summary>
+        /// Gets the DAO data type for the specified column.
+        /// </summary>
+        /// <param name="tableName">The table name.</param>
+        /// <param name="columnName">The column name.</param>
+        /// <returns>The DAO data type.</returns>
         public abstract DataTypes GetColumnDataType(string tableName, string columnName);
+
+        /// <summary>
+        /// Gets the database-native data type string for the specified column.
+        /// </summary>
+        /// <param name="tableName">The table name.</param>
+        /// <param name="columnName">The column name.</param>
+        /// <returns>The database data type string.</returns>
         public abstract string GetColumnDbDataType(string tableName, string columnName);
+
+        /// <summary>
+        /// Gets the maximum length for the specified column.
+        /// </summary>
+        /// <param name="tableName">The table name.</param>
+        /// <param name="columnName">The column name.</param>
+        /// <returns>The maximum length string.</returns>
         public abstract string GetColumnMaxLength(string tableName, string columnName);
+
+        /// <summary>
+        /// Gets whether the specified column allows null values.
+        /// </summary>
+        /// <param name="tableName">The table name.</param>
+        /// <param name="columnName">The column name.</param>
+        /// <returns>True if the column allows null; otherwise false.</returns>
         public abstract bool GetColumnNullable(string tableName, string columnName);
+
+        /// <summary>
+        /// Gets all foreign key columns defined in the database.
+        /// </summary>
+        /// <returns>An array of foreign key columns.</returns>
         public abstract ForeignKeyColumn[] GetForeignKeyColumns();
         protected abstract void SetConnectionName(string connectionString);
 
         string _connectionString;
+        /// <summary>
+        /// Gets or sets the database connection string. Setting this property also sets the connection name via <see cref="SetConnectionName"/>.
+        /// </summary>
         public virtual string ConnectionString
         {
             get => _connectionString;
