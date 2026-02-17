@@ -63,7 +63,7 @@
             }
             string path = Path.Combine(root, "Partials", $"{table.Name}.cs");
             FileInfo f = new FileInfo(path);
-            if (!f.Directory.Exists)
+            if (!f.Directory!.Exists)
             {
                 f.Directory.Create();
             }

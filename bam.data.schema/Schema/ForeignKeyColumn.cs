@@ -59,7 +59,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        string referenceName;
+        string referenceName = null!;
         /// <summary>
         /// Gets or sets the foreign key constraint name. Defaults to "FK_{TableName}_{ReferencedTable}" if not explicitly set.
         /// </summary>
@@ -86,19 +86,19 @@ namespace Bam.Data.Schema
         {
             get;
             set;
-        }
+        } = null!;
 
         /// <summary>
         /// Gets or sets the name of the key column in the referenced (primary) table.
         /// </summary>
-        public string ReferencedKey { get; set; }
+        public string ReferencedKey { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the name of the referenced (primary) table.
         /// </summary>
         public string ReferencedTable { get; set; }
 
-        string _referencedClass;
+        string _referencedClass = null!;
         /// <summary>
         /// Gets or sets the C# class name of the referenced (primary) table.
         /// </summary>
@@ -108,7 +108,7 @@ namespace Bam.Data.Schema
             set => _referencedClass = value;
         }
 
-        string _referencingClass;
+        string _referencingClass = null!;
         /// <summary>
         /// Gets or sets the C# class name of the referencing (foreign key) table.
         /// </summary>

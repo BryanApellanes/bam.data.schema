@@ -19,7 +19,7 @@ namespace Bam.Data.SQLite
             : base()
         {
             Database = database;
-            ConnectionString = database.ConnectionString;
+            ConnectionString = database.ConnectionString!;
             _pragmaTables = new Dictionary<string, DataTable>();
         }
 
@@ -57,7 +57,7 @@ namespace Bam.Data.SQLite
             List<string> columnNames = new List<string>();
             foreach(DataRow row in pragmaTable.Rows)
             {
-                columnNames.Add(row["name"].ToString());
+                columnNames.Add(row["name"].ToString()!);
             }
             return columnNames.ToArray();
         }
@@ -132,7 +132,7 @@ ORDER BY SUBSTR(type, 2, 1), name";
         /// <inheritdoc />
         public override string GetSchemaName()
         {
-            return Database.ConnectionName;
+            return Database.ConnectionName!;
         }
 
         /// <inheritdoc />
@@ -145,7 +145,7 @@ ORDER BY SUBSTR(type, 2, 1), name";
         protected override void SetConnectionName(string connectionString)
         {
             SQLiteConnectionStringBuilder conn = new SQLiteConnectionStringBuilder(connectionString);
-            Database.ConnectionName = Path.GetFileNameWithoutExtension(conn["Data Source"].ToString());
+            Database.ConnectionName = Path.GetFileNameWithoutExtension(conn["Data Source"]!.ToString()!);
         }
 
         protected internal DataTypes TranslateDataType(string sqlDataType)

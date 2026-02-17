@@ -93,7 +93,7 @@ namespace Bam.Data.Schema
 
         Func<IDaoSchemaDefinition, ITypeSchema, string>? _typeSchemaTempPathProvider;
         /// <inheritdoc />
-        public Func<IDaoSchemaDefinition, ITypeSchema, string>? TypeSchemaTempPathProvider
+        public Func<IDaoSchemaDefinition, ITypeSchema, string> TypeSchemaTempPathProvider
         {
             get
             {
@@ -104,7 +104,7 @@ namespace Bam.Data.Schema
                         return TypeSchemaTempPathFuncProvider.GetSchemaTempPath;
                     }
                 }
-                return _typeSchemaTempPathProvider;
+                return _typeSchemaTempPathProvider!;
             }
             set
             {
@@ -116,47 +116,47 @@ namespace Bam.Data.Schema
         {
             get;
             set;
-        }
+        } = null!;
 
 
         /// <inheritdoc />
-        public event EventHandler DifferentTypeNamespacesFound;
+        public event EventHandler DifferentTypeNamespacesFound = null!;
 
         /// <summary>
         /// The event that fires when schema creation begins
         /// </summary>
         [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Creating dao schema started: '{SchemaName}'")]
-        public event EventHandler CreatingSchemaStarted;
+        public event EventHandler CreatingSchemaStarted = null!;
 
         /// <summary>
         /// The event that fires when type schema creation begins
         /// </summary>
         [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Creating type schema started: '{SchemaName}'")]
-        public event EventHandler CreatingTypeSchemaStarted;
+        public event EventHandler CreatingTypeSchemaStarted = null!;
 
         /// <summary>
         /// The event that fires when type schema creation completes
         /// </summary>
         [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Creating type schema finished: '{SchemaName}'")]
-        public event EventHandler CreatingTypeSchemaFinished;
+        public event EventHandler CreatingTypeSchemaFinished = null!;
 
         /// <summary>
         /// The event that fires when dao schema creation begins
         /// </summary>
         [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Writing dao schema started: '{SchemaName}'")]
-        public event EventHandler WritingDaoSchemaStarted;
+        public event EventHandler WritingDaoSchemaStarted = null!;
 
         /// <summary>
         /// The event that fires when dao schema creation completes
         /// </summary>
         [Verbosity(VerbosityLevel.Information, SenderMessageFormat = "Writing dao schema finished: '{SchemaName}'")]
-        public event EventHandler WritingDaoSchemaFinished;
+        public event EventHandler WritingDaoSchemaFinished = null!;
 
         /// <summary>
         /// Holds the name of the currently generating
         /// schema
         /// </summary>
-        public string SchemaName { get; set; }
+        public string SchemaName { get; set; } = null!;
 
         /// <summary>
         /// If true, an Id column is added to the generated dao tables
@@ -192,14 +192,14 @@ namespace Bam.Data.Schema
         public IEnumerable<Type> Types { get; set; }
 
         /// <inheritdoc />
-        public DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(string schemaName = null)
+        public DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(string? schemaName = null)
         {
             Args.ThrowIf(!Types.Any(), "No types specified");
             return CreateDaoSchemaDefinition(Types, schemaName);
         }
 
         /// <inheritdoc />
-        public DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(IEnumerable<Type> types, string schemaName = null)
+        public DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(IEnumerable<Type> types, string? schemaName = null)
         {
             SchemaName = schemaName ?? "null";
             FireEvent(CreatingSchemaStarted, EventArgs.Empty);
@@ -246,7 +246,7 @@ namespace Bam.Data.Schema
         /// <param name="types"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public TypeSchema CreateTypeSchema(IEnumerable<Type> types, string name = null)
+        public TypeSchema CreateTypeSchema(IEnumerable<Type> types, string? name = null)
         {
             CheckBaseNamespaces(types);
             SubscribeToTypeSchemaWarnings();
@@ -276,7 +276,7 @@ namespace Bam.Data.Schema
             return new TypeSchema { Name = GetSchemaNameOrDefault(name), Tables = tableTypes, ForeignKeys = foreignKeyTypes, Xrefs = xrefTypes, DefaultDataTypeBehavior = DefaultDataTypeBehavior, Warnings = TypeSchemaWarnings };
         }
 
-        protected internal virtual void WriteDaoSchema(TypeSchema typeSchema, DaoSchemaManager schemaManager, List<KeyColumn> missingKeyColumns = null, List<ForeignKeyColumn> missingForeignKeyColumns = null, ITypeTableNameProvider tableNameProvider = null)
+        protected internal virtual void WriteDaoSchema(TypeSchema typeSchema, DaoSchemaManager schemaManager, List<KeyColumn>? missingKeyColumns = null, List<ForeignKeyColumn>? missingForeignKeyColumns = null, ITypeTableNameProvider? tableNameProvider = null)
         {
             AddSchemaTables(typeSchema, schemaManager, tableNameProvider);
 
@@ -329,7 +329,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        protected virtual void AddSchemaTables(TypeSchema typeSchema, DaoSchemaManager schemaManager, ITypeTableNameProvider tableNameProvider = null)
+        protected virtual void AddSchemaTables(TypeSchema typeSchema, DaoSchemaManager schemaManager, ITypeTableNameProvider? tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
             foreach (Type tableType in typeSchema.Tables)
@@ -400,7 +400,7 @@ namespace Bam.Data.Schema
             {
                 if (!_daoPrimitives.Contains(property.PropertyType))
                 {
-                    Type enumerableType = property.GetEnumerableType();
+                    Type? enumerableType = property.GetEnumerableType();
                     if (enumerableType != null)
                     {
                         if (AreXrefs(type, enumerableType, out PropertyInfo leftEnumerable, out PropertyInfo rightEnumerable))
@@ -421,7 +421,7 @@ namespace Bam.Data.Schema
 
         protected internal static bool AreXrefs(Type left, Type right, out PropertyInfo leftEnumerable, out PropertyInfo rightEnumerable)
         {
-            rightEnumerable = null;
+            rightEnumerable = null!;
             return left.HasEnumerableOfMe(right, out leftEnumerable) && right.HasEnumerableOfMe(left, out rightEnumerable);
         }
 
@@ -432,7 +432,7 @@ namespace Bam.Data.Schema
         public string Instant => new Instant(DateTime.UtcNow).ToString();
 
         /// <inheritdoc />
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
 
         /// <summary>
         /// The event that occurs when a Type is found in the current
@@ -441,7 +441,7 @@ namespace Bam.Data.Schema
         /// the name of "Id")
         /// </summary>
         [Verbosity(VerbosityLevel.Warning, SenderMessageFormat = "[{Instant}]:: KeyPropertyNotFound: {Message}\r\n")]
-        public event EventHandler KeyPropertyNotFound;
+        public event EventHandler KeyPropertyNotFound = null!;
 
         /// <summary>
         /// The event that occurs when a Type is found in the current
@@ -452,7 +452,7 @@ namespace Bam.Data.Schema
         /// the name of "Id").
         /// </summary>
         [Verbosity(VerbosityLevel.Warning, SenderMessageFormat = "[{Instant}]:: ReferencingPropertyNotFound: {Message}\r\n")]
-        public event EventHandler ReferencingPropertyNotFound;
+        public event EventHandler ReferencingPropertyNotFound = null!;
 
         /// <summary>
         /// The event that occurs when a Type is found in the current
@@ -461,7 +461,7 @@ namespace Bam.Data.Schema
         /// the parent.
         /// </summary>
         [Verbosity(VerbosityLevel.Warning, SenderMessageFormat = "[{Instant}]:: ChildParentPropertyNotFound: {Message}\r\n")]
-        public event EventHandler ChildParentPropertyNotFound;
+        public event EventHandler ChildParentPropertyNotFound = null!;
 
         /// <summary>
         /// Get the types for each IEnumerable property of the specified type.
@@ -478,14 +478,14 @@ namespace Bam.Data.Schema
                     propertyType != typeof(string) &&
                     property.IsEnumerable() &&
                     property.GetEnumerableType() != typeof(string) &&
-                    !AreXrefs(parentType, property.GetEnumerableType()))
+                    !AreXrefs(parentType, property.GetEnumerableType()!))
                 {
                     PropertyInfo keyProperty = GetKeyProperty(parentType);
-                    Type foreignKeyType = property.GetEnumerableType();
-                    PropertyInfo referencingProperty = null;
+                    Type foreignKeyType = property.GetEnumerableType()!;
+                    PropertyInfo? referencingProperty = null;
                     if (keyProperty == null)
                     {
-                        Message = "KeyProperty not found for type {0}".Format(parentType.FullName);
+                        Message = "KeyProperty not found for type {0}".Format(parentType.FullName!);
                         FireEvent(KeyPropertyNotFound, new TypeSchemaWarningEventArgs() { Warning = Schema.TypeSchemaWarnings.KeyPropertyNotFound, ParentType = parentType });
                         keyProperty = new TypeSchemaPropertyInfo("Id", parentType, TableNameProvider);
                     }
@@ -495,15 +495,15 @@ namespace Bam.Data.Schema
 
                     if (referencingProperty == null)
                     {
-                        Message = "Referencing property not found {0}: Parent type ({1}), ForeignKeyType ({2})".Format(referencingPropertyName, parentType.FullName, foreignKeyType.FullName);
+                        Message = "Referencing property not found {0}: Parent type ({1}), ForeignKeyType ({2})".Format(referencingPropertyName, parentType.FullName!, foreignKeyType.FullName!);
                         FireEvent(ReferencingPropertyNotFound, new TypeSchemaWarningEventArgs() { Warning = Schema.TypeSchemaWarnings.ReferencingPropertyNotFound, ParentType = parentType, ForeignKeyType = foreignKeyType });
                         referencingProperty = new TypeSchemaPropertyInfo(referencingPropertyName, parentType, foreignKeyType, TableNameProvider);
                     }
 
-                    PropertyInfo childParentProperty = foreignKeyType.GetProperty(parentType.Name);
+                    PropertyInfo? childParentProperty = foreignKeyType.GetProperty(parentType.Name);
                     if (childParentProperty == null)
                     {
-                        Message = "ChildParentProperty was not found {0}.{1}: Parent type({2}), ForeignKeyType ({3})".Format(foreignKeyType.Name, parentType.Name, parentType.FullName, foreignKeyType.FullName);
+                        Message = "ChildParentProperty was not found {0}.{1}: Parent type({2}), ForeignKeyType ({3})".Format(foreignKeyType.Name, parentType.Name, parentType.FullName!, foreignKeyType.FullName!);
                         FireEvent(ChildParentPropertyNotFound, new TypeSchemaWarningEventArgs() { Warning = Schema.TypeSchemaWarnings.ChildParentPropertyNotFound, ParentType = parentType, ForeignKeyType = foreignKeyType });
                         childParentProperty = new TypeSchemaPropertyInfo(parentType.Name, foreignKeyType, TableNameProvider);
                     }
@@ -523,10 +523,10 @@ namespace Bam.Data.Schema
             return results;
         }
 
-        protected internal static PropertyInfo GetKeyProperty(Type type, List<KeyColumn> keyColumnsToCheck = null, ITypeTableNameProvider tableNameProvider = null)
+        protected internal static PropertyInfo GetKeyProperty(Type type, List<KeyColumn>? keyColumnsToCheck = null, ITypeTableNameProvider? tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
-            PropertyInfo keyProperty = type.GetFirstProperyWithAttributeOfType<KeyAttribute>();
+            PropertyInfo? keyProperty = type.GetFirstProperyWithAttributeOfType<KeyAttribute>();
             if (keyProperty == null)
             {
                 keyProperty = type.GetProperty("Id");
@@ -534,16 +534,16 @@ namespace Bam.Data.Schema
 
             if (keyProperty == null && keyColumnsToCheck != null)
             {
-                KeyColumn keyColumn = keyColumnsToCheck.FirstOrDefault(kc => kc.TableName.Equals(GetTableNameForType(type, tableNameProvider)));
+                KeyColumn? keyColumn = keyColumnsToCheck.FirstOrDefault(kc => kc.TableName.Equals(GetTableNameForType(type, tableNameProvider)));
                 if (keyColumn != null)
                 {
                     keyProperty = new TypeSchemaPropertyInfo(keyColumn.Name, type, tableNameProvider);
                 }
             }
-            return keyProperty;
+            return keyProperty!;
         }
 
-        protected internal static string GetTableNameForType(Type type, ITypeTableNameProvider tableNameProvider = null)
+        protected internal static string GetTableNameForType(Type type, ITypeTableNameProvider? tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
             return tableNameProvider.GetTableName(type);
@@ -597,7 +597,7 @@ namespace Bam.Data.Schema
             return dataType;
         }
 
-        protected virtual void AddPropertyColumns(Type type, DaoSchemaManager schemaManager, DefaultDataTypeBehaviors defaultDataTypeBehavior, ITypeTableNameProvider tableNameProvider = null)
+        protected virtual void AddPropertyColumns(Type type, DaoSchemaManager schemaManager, DefaultDataTypeBehaviors defaultDataTypeBehavior, ITypeTableNameProvider? tableNameProvider = null)
         {
             string tableName = GetTableNameForType(type, tableNameProvider);
             foreach (PropertyInfo property in type.GetProperties().Where(p => p.CanWrite))
@@ -722,7 +722,7 @@ namespace Bam.Data.Schema
             HashSet<string> namespaces = new HashSet<string>();
             foreach (Type type in types)
             {
-                namespaces.Add(type.Namespace);
+                namespaces.Add(type.Namespace!);
             }
 
             if (namespaces.Count > 1)

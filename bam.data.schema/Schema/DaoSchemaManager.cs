@@ -57,7 +57,7 @@ namespace Bam.Data.Schema
         /// </summary>
         public bool AutoSave { get; set; }
 
-        IDaoSchemaDefinition _currentSchema;
+        IDaoSchemaDefinition _currentSchema = null!;
         readonly object _currentSchemaLock = new object();
         /// <summary>
         /// Gets or sets the current schema definition being managed. Lazily loads a default schema if not explicitly set.
@@ -193,7 +193,7 @@ namespace Bam.Data.Schema
         /// <param name="tableName">The name of the table to add.</param>
         /// <param name="className">The optional C# class name; defaults to the table name if not specified.</param>
         /// <returns>The result of the operation.</returns>
-        public IDaoSchemaManagerResult AddTable(string tableName, string className = null)
+        public IDaoSchemaManagerResult AddTable(string tableName, string? className = null)
         {
             try
             {
@@ -387,7 +387,7 @@ namespace Bam.Data.Schema
         /// <param name="referencedKey">The key column on the target table; defaults to the target table's key or "Id".</param>
         /// <param name="nameFormatter">An optional name formatter for setting class names on the foreign key.</param>
         /// <returns>The result of the operation.</returns>
-        public IDaoSchemaManagerResult SetForeignKey(string targetTable, string referencingTable, string referencingColumn, string referencedKey = null, INameFormatter nameFormatter = null)
+        public IDaoSchemaManagerResult SetForeignKey(string targetTable, string referencingTable, string referencingColumn, string? referencedKey = null, INameFormatter? nameFormatter = null)
         {
             try
             {
@@ -684,7 +684,7 @@ namespace Bam.Data.Schema
             managerResult.ExceptionMessage = ex.Message;
             managerResult.Success = false;
 #if DEBUG
-            managerResult.StackTrace = ex.StackTrace;
+            managerResult.StackTrace = ex.StackTrace!;
 #endif
             return managerResult;
         }

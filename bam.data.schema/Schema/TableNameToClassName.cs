@@ -21,11 +21,11 @@ namespace Bam.Data.Schema
         /// <summary>
         /// Gets or sets the database table name.
         /// </summary>
-        public string TableName { get; set; }
+        public string TableName { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the C# class name.
         /// </summary>
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = null!;
     }
 }

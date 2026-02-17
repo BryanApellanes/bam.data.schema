@@ -20,22 +20,22 @@ namespace Bam.Data.Repositories
         /// <summary>
         /// Gets or sets the set of warnings generated during schema creation.
         /// </summary>
-        public HashSet<ITypeSchemaWarning> Warnings { get; set; }
+        public HashSet<ITypeSchemaWarning> Warnings { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the set of CLR types that map to database tables.
 		/// </summary>
-		public HashSet<Type> Tables { get; set; }
+		public HashSet<Type> Tables { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the set of foreign key relationships between types.
 		/// </summary>
-		public HashSet<ITypeFk> ForeignKeys { get; set; }
+		public HashSet<ITypeFk> ForeignKeys { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the set of many-to-many cross-reference relationships between types.
 		/// </summary>
-		public HashSet<ITypeXref> Xrefs { get; set; }
+		public HashSet<ITypeXref> Xrefs { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets how to treat properties whose type is not explicitly supported.
@@ -66,7 +66,7 @@ namespace Bam.Data.Repositories
         /// </summary>
         public string Hash => ToString().Sha1();
 
-        string _name;
+        string _name = null!;
         /// <summary>
         /// Gets or sets the name of this TypeSchema. Defaults to the <see cref="Hash"/> value if not explicitly set.
         /// </summary>

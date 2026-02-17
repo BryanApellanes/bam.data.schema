@@ -8,17 +8,17 @@
         /// <summary>
         /// Gets or sets the table model containing columns and foreign keys.
         /// </summary>
-        public ITable Model { get; set; }
+        public ITable Model { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the parent schema definition.
         /// </summary>
-        public IDaoSchemaDefinition Schema { get; set; }
+        public IDaoSchemaDefinition Schema { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the namespace for generated code.
         /// </summary>
-        public string Namespace { get; set; }
+        public string Namespace { get; set; } = null!;
 
         /// <summary>
         /// Gets the camelCased pluralized class name for the table, used in code generation.
@@ -49,7 +49,7 @@
             }
         }
 
-        private HashSet<string> _foreignKeyNames;
+        private HashSet<string> _foreignKeyNames = null!;
         protected HashSet<string> ForeignKeyNames
         {
             get

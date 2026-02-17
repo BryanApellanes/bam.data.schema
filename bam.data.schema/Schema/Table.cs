@@ -50,7 +50,7 @@ namespace Bam.Data.Schema
         /// Gets or sets the connection/schema name for this table.
         /// </summary>
         [Exclude]
-        public string ConnectionName { get; set; }
+        public string ConnectionName { get; set; } = null!;
 
         /// <summary>
         /// Sets the C# property name for the specified column.
@@ -60,7 +60,7 @@ namespace Bam.Data.Schema
         public void SetPropertyName(string columnName, string propertyName)
         {
             List<IColumn> columns = new List<IColumn>(Columns);
-            IColumn toSet = columns.FirstOrDefault(c => c.Name.Equals(columnName));
+            IColumn? toSet = columns.FirstOrDefault(c => c.Name.Equals(columnName));
             if (toSet != null)
             {
                 toSet.PropertyName = propertyName;
@@ -69,7 +69,7 @@ namespace Bam.Data.Schema
             else
             {
                 List<IForeignKeyColumn> fks = new List<IForeignKeyColumn>(ForeignKeys);
-                IForeignKeyColumn toSetFk = fks.FirstOrDefault(c => c.Name.Equals(columnName));
+                IForeignKeyColumn? toSetFk = fks.FirstOrDefault(c => c.Name.Equals(columnName));
                 if (toSetFk != null)
                 {
                     toSetFk.PropertyName = propertyName;
@@ -88,7 +88,7 @@ namespace Bam.Data.Schema
             return this[columnName].PropertyName;
         }
 
-        string name;
+        string name = null!;
         /// <summary>
         /// Gets or sets the table name, with whitespace automatically removed.
         /// </summary>
@@ -98,7 +98,7 @@ namespace Bam.Data.Schema
             set => this.name = Regex.Replace(value, @"\s", string.Empty);
         }
 
-        string _className;
+        string _className = null!;
         /// <summary>
         /// Gets or sets the C# class name for this table. Defaults to the table name formatted as PascalCase.
         /// </summary>
@@ -187,7 +187,7 @@ namespace Bam.Data.Schema
         {
             get
             {
-                IColumn key = (from col in Columns
+                IColumn? key = (from col in Columns
                         where (col is KeyColumn || col.Key)
                         select col).FirstOrDefault();
                 
@@ -206,7 +206,7 @@ namespace Bam.Data.Schema
         /// <param name="columnName">The name of the column to set as the key.</param>
         public void SetKeyColumn(string columnName)
         {
-            IColumn c = (from cl in Columns
+            IColumn? c = (from cl in Columns
                         where cl.Key
                         select cl).FirstOrDefault();
             if (c != null)
@@ -227,14 +227,14 @@ namespace Bam.Data.Schema
         /// <param name="referencedTable">The name of the referenced (primary) table.</param>
         public void SetForeignKeyColumn(string columnName, string referencedColumn, string referencedTable)
         {
-            IColumn c = (from cl in Columns
+            IColumn? c = (from cl in Columns
                         where cl.Name.Equals(columnName)
                         select cl).FirstOrDefault();
             if (c != null)
             {
                 RemoveColumn(c);
             }
-            this.AddColumn(new ForeignKeyColumn(c, referencedTable));
+            this.AddColumn(new ForeignKeyColumn(c!, referencedTable));
         }
         
         private void UnsetKeyColumn(string columnName)
@@ -363,7 +363,7 @@ namespace Bam.Data.Schema
         public bool HasColumn(string columnName, out IColumn column)
         {
             bool result = _columns.ContainsKey(columnName);
-            column = _columns[columnName];
+            column = _columns[columnName]!;
             return result;
         }
         

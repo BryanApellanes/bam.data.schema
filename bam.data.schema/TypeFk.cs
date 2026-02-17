@@ -14,37 +14,37 @@ namespace Bam.Data.Repositories
 		/// <summary>
 		/// The type of the Primary Key poco
 		/// </summary>
-		public Type PrimaryKeyType { get; set; }
+		public Type PrimaryKeyType { get; set; } = null!;
 
 		/// <summary>
 		/// The property of the Primary Key poco
 		/// that represents the Id/Primary Key
 		/// </summary>
-		public PropertyInfo PrimaryKeyProperty { get; set; }
+		public PropertyInfo PrimaryKeyProperty { get; set; } = null!;
 
 		/// <summary>
 		/// The type of the Foreign Key poco
 		/// </summary>
-		public Type ForeignKeyType { get; set; }
+		public Type ForeignKeyType { get; set; } = null!;
 
 		/// <summary>
-		/// The Foreign Key property that references the 
+		/// The Foreign Key property that references the
 		/// Primary Key
 		/// </summary>
-		public PropertyInfo ForeignKeyProperty { get; set; }
+		public PropertyInfo ForeignKeyProperty { get; set; } = null!;
 
 		/// <summary>
 		/// The property that represents the collection
-		/// of Foreign Keys that reference the same 
+		/// of Foreign Keys that reference the same
 		/// Primary Key
 		/// </summary>
-		public PropertyInfo CollectionProperty { get; set; }
+		public PropertyInfo CollectionProperty { get; set; } = null!;
 
 		/// <summary>
 		/// The property that represents the Parent
 		/// Primary Key instance on the Foreign Key
 		/// </summary>
-		public PropertyInfo ChildParentProperty { get; set; }
+		public PropertyInfo ChildParentProperty { get; set; } = null!;
 
         /// <summary>
         /// Returns a string representation of this foreign key descriptor showing the primary key and foreign key type/property pairs.
@@ -70,9 +70,9 @@ namespace Bam.Data.Repositories
 		/// </summary>
 		/// <param name="obj">The object to compare with.</param>
 		/// <returns>True if the objects have the same primary key and foreign key types; otherwise false.</returns>
-		public override bool Equals(object obj) 
+		public override bool Equals(object? obj)
 		{
-			TypeFk compareTo = obj as TypeFk;
+			TypeFk? compareTo = obj as TypeFk;
 			if (compareTo != null) 
 			{
 				return PrimaryKeyType.Equals(compareTo.PrimaryKeyType) && ForeignKeyType.Equals(compareTo.ForeignKeyType);

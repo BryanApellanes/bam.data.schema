@@ -57,9 +57,9 @@ namespace Bam.Data.Schema
         /// Gets or sets the name of the table this column belongs to.
         /// </summary>
         [Exclude]
-        public string TableName { get; set; }
+        public string TableName { get; set; } = null!;
 
-        string _tableClassName;
+        string _tableClassName = null!;
         /// <summary>
         /// Gets or sets the PascalCase class name derived from the table name.
         /// </summary>
@@ -83,7 +83,7 @@ namespace Bam.Data.Schema
             set => _tableClassName = value;
         }
 
-        string name;
+        string name = null!;
         /// <summary>
         /// Gets or sets the column name, with whitespace automatically removed.
         /// </summary>
@@ -93,7 +93,7 @@ namespace Bam.Data.Schema
             set => this.name = Regex.Replace(value, @"\s", string.Empty);
         }
 
-        string _propertyName;
+        string _propertyName = null!;
         /// <summary>
         /// Gets the value of the PropertyName this Column
         /// will be converted to during code generation
@@ -134,7 +134,7 @@ namespace Bam.Data.Schema
         /// <summary>
         /// Gets or sets the maximum length for the column, if applicable.
         /// </summary>
-        public string MaxLength { get; set; }
+        public string MaxLength { get; set; } = null!;
 
         /// <summary>
         /// The string representation of the Dao defined data type 
@@ -171,7 +171,7 @@ namespace Bam.Data.Schema
             }            
         }
 
-        string _dbDataType;
+        string _dbDataType = null!;
         /// <summary>
         /// The database equivalent of the DataType
         /// </summary>
@@ -227,7 +227,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        private void SetDbDataType(string dbDataType, string max = null)
+        private void SetDbDataType(string dbDataType, string? max = null)
         {
             _dbDataType = dbDataType;
             if (string.IsNullOrEmpty(MaxLength) && !string.IsNullOrEmpty(max))
@@ -269,7 +269,7 @@ namespace Bam.Data.Schema
         /// </summary>
         /// <param name="obj">The object to compare with.</param>
         /// <returns>True if the columns have the same table name and column name; otherwise false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Column col)
             {

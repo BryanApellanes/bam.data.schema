@@ -28,7 +28,7 @@ namespace Bam.Data.Schema
             this.Right = rightTable;
         }
 
-        string _left;
+        string _left = null!;
         /// <summary>
         /// Gets or sets the name of the left table. Setting this value updates the xref table name.
         /// </summary>
@@ -42,7 +42,7 @@ namespace Bam.Data.Schema
             }
         }
 
-        string _right;
+        string _right = null!;
         /// <summary>
         /// Gets or sets the name of the right table. Setting this value updates the xref table name.
         /// </summary>

@@ -10,7 +10,7 @@ namespace Bam.Data.Repositories
         /// <summary>
         /// Gets or sets the result of the most recent schema definition creation.
         /// </summary>
-        public DaoSchemaDefinitionCreateResult LastSchemaDefinitionCreateResult { get; set; }
+        public DaoSchemaDefinitionCreateResult LastSchemaDefinitionCreateResult { get; set; } = null!;
 
         /// <summary>
         /// Generates and executes the SQL schema script for the specified types against the given database.
@@ -61,7 +61,7 @@ namespace Bam.Data.Repositories
         /// <param name="typeSchemaGenerator">The schema provider to use for generating the DAO schema definition.</param>
         /// <param name="schemaManager">An optional schema manager; if null, a non-auto-saving manager is created.</param>
         /// <returns>The SQL string builder containing the generated schema script.</returns>
-        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaProvider typeSchemaGenerator, DaoSchemaManager schemaManager = null)
+        public SqlStringBuilder WriteSchemaScript(IDatabase database, SchemaProvider typeSchemaGenerator, DaoSchemaManager? schemaManager = null)
         {
             schemaManager = schemaManager ?? new DaoSchemaManager { AutoSave = false };
             typeSchemaGenerator.SchemaManager = schemaManager;

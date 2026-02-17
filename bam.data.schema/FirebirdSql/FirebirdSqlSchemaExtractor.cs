@@ -14,7 +14,7 @@ namespace Bam.Data.FirebirdSql
         public FirebirdSqlSchemaExtractor(FirebirdSqlDatabase database)
         {
             Database = database;
-            ConnectionString = database.ConnectionString;
+            ConnectionString = database.ConnectionString!;
         }
         /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)

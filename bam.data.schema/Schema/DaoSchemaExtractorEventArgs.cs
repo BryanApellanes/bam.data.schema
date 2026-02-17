@@ -17,21 +17,21 @@ namespace Bam.Data.Schema
 		/// <summary>
 		/// Gets or sets the name of the table being processed.
 		/// </summary>
-		public string Table { get; set; }
+		public string Table { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the name of the column being processed.
 		/// </summary>
-		public string Column { get; set; }
+		public string Column { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the property name involved in a naming collision.
 		/// </summary>
-        public string Property { get; set; }
+        public string Property { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the foreign key column being processed.
 		/// </summary>
-        public ForeignKeyColumn ForeignKeyColumn { get; set; }
+        public ForeignKeyColumn ForeignKeyColumn { get; set; } = null!;
 	}
 }

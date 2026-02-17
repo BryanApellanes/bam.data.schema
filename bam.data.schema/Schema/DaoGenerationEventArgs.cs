@@ -16,11 +16,11 @@
         /// <summary>
         /// Gets or sets the schema definition being generated.
         /// </summary>
-        public DaoSchemaDefinition SchemaDefinition { get; set; }
+        public DaoSchemaDefinition SchemaDefinition { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the table currently being processed during generation.
         /// </summary>
-        public Table Table { get; set; }
+        public Table Table { get; set; } = null!;
     }
 }

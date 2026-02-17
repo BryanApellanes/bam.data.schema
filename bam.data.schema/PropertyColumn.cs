@@ -17,7 +17,7 @@ namespace Bam.Data.Repositories
         {
             PropertyInfo = property;
             string columnName = property.Name.LettersOnly();
-            ColumnAttribute attr = null;
+            ColumnAttribute? attr = null;
             if(property.HasCustomAttributeOfType<ColumnAttribute>(out attr))
             {
                 columnName = attr.Name;

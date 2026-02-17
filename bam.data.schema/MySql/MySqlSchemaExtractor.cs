@@ -17,7 +17,7 @@ namespace Bam.Data.MySql
             : base()
         {
             Database = database;
-            ConnectionString = database.ConnectionString;
+            ConnectionString = database.ConnectionString!;
             _tableIndexes = new Dictionary<string, DataTable>();
         }
         /// <inheritdoc />
@@ -65,11 +65,11 @@ WHERE
             foreach(DataRow row in fkData.Rows)
             {
                 ForeignKeyColumn fk = new ForeignKeyColumn();
-                fk.TableName = row["TABLE_NAME"].ToString();
-                fk.ReferenceName = row["CONSTRAINT_NAME"].ToString();
-                fk.Name = row["COLUMN_NAME"].ToString();
-                fk.ReferencedKey = row["REFERENCED_COLUMN_NAME"].ToString();
-                fk.ReferencedTable = row["REFERENCED_TABLE_NAME"].ToString();
+                fk.TableName = row["TABLE_NAME"].ToString()!;
+                fk.ReferenceName = row["CONSTRAINT_NAME"].ToString()!;
+                fk.Name = row["COLUMN_NAME"].ToString()!;
+                fk.ReferencedKey = row["REFERENCED_COLUMN_NAME"].ToString()!;
+                fk.ReferencedTable = row["REFERENCED_TABLE_NAME"].ToString()!;
                 results.Add(fk);
             }
             return results.ToArray();
@@ -92,7 +92,7 @@ WHERE
         /// <inheritdoc />
         public override string GetSchemaName()
         {
-            return Database.ConnectionName;
+            return Database.ConnectionName!;
         }
 
         /// <inheritdoc />
@@ -129,7 +129,7 @@ WHERE
         {
             string sql = $"SELECT {attributeName} FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = @SchemaName AND TABLE_NAME = @TableName AND COLUMN_NAME = @ColumnName";
             object result = Database.QuerySingle<object>(sql, new { SchemaName = GetSchemaName(), TableName = tableName, ColumnName = columnName });
-            return result == null ? string.Empty : result.ToString();
+            return result == null ? string.Empty : result.ToString()!;
         }
 
     }

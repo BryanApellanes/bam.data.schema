@@ -21,7 +21,7 @@ namespace Bam.Data.MsSql
             : base()
         {
             Database = database;
-            ConnectionString = database.ConnectionString;
+            ConnectionString = database.ConnectionString!;
         }
 
         /// <summary>
@@ -43,14 +43,14 @@ namespace Bam.Data.MsSql
         /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
-            return GetColumnAttribute(tableName, columnName, "DATA_TYPE").ToString();
+            return GetColumnAttribute(tableName, columnName, "DATA_TYPE")!.ToString()!;
         }
 
         /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
-            object value = GetColumnAttribute(tableName, columnName, "CHARACTER_MAXIMUM_LENGTH");
-            return value == null ? "MAX" : value.ToString();
+            object? value = GetColumnAttribute(tableName, columnName, "CHARACTER_MAXIMUM_LENGTH");
+            return value == null ? "MAX" : value.ToString()!;
         }
 
         /// <inheritdoc />
@@ -75,11 +75,11 @@ namespace Bam.Data.MsSql
             foreach (DataRow row in foreignKeyData.Rows)
             {
                 ForeignKeyColumn fk = new ForeignKeyColumn();
-                fk.TableName = row["ForeignKeyTable"].ToString();
-                fk.ReferenceName = row["ForeignKeyName"].ToString();
-                fk.Name = row["ForeignKeyColumn"].ToString();
-                fk.ReferencedKey = row["PrimaryKeyColumn"].ToString();
-                fk.ReferencedTable = row["PrimaryKeyTable"].ToString();
+                fk.TableName = row["ForeignKeyTable"].ToString()!;
+                fk.ReferenceName = row["ForeignKeyName"].ToString()!;
+                fk.Name = row["ForeignKeyColumn"].ToString()!;
+                fk.ReferencedKey = row["PrimaryKeyColumn"].ToString()!;
+                fk.ReferencedTable = row["PrimaryKeyTable"].ToString()!;
                 results.Add(fk);
             }
 
@@ -93,13 +93,13 @@ namespace Bam.Data.MsSql
 FROM {GetSchemaName()}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE
 WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + CONSTRAINT_NAME), 'IsPrimaryKey') = 1
 AND TABLE_NAME = @TableName";            
-            return Database.QuerySingle<string>(sql, new { TableName = tableName }.ToDbParameters(Database).ToArray());            
+            return Database.QuerySingle<string>(sql, new { TableName = tableName }.ToDbParameters(Database).ToArray())!;
         }
 
         /// <inheritdoc />
         public override string GetSchemaName()
         {
-            return Database.ConnectionName;
+            return Database.ConnectionName!;
         }
 
         /// <inheritdoc />
@@ -110,7 +110,7 @@ AND TABLE_NAME = @TableName";
             List<string> tableNames = new List<string>();
             foreach(DataRow row in results.Rows)
             {
-                tableNames.Add(row["TABLE_NAME"].ToString());
+                tableNames.Add(row["TABLE_NAME"].ToString()!);
             }
             return tableNames.ToArray();
         }
@@ -153,7 +153,7 @@ AND TABLE_NAME = @TableName";
         {
             SqlConnectionStringBuilder connectionStringBuilder = Database.CreateConnectionStringBuilder<SqlConnectionStringBuilder>();
             connectionStringBuilder.ConnectionString = connectionString;
-            string databaseName = connectionStringBuilder["Initial Catalog"] as string;
+            string? databaseName = connectionStringBuilder["Initial Catalog"] as string;
             if (string.IsNullOrWhiteSpace(databaseName))
             {
                 databaseName = connectionStringBuilder["Database"] as string;
@@ -166,11 +166,11 @@ AND TABLE_NAME = @TableName";
                     connectionString));
             }
 
-            Database.ConnectionName = databaseName;
+            Database.ConnectionName = databaseName!;
         }
         
         Dictionary<string, DataTable> _tableColumnInfo = new Dictionary<string, DataTable>();
-        private object GetColumnAttribute(string tableName, string columnName, string attributeName)
+        private object? GetColumnAttribute(string tableName, string columnName, string attributeName)
         {
             if (!_tableColumnInfo.ContainsKey(tableName))
             {

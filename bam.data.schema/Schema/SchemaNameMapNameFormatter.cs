@@ -27,7 +27,7 @@ namespace Bam.Data.Schema
         /// <summary>
         /// Gets or sets the schema name map used for lookups.
         /// </summary>
-        public SchemaNameMap NameMap { get; set; }
+        public SchemaNameMap NameMap { get; set; } = null!;
 
         /// <inheritdoc />
         public string FormatClassName(string tableName)

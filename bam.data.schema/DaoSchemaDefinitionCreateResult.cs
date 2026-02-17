@@ -18,11 +18,11 @@ namespace Bam.Data.Repositories
 		/// <param name="typeSchema">The type schema describing CLR type relationships.</param>
 		/// <param name="missingKeyColumns">Key columns that were inferred because they were not found on the CLR types.</param>
 		/// <param name="missingForeignKeyColumns">Foreign key columns that were inferred because they were not found on the CLR types.</param>
-		public DaoSchemaDefinitionCreateResult(IDaoSchemaDefinition schemaDefinition, TypeSchema typeSchema, KeyColumn[] missingKeyColumns = null, ForeignKeyColumn[] missingForeignKeyColumns = null)
+		public DaoSchemaDefinitionCreateResult(IDaoSchemaDefinition schemaDefinition, TypeSchema typeSchema, KeyColumn[]? missingKeyColumns = null, ForeignKeyColumn[]? missingForeignKeyColumns = null)
 		{
 			this.DaoSchemaDefinition = schemaDefinition;
 			this.TypeSchema = typeSchema;
-			this.Warnings = new SchemaWarnings(missingKeyColumns, missingForeignKeyColumns);
+			this.Warnings = new SchemaWarnings(missingKeyColumns!, missingForeignKeyColumns!);
 		}
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Bam.Data.Repositories
 		/// <summary>
 		/// Gets or sets the set of warnings generated during type schema creation.
 		/// </summary>
-		public HashSet<ITypeSchemaWarning> TypeSchemaWarnings { get; set; }
+		public HashSet<ITypeSchemaWarning> TypeSchemaWarnings { get; set; } = null!;
 
 		/// <summary>
 		/// Gets the generated DAO schema definition containing tables, columns, and foreign keys.

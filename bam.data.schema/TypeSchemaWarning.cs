@@ -15,12 +15,12 @@ namespace Bam.Data.Repositories
         /// <summary>
         /// Gets or sets the parent type associated with this warning.
         /// </summary>
-        public Type ParentType { get; set; }
+        public Type ParentType { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the foreign key type associated with this warning, if applicable.
         /// </summary>
-        public Type ForeignKeyType { get; set; }
+        public Type ForeignKeyType { get; set; } = null!;
 
         /// <summary>
         /// Returns a string representation of this warning, including the warning type, parent type, and optional foreign key type.
@@ -46,7 +46,7 @@ namespace Bam.Data.Repositories
         /// </summary>
         /// <param name="obj">The object to compare with.</param>
         /// <returns>True if the warnings are equivalent; otherwise false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is TypeSchemaWarning typeSchemaWarning)
             {
@@ -67,8 +67,8 @@ namespace Bam.Data.Repositories
             return new TypeSchemaWarning
             {
                 Warning = args.Warning,
-                ParentType =  args.ParentType,
-                ForeignKeyType = args.ForeignKeyType
+                ParentType =  args.ParentType!,
+                ForeignKeyType = args.ForeignKeyType!
             };
         }
         

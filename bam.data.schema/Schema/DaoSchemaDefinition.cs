@@ -46,7 +46,7 @@ namespace Bam.Data.Schema
         /// </summary>
         public string Name { get; set; }
 
-        FileInfo _file;
+        FileInfo _file = null!;
         /// <summary>
         /// Gets or sets the file path where this schema definition is stored. Setting this value creates the parent directory if it does not exist.
         /// </summary>
@@ -137,12 +137,12 @@ namespace Bam.Data.Schema
         /// <returns>The table if found; otherwise null.</returns>
         public ITable GetTable(string tableName)
         {
-            ITable table = null;
+            ITable? table = null;
 			if (this._tables.TryGetValue(tableName, out var table1))
 			{
 				table = table1;
 			}
-            return table;
+            return table!;
         }
 
         readonly List<IForeignKeyColumn> _foreignKeys = new List<IForeignKeyColumn>();
@@ -203,13 +203,13 @@ namespace Bam.Data.Schema
         /// <returns>The xref table if found; otherwise null.</returns>
         public IXrefTable GetXref(string tableName)
         {
-            IXrefTable result = null;
+            IXrefTable? result = null;
             if (this._xrefs.ContainsKey(tableName))
             {
                 result = this._xrefs[tableName];
             }
 
-            return result;
+            return result!;
         }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace Bam.Data.Schema
                 {
                     IForeignKeyColumn existing = (from efk in this._foreignKeys
                                                  where efk.Equals(fk)
-                                                 select efk).FirstOrDefault();
+                                                 select efk).FirstOrDefault()!;
 
                     existing.AllowNull = fk.AllowNull;
                     existing.DbDataType = fk.DbDataType;
@@ -338,7 +338,7 @@ namespace Bam.Data.Schema
             this.LastException = ex;
             r.Message = ex.Message;
             r.Success = false;
-            r.StackTrace = ex.StackTrace;
+            r.StackTrace = ex.StackTrace!;
         }
         
         /// <summary>
@@ -352,7 +352,7 @@ namespace Bam.Data.Schema
         {
             get;
             private set;
-        }
+        } = null!;
         
         /// <summary>
         /// Loads a SchemaDefinition from the specified file, the file

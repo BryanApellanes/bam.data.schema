@@ -26,12 +26,12 @@ namespace Bam.Data.Repositories
         /// <summary>
         /// Gets or sets the left type in the many-to-many relationship.
         /// </summary>
-        public Type Left { get; set; }
+        public Type Left { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the right type in the many-to-many relationship.
         /// </summary>
-        public Type Right { get; set; }
+        public Type Right { get; set; } = null!;
 
         /// <summary>
         /// The property of the Left type that represents
@@ -41,7 +41,7 @@ namespace Bam.Data.Repositories
         {
             get;
             set;
-        }
+        } = null!;
 
         /// <summary>
         /// Gets or sets the provider used to determine table names from types.
@@ -87,7 +87,7 @@ namespace Bam.Data.Repositories
         {
             get;
             set;
-        }
+        } = null!;
 
         /// <summary>
         /// Gets the DAO table name for the right type.
@@ -108,7 +108,7 @@ namespace Bam.Data.Repositories
         {
             get
             {
-                string value = LeftCollectionProperty.PropertyType.IsArray ? LeftCollectionProperty.PropertyType.FullName : string.Format("List<{0}.{1}>", Left.Namespace, Left.Name);
+                string value = LeftCollectionProperty.PropertyType.IsArray ? LeftCollectionProperty.PropertyType.FullName! : string.Format("List<{0}.{1}>", Left.Namespace, Left.Name);
                 return value;
             }
         }
@@ -121,7 +121,7 @@ namespace Bam.Data.Repositories
         {
             get
             {
-                string value = RightCollectionProperty.PropertyType.IsArray ? RightCollectionProperty.PropertyType.FullName : string.Format("List<{0}.{1}>", Right.Namespace, Right.Name);
+                string value = RightCollectionProperty.PropertyType.IsArray ? RightCollectionProperty.PropertyType.FullName! : string.Format("List<{0}.{1}>", Right.Namespace, Right.Name);
                 return value;
             }
         }
@@ -163,9 +163,9 @@ namespace Bam.Data.Repositories
 		/// </summary>
 		/// <param name="obj">The object to compare with.</param>
 		/// <returns>True if the cross-references involve the same two types; otherwise false.</returns>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			TypeXref compareTo = obj as TypeXref;
+			TypeXref? compareTo = obj as TypeXref;
 			if(compareTo != null)
 			{
 				return compareTo.Left.Equals(this.Left) && compareTo.Right.Equals(this.Right) ||

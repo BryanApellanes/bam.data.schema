@@ -30,11 +30,11 @@ namespace Bam.Data.Schema
         /// </summary>
         public string Namespace { get; set; }
 
-        private Dictionary<string, Type> _daoTypes;
-        private Dictionary<string, List<ColumnAttribute>> _columnAttributes;
+        private Dictionary<string, Type> _daoTypes = null!;
+        private Dictionary<string, List<ColumnAttribute>> _columnAttributes = null!;
         protected DataTypeTranslator DataTypeTranslator { get; }
 
-        private bool _analyzed;
+        private bool _analyzed = false;
         private readonly object _analyzeLock = new object();
         /// <summary>
         /// Analyzes the assembly to discover DAO types and their column attributes. Must be called before extraction.
@@ -106,7 +106,7 @@ namespace Bam.Data.Schema
                 throw new InvalidOperationException($"No dao types were found in the specified namespace ({Namespace}) of the specified assembly ({Assembly.FullName}).");
             }
 
-            return uniqueSchemaNames.FirstOrDefault();
+            return uniqueSchemaNames.FirstOrDefault()!;
         }
 
         /// <inheritdoc />
@@ -186,7 +186,7 @@ namespace Bam.Data.Schema
         
         private ColumnAttribute GetColumnAttribute(string tableName, string columnName)
         {
-            ColumnAttribute columnAttribute = _columnAttributes[tableName].FirstOrDefault(c => c.Name.Equals(columnName));
+            ColumnAttribute? columnAttribute = _columnAttributes[tableName].FirstOrDefault(c => c.Name.Equals(columnName));
             if (columnAttribute == null)
             {
                 throw new InvalidOperationException($"Column not found {tableName}.{columnName}");

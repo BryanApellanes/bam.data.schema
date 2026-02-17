@@ -30,7 +30,7 @@ namespace Bam.Data.Repositories
         /// </summary>
         /// <param name="tableNameProvider">The provider to use for table name resolution; defaults to <see cref="EchoTypeTableNameProvider"/> if null.</param>
         /// <returns>The table name for this type.</returns>
-        public string GetTableName(ITypeTableNameProvider tableNameProvider = null)
+        public string GetTableName(ITypeTableNameProvider? tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
             return tableNameProvider.GetTableName(Type);

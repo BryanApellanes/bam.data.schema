@@ -22,7 +22,7 @@ namespace Bam.Data.Schema
             Type = type;
             RootType = type;
             Chain = new List<TypeTable> { new TypeTable(type) };
-            Type baseType = type.BaseType;
+            Type? baseType = type.BaseType;
             while (baseType != typeof(object) && baseType != null)
             {
                 RootType = baseType;
@@ -33,17 +33,17 @@ namespace Bam.Data.Schema
         /// <summary>
         /// Gets or sets the most derived type in the inheritance chain.
         /// </summary>
-        public Type Type { get; set; }
+        public Type Type { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the root (most base) type in the inheritance chain, excluding <see cref="object"/>.
         /// </summary>
-        public Type RootType { get; set; }
+        public Type RootType { get; set; } = null!;
 
         /// <summary>
         /// Gets the list of <see cref="TypeTable"/> entries representing the inheritance chain, ordered from most derived to most base.
         /// </summary>
-        public List<TypeTable> Chain { get; }
+        public List<TypeTable> Chain { get; } = null!;
 
         /// <summary>
         /// Returns a formatted string representation of the inheritance chain, showing table names and their columns indented by depth.

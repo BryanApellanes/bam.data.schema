@@ -72,7 +72,7 @@ namespace Bam.Data.Repositories
 		}
 
 		/// <inheritdoc />
-		public override MethodInfo GetGetMethod(bool nonPublic)
+		public override MethodInfo? GetGetMethod(bool nonPublic)
 		{
 			return null;
 		}
@@ -90,7 +90,7 @@ namespace Bam.Data.Repositories
 		}
 
 		/// <inheritdoc />
-		public override object GetValue(object obj, BindingFlags invokeAttr, Binder binder, object[] index, System.Globalization.CultureInfo culture)
+		public override object? GetValue(object? obj, BindingFlags invokeAttr, Binder? binder, object?[]? index, System.Globalization.CultureInfo? culture)
 		{
 			throw new NotImplementedException();
 		}
@@ -102,12 +102,12 @@ namespace Bam.Data.Repositories
 		}
 
 		/// <inheritdoc />
-		public override void SetValue(object obj, object value, BindingFlags invokeAttr, Binder binder, object[] index, System.Globalization.CultureInfo culture)
+		public override void SetValue(object? obj, object? value, BindingFlags invokeAttr, Binder? binder, object?[]? index, System.Globalization.CultureInfo? culture)
 		{
 			throw new NotImplementedException();
 		}
 
-		Type _declaringType;
+		Type _declaringType = null!;
 		/// <inheritdoc />
 		public override Type DeclaringType
 		{
@@ -177,19 +177,19 @@ namespace Bam.Data.Repositories
 			}
 			return new KeyColumn 
 			{
-				TableName = tableNameProvider.GetTableName(DeclaringType),
+				TableName = tableNameProvider.GetTableName(DeclaringType!),
 				Name = name,
 				DataType = DataTypes.ULong
 			};
 		}
 
-		Type _foreignKeyTableType;
+		Type _foreignKeyTableType = null!;
 		/// <summary>
 		/// Converts this property info to a <see cref="ForeignKeyColumn"/> using the specified table name provider.
 		/// </summary>
 		/// <param name="tableNameProvider">The provider for resolving table names from types; defaults to <see cref="EchoTypeTableNameProvider"/> if null.</param>
 		/// <returns>A foreign key column representing this property.</returns>
-		public ForeignKeyColumn ToForeignKeyColumn(ITypeTableNameProvider tableNameProvider = null) {
+		public ForeignKeyColumn ToForeignKeyColumn(ITypeTableNameProvider? tableNameProvider = null) {
             ForeignKeyColumn result = new ForeignKeyColumn(Name, SchemaProvider.GetTableNameForType(_foreignKeyTableType),
                 SchemaProvider.GetTableNameForType(DeclaringType, tableNameProvider))
             {

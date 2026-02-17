@@ -12,7 +12,7 @@ namespace Bam.Data.Schema
         /// <summary>
         /// Gets or sets the name of the column to add.
         /// </summary>
-        public string ColumnName { get; set; }
+        public string ColumnName { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the data type of the column to add.

@@ -25,7 +25,7 @@ namespace Bam.Data.Schema
             _namingCollisionHandlers.Add(DaoSchemaExtractorNamingCollisionStrategy.TypePrefix, (tableName, columnName, propertyName) => $"{GetColumnDataType(tableName, columnName)}{columnName}");
             _namingCollisionHandlers.Add(DaoSchemaExtractorNamingCollisionStrategy.TypeSuffix, (tableName, columnName, propertyName) => $"{columnName}{GetColumnDataType(tableName, columnName)}");
             _namingCollisionHandlers.Add(DaoSchemaExtractorNamingCollisionStrategy.UnderscoreDelimit, (tableName, columnName, propertyName) => $"_{columnName}_");
-            _namingCollisionHandlers.Add(DaoSchemaExtractorNamingCollisionStrategy.Custom, (tableName, columnName, propertyName) => CustomNamingCollisionHandler(tableName, columnName, propertyName));
+            _namingCollisionHandlers.Add(DaoSchemaExtractorNamingCollisionStrategy.Custom, (tableName, columnName, propertyName) => CustomNamingCollisionHandler!(tableName, columnName, propertyName));
             _namingCollisionHandlers.Add(DaoSchemaExtractorNamingCollisionStrategy.Invalid, (tableName, columnName, propertyName) => throw new InvalidOperationException("Invalid SchemaExtractorNamingCollisionStrategy specified"));
             CustomNamingCollisionHandler = _namingCollisionHandlers[DaoSchemaExtractorNamingCollisionStrategy.TrailingUnderscore];
             SchemaExtractorNamingCollisionStrategy = DaoSchemaExtractorNamingCollisionStrategy.TrailingUnderscore;
@@ -34,61 +34,61 @@ namespace Bam.Data.Schema
         /// <summary>
         /// Gets the database this extractor reads schema metadata from.
         /// </summary>
-        public Database Database { get; protected set; }
+        public Database Database { get; protected set; } = null!;
 
         /// <summary>
         /// Occurs when a table begins processing.
         /// </summary>
-        public event EventHandler ProcessingTable;
+        public event EventHandler ProcessingTable = null!;
         /// <summary>
         /// Occurs when a table finishes processing.
         /// </summary>
-        public event EventHandler ProcessingTableComplete;
+        public event EventHandler ProcessingTableComplete = null!;
 
         /// <summary>
         /// Occurs when a column begins processing.
         /// </summary>
-        public event EventHandler ProcessingColumn;
+        public event EventHandler ProcessingColumn = null!;
 
         /// <summary>
         /// Occurs when a column finishes processing.
         /// </summary>
-        public event EventHandler ProcessingColumnComplete;
+        public event EventHandler ProcessingColumnComplete = null!;
 
         /// <summary>
         /// Occurs when a foreign key begins processing.
         /// </summary>
-        public event EventHandler ProcessingForeignKey;
+        public event EventHandler ProcessingForeignKey = null!;
 
         /// <summary>
         /// Occurs when a foreign key finishes processing.
         /// </summary>
-        public event EventHandler ProcessingForeignComplete;
+        public event EventHandler ProcessingForeignComplete = null!;
 
         /// <summary>
         /// Occurs before a class name is formatted from a table name.
         /// </summary>
-        public event EventHandler ClassNameFormatting;
+        public event EventHandler ClassNameFormatting = null!;
 
         /// <summary>
         /// Occurs after a class name has been formatted from a table name.
         /// </summary>
-        public event EventHandler ClassNameFormatted;
+        public event EventHandler ClassNameFormatted = null!;
 
         /// <summary>
         /// Occurs before a property name is formatted from a column name.
         /// </summary>
-        public event EventHandler PropertyNameFormatting;
+        public event EventHandler PropertyNameFormatting = null!;
 
         /// <summary>
         /// Occurs after a property name has been formatted from a column name.
         /// </summary>
-        public event EventHandler PropertyNameFormatted;
+        public event EventHandler PropertyNameFormatted = null!;
 
         /// <summary>
         /// Occurs when a property name collision with a reserved keyword or containing type is avoided.
         /// </summary>
-        public event EventHandler PropertyNameCollisionAvoided;
+        public event EventHandler PropertyNameCollisionAvoided = null!;
 
         /// <summary>
         /// Gets the schema name from the database.
@@ -155,7 +155,7 @@ namespace Bam.Data.Schema
         public abstract ForeignKeyColumn[] GetForeignKeyColumns();
         protected abstract void SetConnectionName(string connectionString);
 
-        string _connectionString;
+        string _connectionString = null!;
         /// <summary>
         /// Gets or sets the database connection string. Setting this property also sets the connection name via <see cref="SetConnectionName"/>.
         /// </summary>

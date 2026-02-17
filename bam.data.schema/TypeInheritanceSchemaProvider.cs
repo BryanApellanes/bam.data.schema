@@ -16,18 +16,18 @@ namespace Bam.Data.Schema
         /// </summary>
         /// <param name="tableNameProvider">The provider to use for determining table names from CLR types; defaults to <see cref="EchoTypeTableNameProvider"/> if null.</param>
         /// <param name="schemaTempPathProvider">The provider for temporary file paths during schema generation; defaults to <see cref="SchemaTempPathProvider"/> if null.</param>
-        public TypeInheritanceSchemaProvider(ITypeTableNameProvider tableNameProvider = null, ISchemaTempPathProvider schemaTempPathProvider = null)
-            : base(tableNameProvider, schemaTempPathProvider)
+        public TypeInheritanceSchemaProvider(ITypeTableNameProvider? tableNameProvider = null, ISchemaTempPathProvider? schemaTempPathProvider = null)
+            : base(tableNameProvider!, schemaTempPathProvider!)
         {
         }
 
-        protected override void AddSchemaTables(TypeSchema typeSchema, DaoSchemaManager schemaManager, ITypeTableNameProvider tableNameProvider = null)
+        protected override void AddSchemaTables(TypeSchema typeSchema, DaoSchemaManager schemaManager, ITypeTableNameProvider? tableNameProvider = null)
         {
             tableNameProvider = tableNameProvider ?? new EchoTypeTableNameProvider();
             foreach (Type topType in typeSchema.Tables)
             {
                 TypeInheritanceDescriptor inheritance = new TypeInheritanceDescriptor(topType);
-                Type inheritFrom = null;
+                Type? inheritFrom = null;
                 inheritance.Chain.BackwardsEach(typeTable =>
                 {
                     string tableName = typeTable.GetTableName(tableNameProvider);

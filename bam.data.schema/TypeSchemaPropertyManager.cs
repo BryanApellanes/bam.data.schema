@@ -50,10 +50,10 @@ namespace Bam.Data.Repositories
             List<ITypeFk> fkDescriptors = TypeSchema.ForeignKeys.Where(tfk => tfk.PrimaryKeyType == parentType).ToList();
             foreach (TypeFk fk in fkDescriptors)
             {
-                IEnumerable collection = (IEnumerable)fk.CollectionProperty.GetValue(parent);
+                IEnumerable collection = (IEnumerable)fk.CollectionProperty.GetValue(parent)!;
                 if (collection != null)
                 {
-                    forEachCollection(fk.CollectionProperty.GetEnumerableType(), collection);
+                    forEachCollection(fk.CollectionProperty.GetEnumerableType()!, collection);
                 }
             }
         }
@@ -66,11 +66,11 @@ namespace Bam.Data.Repositories
         {
             Type parentType = parent.GetType();
             Type childType = child.GetType();
-            ulong parentId = Meta.GetId(parent).Value;
+            ulong parentId = Meta.GetId(parent)!.Value;
             foreach (TypeFk typeFk in TypeSchema.ForeignKeys.Where(fk => fk.ForeignKeyType == childType && fk.PrimaryKeyType == parentType))
             {
                 typeFk.ForeignKeyProperty.SetValue(child, parentId);
-                PropertyInfo parentInstanceProperty = childType.GetProperty(typeFk.PrimaryKeyType.Name);
+                PropertyInfo? parentInstanceProperty = childType.GetProperty(typeFk.PrimaryKeyType.Name);
                 if (parentInstanceProperty != null)
                 {
                     parentInstanceProperty.SetValue(child, parent);

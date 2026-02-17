@@ -56,7 +56,7 @@ namespace Bam.Data.Schema
         /// <param name="targetResolver">An optional function to resolve output streams by name.</param>
         /// <param name="root">The root file path for generated output.</param>
         /// <param name="partialsDir">The directory for partial class files.</param>
-        void Generate(IDaoSchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null);
+        void Generate(IDaoSchemaDefinition schema, Func<string, Stream>? targetResolver = null, string root = "./", string? partialsDir = null);
 
         /// <summary>
         /// Generates code for the specified schema, writing to the specified root directory.

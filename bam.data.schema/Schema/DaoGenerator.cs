@@ -63,12 +63,12 @@ namespace Bam.Data.Schema
         /// <summary>
         /// The event that fires prior to code generation
         /// </summary>
-        public event GeneratorEventDelegate GenerateStarted;
+        public event GeneratorEventDelegate GenerateStarted = null!;
 
         /// <summary>
         /// The event that fires when code generation is complete
         /// </summary>
-        public event GeneratorEventDelegate GenerateComplete;
+        public event GeneratorEventDelegate GenerateComplete = null!;
 
         protected void OnGenerateStarted(IDaoSchemaDefinition schema)
         {
@@ -86,7 +86,7 @@ namespace Bam.Data.Schema
         /// If the generator compiled generated files, this will be the FileInfo 
         /// representing the compiled assembly
         /// </summary>
-        public FileInfo DaoAssemblyFile { get; set; }
+        public FileInfo DaoAssemblyFile { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the namespace to use for generated DAO classes.
@@ -130,7 +130,7 @@ namespace Bam.Data.Schema
         /// <param name="targetResolver">If specified, generated code will be 
         /// written to the stream returned by this function</param>
         /// <param name="root">The root file path to use if no target resolver is specified</param>
-        public void Generate(IDaoSchemaDefinition schema, Func<string, Stream> targetResolver = null, string root = "./", string partialsDir = null)
+        public void Generate(IDaoSchemaDefinition schema, Func<string, Stream>? targetResolver = null, string root = "./", string? partialsDir = null)
         {
             if (string.IsNullOrEmpty(Namespace))
             {
@@ -140,29 +140,29 @@ namespace Bam.Data.Schema
 
             OnGenerateStarted(schema);
 
-            DaoCodeWriter.WriteContextClass(schema, targetResolver, root);
+            DaoCodeWriter.WriteContextClass(schema, targetResolver!, root);
 
             bool writePartial = !string.IsNullOrEmpty(partialsDir);
             if (writePartial)
             {
-                EnsurePartialsDir(partialsDir);
+                EnsurePartialsDir(partialsDir!);
             }
 
             foreach (ITable table in schema.Tables)
             {
                 if (writePartial)
                 {
-                    DaoCodeWriter.WritePartial(schema, targetResolver, root, table);
+                    DaoCodeWriter.WritePartial(schema, targetResolver!, root, table);
                 }
-                DaoCodeWriter.WriteDaoClass(schema, targetResolver, root, table);
-                DaoCodeWriter.WriteQueryClass(schema, targetResolver, root, table);
-                DaoCodeWriter.WritePagedQueryClass(schema, targetResolver, root, table);
+                DaoCodeWriter.WriteDaoClass(schema, targetResolver!, root, table);
+                DaoCodeWriter.WriteQueryClass(schema, targetResolver!, root, table);
+                DaoCodeWriter.WritePagedQueryClass(schema, targetResolver!, root, table);
                 if (GenerateQiClasses)
                 {
-                    DaoCodeWriter.WriteQiClass(schema, targetResolver, root, table);
+                    DaoCodeWriter.WriteQiClass(schema, targetResolver!, root, table);
                 }
-                DaoCodeWriter.WriteCollectionClass(schema, targetResolver, root, table);
-                DaoCodeWriter.WriteColumnsClass(schema, targetResolver, root, table);
+                DaoCodeWriter.WriteCollectionClass(schema, targetResolver!, root, table);
+                DaoCodeWriter.WriteColumnsClass(schema, targetResolver!, root, table);
             }
 
             OnGenerateComplete(schema);

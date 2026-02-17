@@ -18,7 +18,7 @@ namespace Bam.Data.Npgsql
         {
             Database = database;
             TableCatalog = Database.Name;
-            ConnectionString = database.ConnectionString;
+            ConnectionString = database.ConnectionString!;
             _keyColumns = new Dictionary<string, string>();
             _columnDefinitions = new Dictionary<string, Dictionary<string, DataRow>>();
             _foreignKeyDefinitions = new Dictionary<string, NpgsqlForeignKeyDescriptor[]>();
@@ -35,7 +35,7 @@ namespace Bam.Data.Npgsql
         /// <summary>
         /// Gets or sets the database schema name used in queries (e.g., "public").
         /// </summary>
-        public string TableSchema { get; set; }
+        public string TableSchema { get; set; } = null!;
         
         /// <inheritdoc />
         public override DataTypes GetColumnDataType(string tableName, string columnName)
@@ -104,7 +104,7 @@ JOIN   pg_attribute a ON a.attrelid = i.indrelid
 WHERE  i.indrelid = '{TableSchema}.{tableName}'::regclass
 AND    i.indisprimary;";
 
-                _keyColumns.AddMissing(tableName, Database.QuerySingleColumn<string>(keyColumnQuery).FirstOrDefault());
+                _keyColumns.TryAdd(tableName, Database.QuerySingleColumn<string>(keyColumnQuery).FirstOrDefault()!);
             }
 
             return _keyColumns[tableName];
@@ -116,7 +116,7 @@ AND    i.indisprimary;";
             return TableSchema;
         }
 
-        string[] _tableNames;
+        string[]? _tableNames;
         /// <inheritdoc />
         public override string[] GetTableNames()
         {
@@ -133,7 +133,7 @@ AND    i.indisprimary;";
         protected override void SetConnectionName(string connectionString)
         {
             NpgsqlConnectionStringBuilder conn = new NpgsqlConnectionStringBuilder(connectionString);
-            Database.ConnectionName = conn["Database"].ToString();
+            Database.ConnectionName = conn["Database"]!.ToString()!;
         }
         
         protected internal DataTypes TranslateDataType(string sqlDataType)
@@ -182,10 +182,10 @@ AND    i.indisprimary;";
             {
                 if (!_columnDefinitions.ContainsKey(tableName))
                 {
-                    _columnDefinitions.AddMissing(tableName, new Dictionary<string, DataRow>());
+                    _columnDefinitions.TryAdd(tableName, new Dictionary<string, DataRow>());
                 }
 
-                string colName = row["column_name"]?.ToString();
+                string colName = row["column_name"]?.ToString()!;
                 if (!_columnDefinitions[tableName].ContainsKey(colName))
                 {
                     _columnDefinitions[tableName].Add(colName, row);
@@ -200,7 +200,7 @@ AND    i.indisprimary;";
                 SetTableColumnInfo(tableName);
             }
 
-            return _columnDefinitions[tableName][columnName][metaColumnName].ToString();
+            return _columnDefinitions[tableName][columnName][metaColumnName].ToString()!;
         }
 
         private NpgsqlForeignKeyDescriptor[] GetForeignKeyInfo(string tableName)
@@ -232,7 +232,7 @@ WHERE
     tc.table_schema = '{TableSchema}' AND 
     tc.constraint_type = 'FOREIGN KEY' AND tc.table_name='{tableName}';";
 
-            _foreignKeyDefinitions.AddMissing(tableName, Database.ExecuteReader<NpgsqlForeignKeyDescriptor>(fkQuery).ToArray());
+            _foreignKeyDefinitions.TryAdd(tableName, Database.ExecuteReader<NpgsqlForeignKeyDescriptor>(fkQuery).ToArray());
         }
     }
 }

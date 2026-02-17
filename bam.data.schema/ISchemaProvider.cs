@@ -69,7 +69,7 @@ namespace Bam.Data.Repositories
         /// <summary>
         /// Gets or sets a function that provides a temporary file path for schema generation output.
         /// </summary>
-        Func<IDaoSchemaDefinition, ITypeSchema, string>? TypeSchemaTempPathProvider { get; set; }
+        Func<IDaoSchemaDefinition, ITypeSchema, string> TypeSchemaTempPathProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the set of warnings generated during type schema creation.
@@ -126,7 +126,7 @@ namespace Bam.Data.Repositories
         /// </summary>
         /// <param name="schemaName">An optional name for the schema.</param>
         /// <returns>The result containing the schema definition and any warnings.</returns>
-        DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(string schemaName = null);
+        DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(string? schemaName = null);
 
         /// <summary>
         /// Creates a DAO schema definition from the specified types.
@@ -134,7 +134,7 @@ namespace Bam.Data.Repositories
         /// <param name="types">The CLR types to generate a schema for.</param>
         /// <param name="schemaName">An optional name for the schema.</param>
         /// <returns>The result containing the schema definition and any warnings.</returns>
-        DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(IEnumerable<Type> types, string schemaName = null);
+        DaoSchemaDefinitionCreateResult CreateDaoSchemaDefinition(IEnumerable<Type> types, string? schemaName = null);
 
         /// <summary>
         /// Creates a type schema from the types set on this provider.
@@ -148,7 +148,7 @@ namespace Bam.Data.Repositories
         /// <param name="types">The CLR types to analyze.</param>
         /// <param name="name">An optional name for the schema.</param>
         /// <returns>A <see cref="TypeSchema"/> describing the relationships between the types.</returns>
-        TypeSchema CreateTypeSchema(IEnumerable<Type> types, string name = null);
+        TypeSchema CreateTypeSchema(IEnumerable<Type> types, string? name = null);
 
         /// <summary>
         /// Creates a type schema from the specified types with the given name.
