@@ -46,12 +46,29 @@ namespace Bam.Data.Npgsql
         /// <inheritdoc />
         public override string GetColumnDbDataType(string tableName, string columnName)
         {
-            return GetTableColumnInfo(tableName, columnName, "data_type");
+            string dataType = GetTableColumnInfo(tableName, columnName, "data_type");
+            if ("user-defined".Equals(dataType, StringComparison.OrdinalIgnoreCase))
+            {
+                // extension types (e.g. pgvector's vector) report USER-DEFINED; the
+                // concrete type name is in udt_name
+                dataType = GetTableColumnInfo(tableName, columnName, "udt_name");
+            }
+            return dataType;
         }
 
         /// <inheritdoc />
         public override string GetColumnMaxLength(string tableName, string columnName)
         {
+            if ("vector".Equals(GetColumnDbDataType(tableName, columnName), StringComparison.OrdinalIgnoreCase))
+            {
+                // a vector column's dimension is not in character_maximum_length; pgvector
+                // records it directly in pg_attribute.atttypmod
+                string dimensionQuery = $@"SELECT a.atttypmod as Dimensions
+FROM pg_attribute a
+WHERE a.attrelid = '{TableSchema}.{tableName}'::regclass
+AND a.attname = '{columnName}';";
+                return Database.QuerySingleColumn<string>(dimensionQuery).FirstOrDefault()!;
+            }
             return GetTableColumnInfo(tableName, columnName, "character_maximum_length");
         }
 
@@ -160,6 +177,8 @@ AND    i.indisprimary;";
                     return DataTypes.String;
                 case "boolean":
                     return DataTypes.Boolean;
+                case "vector":
+                    return DataTypes.Vector;
                 default:
                     return DataTypes.String;
             }
