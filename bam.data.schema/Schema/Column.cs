@@ -165,6 +165,8 @@ namespace Bam.Data.Schema
                         return "byte[]";
                     case DataTypes.DateTime:
                         return "DateTime?";
+                    case DataTypes.Vector:
+                        return "Vector?";
                     default:
                         return "string";
                 }
@@ -212,6 +214,11 @@ namespace Bam.Data.Schema
                             break;
                         case DataTypes.DateTime:
                             SetDbDataType("DateTime", "8");
+                            break;
+                        case DataTypes.Vector:
+                            // no default dimension: a vector column's MaxLength carries its
+                            // dimension and must be supplied by the schema author
+                            SetDbDataType("vector");
                             break;
                         default:
                             SetDbDataType("VarChar", "4000");
