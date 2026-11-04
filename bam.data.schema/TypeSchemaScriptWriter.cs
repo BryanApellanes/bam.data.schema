@@ -13,22 +13,24 @@ namespace Bam.Data.Repositories
         public DaoSchemaDefinitionCreateResult LastSchemaDefinitionCreateResult { get; set; } = null!;
 
         /// <summary>
-        /// Generates and executes the SQL schema script for the specified types against the given database.
+        /// Generates the SQL schema script for the specified types and executes it as a schema script, so tables that
+        /// already exist don't stop the ones that don't from being created.
         /// </summary>
         /// <param name="database">The database to execute the schema script against.</param>
         /// <param name="types">The CLR types to generate a schema for.</param>
         public void CommitSchema(Database database, IEnumerable<Type> types)
         {
-            database.ExecuteSql(WriteSchemaScript(database, types));
+            CommitSchema((IDatabase)database, types.ToArray());
         }
         /// <summary>
-        /// Generates and executes the SQL schema script for the specified types against the given database.
+        /// Generates the SQL schema script for the specified types and executes it as a schema script, so tables that
+        /// already exist don't stop the ones that don't from being created.
         /// </summary>
         /// <param name="database">The database to execute the schema script against.</param>
         /// <param name="types">The CLR types to generate a schema for.</param>
         public void CommitSchema(IDatabase database, params Type[] types)
         {
-            database.ExecuteSql(WriteSchemaScript(database, types));
+            database.ExecuteSchemaScript(WriteSchemaScript(database, types));
         }
 
         /// <summary>
